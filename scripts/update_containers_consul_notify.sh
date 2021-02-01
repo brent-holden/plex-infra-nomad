@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
-for IMAGE in `podman ps | awk -F ' ' '{print $2}' | grep -v ID`
+for IMAGE in `sudo podman ps | awk -F ' ' '{print $2}' | grep -v ID`
 do
+  # pull new image
+  sudo podman pull $IMAGE
+  
   # get image Id
   ID=`podman inspect --format "{{.Id}}" $IMAGE`
   
