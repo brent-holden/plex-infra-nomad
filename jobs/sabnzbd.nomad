@@ -42,7 +42,6 @@ job "sabnzbd" {
       size = 2048
     }
 
-
     task "sabnzbd" {
       driver = "podman"
 
@@ -59,10 +58,7 @@ job "sabnzbd" {
       }
 
       template {
-        data = <<EOF
-IMAGE_ID={{ key "sabnzbd/config/image_id" }}
-EOF
-
+        data = "IMAGE_ID={{ key \"sabnzbd/config/image_id\" }}"
         destination = "image_id.env"
         env = true
       }

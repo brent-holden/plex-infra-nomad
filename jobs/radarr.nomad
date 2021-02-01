@@ -31,7 +31,7 @@ job "radarr" {
 
       check {
         type     = "tcp"
-	port     = "radarr"
+        port     = "radarr"
         interval = "60s"
         timeout  = "2s"
       }
@@ -58,10 +58,7 @@ job "radarr" {
       }
 
       template {
-        data = <<EOF
-IMAGE_ID={{ key "radarr/config/image_id" }}
-EOF
-
+        data = "IMAGE_ID={{ key \"radarr/config/image_id\" }}"
         destination = "image_id.env"
         env = true
       }

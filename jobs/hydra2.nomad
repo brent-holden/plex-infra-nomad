@@ -31,7 +31,7 @@ job "hydra2" {
 
       check {
         type     = "tcp"
-	port     = "hydra2"
+        port     = "hydra2"
         interval = "120s"
         timeout  = "60s"
       }
@@ -41,7 +41,6 @@ job "hydra2" {
       sticky = true
       size = 2048
     }
-
 
     task "hydra2" {
       driver = "podman"
@@ -59,10 +58,7 @@ job "hydra2" {
       }
 
       template {
-        data = <<EOF
-IMAGE_ID={{ key "hydra2/config/image_id" }}
-EOF
-
+        data = "IMAGE_ID={{ key \"hydra2/config/image_id\" }}"
         destination = "image_id.env"
         env = true
       }

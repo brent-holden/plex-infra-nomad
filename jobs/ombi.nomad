@@ -31,7 +31,7 @@ job "ombi" {
 
       check {
         type     = "tcp"
-	port     = "ombi"
+        port     = "ombi"
         interval = "30s"
         timeout  = "2s"
       }
@@ -41,7 +41,6 @@ job "ombi" {
       sticky = true
       size = 2048
     }
-
 
     task "ombi" {
       driver = "podman"
@@ -60,10 +59,7 @@ job "ombi" {
       }
 
       template {
-        data = <<EOF
-IMAGE_ID={{ key "ombi/config/image_id" }}
-EOF
-
+        data = "IMAGE_ID={{ key \"ombi/config/image_id\" }}"
         destination = "image_id.env"
         env = true
       }

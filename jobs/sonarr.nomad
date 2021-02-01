@@ -31,7 +31,7 @@ job "sonarr" {
 
       check {
         type     = "tcp"
-	port     = "sonarr"
+        port     = "sonarr"
         interval = "60s"
         timeout  = "2s"
       }
@@ -58,10 +58,7 @@ job "sonarr" {
       }
 
       template {
-        data = <<EOF
-IMAGE_ID={{ key "sonarr/config/image_id" }}
-EOF
-
+        data = "IMAGE_ID={{ key \"sonarr/config/image_id\" }}"
         destination = "image_id.env"
         env = true
       }

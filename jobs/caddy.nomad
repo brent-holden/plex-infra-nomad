@@ -30,7 +30,7 @@ job "caddy" {
 
       check {
         type     = "tcp"
-	port     = "https"
+        port     = "https"
         interval = "60s"
         timeout  = "2s"
       }
@@ -40,7 +40,6 @@ job "caddy" {
       sticky = true
       size = 2048
     }
-
 
     task "caddy" {
       driver = "podman"
@@ -53,10 +52,7 @@ job "caddy" {
       }
 
       template {
-        data = <<EOF
-IMAGE_ID={{ key "caddy/config/image_id" }}
-EOF
-
+        data = "IMAGE_ID={{ key \"caddy/config/image_id\" }}"
         destination = "image_id.env"
         env = true
       }

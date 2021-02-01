@@ -31,7 +31,7 @@ job "tautulli" {
 
       check {
         type     = "tcp"
-	port     = "tautulli"
+        port     = "tautulli"
         interval = "60s"
         timeout  = "2s"
       }
@@ -60,14 +60,8 @@ job "tautulli" {
 
 
       template {
-        data = <<EOF
-IMAGE_ID={{ key "tautulli/config/image_id" }}
-EOF
-
-        # A destination file is written even for env templates to aide in debugging
+        data = "IMAGE_ID={{ key \"tautulli/config/image_id\" }}"
         destination = "image_id.env"
-
-        # env = true exposes the IMAGE variable inside the config stanza
         env = true
       }
 

@@ -76,10 +76,7 @@ job "plex" {
       }
 
       template {
-        data = <<EOF
-IMAGE_ID={{ key "plex/config/version" }}
-EOF
-
+        data = "IMAGE_ID={{ key \"plex/config/version\" }}"
         destination = "image_id.env"
         env = true
       }
