@@ -67,15 +67,15 @@ job "plex" {
       }
 
       config {
-        image         = "docker://plexinc/pms-docker:plexpass"
+        image         = "docker://docker.io/plexinc/pms-docker:${RELEASE}"
         network_mode  = "host"
         ports         = ["plex"]
         volumes       = ["/opt/plex:/config","/mnt/rclone/media:/media:ro","/mnt/transcode:/transcode"]
       }
 
       template {
-        data          = "IMAGE_ID={{ key \"plex/config/version\" }}"
-        destination   = "image_id.env"
+        data          = "VERSION={{ key \"plex/config/version\" }}\nIMAGE={{ key \"plex/config/image\" }}\nRELEASE={{ key \"plex/config/release\" }}\nNOMAD_JOB_NAME={{ env \"NOMAD_JOB_NAME\" }}"
+        destination   = "env_info"
         env           = true
       }
 

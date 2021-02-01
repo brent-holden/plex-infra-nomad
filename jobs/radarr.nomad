@@ -49,15 +49,15 @@ job "radarr" {
       }
 
       config {
-        image         = "docker://linuxserver/radarr:latest"
+        image         = "docker://docker.io/linuxserver/radarr:${RELEASE}"
         network_mode  = "bridge"
         ports         = ["radarr"]
         volumes       = ["/opt/radarr:/config","/mnt/downloads:/downloads","/mnt/rclone/media/Movies:/media/movies","/etc/localtime:/etc/localtime:ro"]
       }
 
       template {
-        data          = "IMAGE_ID={{ key \"radarr/config/image_id\" }}"
-        destination   = "image_id.env"
+        data          = "IMAGE_ID={{ key \"radarr/config/image_id\" }}\nIMAGE={{ key \"radarr/config/image\" }}\nRELEASE={{ key \"radarr/config/release\" }}\nNOMAD_JOB_NAME={{ env \"NOMAD_JOB_NAME\" }}\n"
+        destination   = "env_info"
         env           = true
       }
 

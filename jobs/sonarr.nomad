@@ -49,15 +49,15 @@ job "sonarr" {
       }
 
       config {
-        image         = "docker://linuxserver/sonarr:preview"
+        image         = "docker://docker.io/linuxserver/sonarr:${RELEASE}"
         network_mode  = "bridge"
         ports         = ["sonarr"]
-        volumes       = ["/opt/sonarr:/config","/mnt/downloads:/downloads","/mnt/rclone/media/TV:/tv","/etc/localtime:/etc/localtime"]
+        volumes       = ["/opt/sonarr:/config","/mnt/downloads:/downloads","/mnt/rclone/media/TV:/tv","/etc/localtime:/etc/localtime:ro"]
       }
 
       template {
-        data          = "IMAGE_ID={{ key \"sonarr/config/image_id\" }}"
-        destination   = "image_id.env"
+        data          = "IMAGE_ID={{ key \"sonarr/config/image_id\" }}\nIMAGE={{ key \"sonarr/config/image\" }}\nRELEASE={{ key \"sonarr/config/release\" }}\nNOMAD_JOB_NAME={{ env \"NOMAD_JOB_NAME\" }}\n"
+        destination   = "env_info"
         env           = true
       }
 

@@ -49,15 +49,15 @@ job "hydra2" {
       }
 
       config {
-        image         = "docker://linuxserver/nzbhydra2:latest"
+        image         = "docker://docker.io/linuxserver/nzbhydra2:${RELEASE}"
         network_mode  = "bridge"
         ports         = ["hydra2"]
         volumes       = ["/opt/hydra2:/config","/mnt/downloads:/downloads"]
       }
 
       template {
-        data          = "IMAGE_ID={{ key \"hydra2/config/image_id\" }}"
-        destination   = "image_id.env"
+        data          = "IMAGE_ID={{ key \"hydra2/config/image_id\" }}\nIMAGE={{ key \"hydra2/config/image\" }}\nRELEASE={{ key \"hydra2/config/release\" }}\nNOMAD_JOB_NAME={{ env \"NOMAD_JOB_NAME\" }}\n"
+        destination   = "env_info"
         env           = true
       }
 

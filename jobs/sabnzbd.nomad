@@ -49,15 +49,15 @@ job "sabnzbd" {
       }
 
       config {
-        image         = "docker://linuxserver/sabnzbd:latest"
+        image         = "docker://docker.io/linuxserver/sabnzbd:${RELEASE}"
         network_mode  = "bridge"
         ports         = ["sabnzbd"]
         volumes       = ["/opt/sabnzbd:/config","/mnt/downloads:/downloads"]
       }
 
       template {
-        data          = "IMAGE_ID={{ key \"sabnzbd/config/image_id\" }}"
-        destination   = "image_id.env"
+        data          = "IMAGE_ID={{ key \"sabnzbd/config/image_id\" }}\nIMAGE={{ key \"sabnzbd/config/image\" }}\nRELEASE={{ key \"sabnzbd/config/release\" }}\nNOMAD_JOB_NAME={{ env \"NOMAD_JOB_NAME\" }}\n"
+        destination   = "env_info"
         env           = true
       }
 

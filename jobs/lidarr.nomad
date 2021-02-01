@@ -49,15 +49,15 @@ job "lidarr" {
       }
 
       config {
-        image         = "docker://linuxserver/lidarr:latest"
+        image         = "docker://docker.io/linuxserver/lidarr:${RELEASE}"
         network_mode  = "bridge"
         ports         = ["lidarr"]
         volumes       = ["/opt/lidarr:/config","/mnt/downloads:/downloads","/mnt/rclone/media/Music:/music"]
       }
 
       template {
-        data          = "IMAGE_ID={{ key \"lidarr/config/image_id\" }}"
-        destination   = "image_id.env"
+        data          = "IMAGE_ID={{ key \"lidarr/config/image_id\" }}\nIMAGE={{ key \"lidarr/config/image\" }}\nRELEASE={{ key \"lidarr/config/release\" }}\nNOMAD_JOB_NAME={{ env \"NOMAD_JOB_NAME\" }}\n"
+        destination   = "env_info"
         env           = true
       }
 

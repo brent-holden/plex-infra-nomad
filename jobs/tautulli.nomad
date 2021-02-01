@@ -50,16 +50,15 @@ job "tautulli" {
       }
 
       config {
-        image         = "docker://linuxserver/tautulli:latest"
+        image         = "docker://docker.io/linuxserver/tautulli:${RELEASE}"
         network_mode  = "bridge"
         ports         = ["tautulli"]
         volumes       = ["/opt/tautulli:/config","/opt/plex/Library/Application Support/Plex Media Server/Logs:/plex_logs"]
       }
 
-
       template {
-        data          = "IMAGE_ID={{ key \"tautulli/config/image_id\" }}"
-        destination   = "image_id.env"
+        data          = "IMAGE_ID={{ key \"tautulli/config/image_id\" }}\nIMAGE={{ key \"tautulli/config/image\" }}\nRELEASE={{ key \"tautulli/config/release\" }}\nNOMAD_JOB_NAME={{ env \"NOMAD_JOB_NAME\" }}\n"
+        destination   = "env_info"
         env           = true
       }
 

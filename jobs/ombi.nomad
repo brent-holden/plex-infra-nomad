@@ -50,15 +50,15 @@ job "ombi" {
       }
 
       config {
-        image         = "docker://linuxserver/ombi:v4-preview"
+        image         = "docker://docker.io/linuxserver/ombi:${RELEASE}"
         network_mode  = "bridge"
         ports         = ["ombi"]
         volumes       = ["/opt/ombi:/config"]
       }
 
       template {
-        data          = "IMAGE_ID={{ key \"ombi/config/image_id\" }}"
-        destination   = "image_id.env"
+        data          = "IMAGE_ID={{ key \"ombi/config/image_id\" }}\nIMAGE={{ key \"ombi/config/image\" }}\nRELEASE={{ key \"ombi/config/release\" }}\nNOMAD_JOB_NAME={{ env \"NOMAD_JOB_NAME\" }}\n"
+        destination   = "env_info"
         env           = true
       }
 

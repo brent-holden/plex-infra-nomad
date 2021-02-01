@@ -45,15 +45,15 @@ job "caddy" {
       driver = "podman"
 
       config {
-        image         = "docker://caddy:alpine"
+        image         = "docker://docker.io/caddy:${RELEASE}"
         network_mode  = "bridge"
         ports         = ["http", "https"]
         volumes       = ["/opt/caddy/config:/config","/opt/caddy/data:/data","/opt/caddy/Caddyfile:/etc/caddy/Caddyfile"]
       }
 
       template {
-        data          = "IMAGE_ID={{ key \"caddy/config/image_id\" }}"
-        destination   = "image_id.env"
+        data          = "IMAGE_ID={{ key \"caddy/config/image_id\" }}\nIMAGE={{ key \"caddy/config/image\" }}\nRELEASE={{ key \"caddy/config/release\" }}\nNOMAD_JOB_NAME={{ env \"NOMAD_JOB_NAME\" }}\n"
+        destination   = "env_info"
         env           = true
       }
 
