@@ -16,13 +16,6 @@ job "lidarr" {
     canary = 0
   }
 
-#  migrate {
-#    max_parallel = 1
-#    health_check = "task_states"
-#    min_healthy_time = "5s"
-#    healthy_deadline = "1m"
-#  }
-
   group "lidarr" {
     count = 1
     network {
@@ -38,7 +31,7 @@ job "lidarr" {
 
       check {
         type     = "tcp"
-	port     = "lidarr"
+	      port     = "lidarr"
         interval = "60s"
         timeout  = "2s"
       }
@@ -48,7 +41,6 @@ job "lidarr" {
       sticky = true
       size = 2048
     }
-
 
     task "lidarr" {
       driver = "podman"
@@ -66,10 +58,7 @@ job "lidarr" {
       }
 
       template {
-        data = <<EOF
-IMAGE_ID={{ key "lidarr/config/image_id" }}
-EOF
-
+        data = "IMAGE_ID={{ key \"lidarr/config/image_id\" }}"
         destination = "image_id.env"
         env = true
       }
