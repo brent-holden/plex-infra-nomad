@@ -56,7 +56,7 @@ job "sonarr" {
       }
 
       template {
-        data          = "IMAGE_ID={{ key \"sonarr/config/image_id\" }}\nIMAGE={{ key \"sonarr/config/image\" }}\nRELEASE={{ key \"sonarr/config/release\" }}\nNOMAD_JOB_NAME={{ env \"NOMAD_JOB_NAME\" }}\n"
+        data          = "IMAGE_ID={{ keyOrDefault \"sonarr/config/image_id\" \"1\" }}\nRELEASE={{ keyOrDefault \"sonarr/config/release\" \"latest\" }}"
         destination   = "env_info"
         env           = true
       }

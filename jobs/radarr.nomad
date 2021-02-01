@@ -56,7 +56,7 @@ job "radarr" {
       }
 
       template {
-        data          = "IMAGE_ID={{ key \"radarr/config/image_id\" }}\nIMAGE={{ key \"radarr/config/image\" }}\nRELEASE={{ key \"radarr/config/release\" }}\nNOMAD_JOB_NAME={{ env \"NOMAD_JOB_NAME\" }}\n"
+        data          = "IMAGE_ID={{ keyOrDefault \"radarr/config/image_id\" \"1\" }}\nRELEASE={{ keyOrDefault \"radarr/config/release\" \"latest\" }}"
         destination   = "env_info"
         env           = true
       }

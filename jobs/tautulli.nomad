@@ -57,7 +57,7 @@ job "tautulli" {
       }
 
       template {
-        data          = "IMAGE_ID={{ key \"tautulli/config/image_id\" }}\nIMAGE={{ key \"tautulli/config/image\" }}\nRELEASE={{ key \"tautulli/config/release\" }}\nNOMAD_JOB_NAME={{ env \"NOMAD_JOB_NAME\" }}\n"
+        data          = "IMAGE_ID={{ keyOrDefault \"tautulli/config/image_id\" \"1\" }}\nRELEASE={{ keyOrDefault \"tautulli/config/release\" \"latest\" }}"
         destination   = "env_info"
         env           = true
       }

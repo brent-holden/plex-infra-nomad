@@ -56,7 +56,7 @@ job "sabnzbd" {
       }
 
       template {
-        data          = "IMAGE_ID={{ key \"sabnzbd/config/image_id\" }}\nIMAGE={{ key \"sabnzbd/config/image\" }}\nRELEASE={{ key \"sabnzbd/config/release\" }}\nNOMAD_JOB_NAME={{ env \"NOMAD_JOB_NAME\" }}\n"
+        data          = "IMAGE_ID={{ keyOrDefault \"sabnzbd/config/image_id\" \"1\" }}\nRELEASE={{ keyOrDefault \"sabnzbd/config/release\" \"latest\" }}"
         destination   = "env_info"
         env           = true
       }

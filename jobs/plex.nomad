@@ -74,7 +74,7 @@ job "plex" {
       }
 
       template {
-        data          = "VERSION={{ key \"plex/config/version\" }}\nIMAGE={{ key \"plex/config/image\" }}\nRELEASE={{ key \"plex/config/release\" }}\nNOMAD_JOB_NAME={{ env \"NOMAD_JOB_NAME\" }}"
+        data          = "VERSION={{ key \"plex/config/version\" }}\nRELEASE={{ key \"plex/config/release\" }}"
         destination   = "env_info"
         env           = true
       }

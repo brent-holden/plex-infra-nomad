@@ -52,7 +52,7 @@ job "caddy" {
       }
 
       template {
-        data          = "IMAGE_ID={{ key \"caddy/config/image_id\" }}\nIMAGE={{ key \"caddy/config/image\" }}\nRELEASE={{ key \"caddy/config/release\" }}\nNOMAD_JOB_NAME={{ env \"NOMAD_JOB_NAME\" }}\n"
+        data          = "IMAGE_ID={{ keyOrDefault \"caddy/config/image_id\" \"1\" }}\nRELEASE={{ keyOrDefault \"caddy/config/release\" \"latest\" }}"
         destination   = "env_info"
         env           = true
       }

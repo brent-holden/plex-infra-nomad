@@ -56,7 +56,7 @@ job "hydra2" {
       }
 
       template {
-        data          = "IMAGE_ID={{ key \"hydra2/config/image_id\" }}\nIMAGE={{ key \"hydra2/config/image\" }}\nRELEASE={{ key \"hydra2/config/release\" }}\nNOMAD_JOB_NAME={{ env \"NOMAD_JOB_NAME\" }}\n"
+        data          = "IMAGE_ID={{ keyOrDefault \"hydra2/config/image_id\" \"1\" }}\nRELEASE={{ keyOrDefault \"hydra2/config/release\" \"latest\" }}"
         destination   = "env_info"
         env           = true
       }
