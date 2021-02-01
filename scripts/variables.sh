@@ -1,6 +1,17 @@
 #!/usr/bin/env bash
 
-SERVICES=(lidarr sonarr radarr tautulli hydra2 sabnzbd ombi nginx plex)
+#SERVICES=(lidarr sonarr radarr tautulli hydra2 sabnzbd ombi caddy plex)
+
+declare -A SERVICES=( [lidarr]=docker.io/linuxserver/lidarr:latest
+                      [sonarr]=docker.io/linuxserver/sonarr:preview
+                      [radarr]=docker.io/linuxserver/radarr:latest
+                      [tautulli]=docker.io/linuxserver/tautulli:latest
+                      [hydra2]=docker.io/linuxserver/nzbhydra2:latest
+                      [sabnzbd]=docker.io/linuxserver/sabnzbd:latest
+                      [ombi]=docker.io/linuxserver/ombi:v4-preview
+                      [caddy]=docker.io/library/caddy:alpine
+                      [plex]=docker.io/plexinc/pms-docker:plexpass
+                    )
 DOWNLOADABLES=(movies tv music other)
 DATE=`date +%d-%m-%Y`
 CRONDIR=/etc/cron.d
@@ -20,3 +31,4 @@ PLEXUSER=plex
 PLEXGROUP=plex
 PLEXUID=1100
 PACKAGES="fuse rsync vim podman podman-docker podman-remote cockpit cockpit-podman"
+PLEX_TOKEN="X-Plex-Token: Qq9YyApAKHyzkptsS2_g"

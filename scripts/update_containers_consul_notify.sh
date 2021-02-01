@@ -1,19 +1,20 @@
 #!/usr/bin/env bash
 
-for IMAGE in `sudo podman ps | awk -F ' ' '{print $2}' | grep -v ID`
+source ${BASH_SOURCE%/*}/variables.sh
+
+for SERVICE in "${!SERVICES[@]}"
 do
+  IMAGE=${SERVICES[${SERVICE}]}
+
   # pull new image
-  sudo podman pull $IMAGE
+  sudo podman pull ${IMAGE}
   
   # get image Id
-  ID=`podman inspect --format "{{.Id}}" $IMAGE`
-  
-  # get consul kv key
-  KEY=`echo $IMAGE | awk -F '/' '{print $3}' | awk -F ':' '{print $1}'`
+  ID=`sudo podman inspect --format "{{.Id}}" ${IMAGE}`
+ 
+  # echo "Writing: ${SERVICE}/config/image as ${IMAGE}"
+  consul kv put ${SERVICE}/config/image ${IMAGE}
 
-  # echo "Writing: $KEY/config/image as $IMAGE"
-  consul kv put $KEY/config/image $IMAGE
-
-  # echo "Writing: $KEY/config/image_id as $ID"
-  consul kv put $KEY/config/image_id $ID
+  # echo "Writing: ${SERVICE}/config/image_id as $ID"
+  consul kv put ${SERVICE}/config/image_id $ID
 done
