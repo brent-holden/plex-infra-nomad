@@ -60,7 +60,7 @@ job "hydra2" {
 
       template {
         data = <<EOF
-IMAGE_ID={{ key "nzbhydra2/config/image_id" }}
+IMAGE_ID={{ key "hydra2/config/image_id" }}
 EOF
 
         destination = "image_id.env"
