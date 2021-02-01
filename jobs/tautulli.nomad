@@ -19,9 +19,7 @@ job "tautulli" {
   group "tautulli" {
     count = 1
     network {
-      port "tautulli" {
-        static = 8181
-      }
+      port "tautulli" { static = 8181 }
     }
 
     service {
@@ -46,23 +44,23 @@ job "tautulli" {
       driver = "podman"
 
       env {
-        PGID = "1100"
-        PUID = "1100"
-        TZ="America/New_York"
+        PGID  = "1100"
+        PUID  = "1100"
+        TZ    = "America/New_York"
       }
 
       config {
-        image = "docker://linuxserver/tautulli:latest"
-        network_mode = "bridge"
-        ports = ["tautulli"]
-        volumes = ["/opt/tautulli:/config","/opt/plex/Library/Application Support/Plex Media Server/Logs:/plex_logs"]
+        image         = "docker://linuxserver/tautulli:latest"
+        network_mode  = "bridge"
+        ports         = ["tautulli"]
+        volumes       = ["/opt/tautulli:/config","/opt/plex/Library/Application Support/Plex Media Server/Logs:/plex_logs"]
       }
 
 
       template {
-        data = "IMAGE_ID={{ key \"tautulli/config/image_id\" }}"
-        destination = "image_id.env"
-        env = true
+        data          = "IMAGE_ID={{ key \"tautulli/config/image_id\" }}"
+        destination   = "image_id.env"
+        env           = true
       }
 
       resources {

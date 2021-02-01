@@ -8,20 +8,18 @@ job "radarr" {
   }
 
   update {
-    max_parallel = 1
-    min_healthy_time = "5s"
-    healthy_deadline = "2m"
+    max_parallel      = 1
+    min_healthy_time  = "5s"
+    healthy_deadline  = "2m"
     progress_deadline = "3m"
-    auto_revert = true
-    canary = 0
+    auto_revert       = true
+    canary            = 0
   }
 
   group "radarr" {
     count = 1
     network {
-      port "radarr" {
-        static = 7878
-      }
+      port "radarr" { static = 7878 }
     }
 
     service {
@@ -51,16 +49,16 @@ job "radarr" {
       }
 
       config {
-        image = "docker://linuxserver/radarr:latest"
-        network_mode = "bridge"
-        ports = ["radarr"]
-        volumes = ["/opt/radarr:/config","/mnt/downloads:/downloads","/mnt/rclone/media/Movies:/media/movies","/etc/localtime:/etc/localtime:ro"]
+        image         = "docker://linuxserver/radarr:latest"
+        network_mode  = "bridge"
+        ports         = ["radarr"]
+        volumes       = ["/opt/radarr:/config","/mnt/downloads:/downloads","/mnt/rclone/media/Movies:/media/movies","/etc/localtime:/etc/localtime:ro"]
       }
 
       template {
-        data = "IMAGE_ID={{ key \"radarr/config/image_id\" }}"
-        destination = "image_id.env"
-        env = true
+        data          = "IMAGE_ID={{ key \"radarr/config/image_id\" }}"
+        destination   = "image_id.env"
+        env           = true
       }
 
       resources {

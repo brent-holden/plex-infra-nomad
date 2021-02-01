@@ -19,9 +19,7 @@ job "lidarr" {
   group "lidarr" {
     count = 1
     network {
-      port "lidarr" {
-        static = 8686
-      }
+      port "lidarr" { static = 8686 }
     }
 
     service {
@@ -38,8 +36,8 @@ job "lidarr" {
     }
 
     ephemeral_disk {
-      sticky = true
-      size = 2048
+      sticky  = true
+      size    = 2048
     }
 
     task "lidarr" {
@@ -51,16 +49,16 @@ job "lidarr" {
       }
 
       config {
-        image = "docker://linuxserver/lidarr:latest"
-        network_mode = "bridge"
-        ports = ["lidarr"]
-        volumes = ["/opt/lidarr:/config","/mnt/downloads:/downloads","/mnt/rclone/media/Music:/music"]
+        image         = "docker://linuxserver/lidarr:latest"
+        network_mode  = "bridge"
+        ports         = ["lidarr"]
+        volumes       = ["/opt/lidarr:/config","/mnt/downloads:/downloads","/mnt/rclone/media/Music:/music"]
       }
 
       template {
-        data = "IMAGE_ID={{ key \"lidarr/config/image_id\" }}"
-        destination = "image_id.env"
-        env = true
+        data          = "IMAGE_ID={{ key \"lidarr/config/image_id\" }}"
+        destination   = "image_id.env"
+        env           = true
       }
 
       resources {

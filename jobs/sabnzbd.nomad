@@ -8,20 +8,18 @@ job "sabnzbd" {
   }
 
   update {
-    max_parallel = 1
-    min_healthy_time = "5s"
-    healthy_deadline = "2m"
+    max_parallel      = 1
+    min_healthy_time  = "5s"
+    healthy_deadline  = "2m"
     progress_deadline = "3m"
-    auto_revert = true
-    canary = 0
+    auto_revert       = true
+    canary            = 0
   }
 
   group "sabnzbd" {
     count = 1
     network {
-      port "sabnzbd" {
-        static = 8080
-      }
+      port "sabnzbd" { static = 8080 }
     }
 
     service {
@@ -38,8 +36,8 @@ job "sabnzbd" {
     }
 
     ephemeral_disk {
-      sticky = true
-      size = 2048
+      sticky  = true
+      size    = 2048
     }
 
     task "sabnzbd" {
@@ -51,16 +49,16 @@ job "sabnzbd" {
       }
 
       config {
-        image = "docker://linuxserver/sabnzbd:latest"
-        network_mode = "bridge"
-        ports = ["sabnzbd"]
-        volumes = ["/opt/sabnzbd:/config","/mnt/downloads:/downloads"]
+        image         = "docker://linuxserver/sabnzbd:latest"
+        network_mode  = "bridge"
+        ports         = ["sabnzbd"]
+        volumes       = ["/opt/sabnzbd:/config","/mnt/downloads:/downloads"]
       }
 
       template {
-        data = "IMAGE_ID={{ key \"sabnzbd/config/image_id\" }}"
-        destination = "image_id.env"
-        env = true
+        data          = "IMAGE_ID={{ key \"sabnzbd/config/image_id\" }}"
+        destination   = "image_id.env"
+        env           = true
       }
 
       resources {

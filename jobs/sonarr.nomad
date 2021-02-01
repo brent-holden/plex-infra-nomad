@@ -8,20 +8,18 @@ job "sonarr" {
   }
 
   update {
-    max_parallel = 1
-    min_healthy_time = "5s"
-    healthy_deadline = "2m"
+    max_parallel      = 1
+    min_healthy_time  = "5s"
+    healthy_deadline  = "2m"
     progress_deadline = "3m"
-    auto_revert = true
-    canary = 0
+    auto_revert       = true
+    canary            = 0
   }
 
   group "sonarr" {
     count = 1
     network {
-      port "sonarr" {
-        static = 8989
-      }
+      port "sonarr" { static = 8989 }
     }
 
     service {
@@ -38,8 +36,8 @@ job "sonarr" {
     }
 
     ephemeral_disk {
-      sticky = true
-      size = 2048
+      sticky  = true
+      size    = 2048
     }
 
     task "sonarr" {
@@ -51,16 +49,16 @@ job "sonarr" {
       }
 
       config {
-        image = "docker://linuxserver/sonarr:preview"
-        network_mode = "bridge"
-        ports = ["sonarr"]
-        volumes = ["/opt/sonarr:/config","/mnt/downloads:/downloads","/mnt/rclone/media/TV:/tv","/etc/localtime:/etc/localtime"]
+        image         = "docker://linuxserver/sonarr:preview"
+        network_mode  = "bridge"
+        ports         = ["sonarr"]
+        volumes       = ["/opt/sonarr:/config","/mnt/downloads:/downloads","/mnt/rclone/media/TV:/tv","/etc/localtime:/etc/localtime"]
       }
 
       template {
-        data = "IMAGE_ID={{ key \"sonarr/config/image_id\" }}"
-        destination = "image_id.env"
-        env = true
+        data          = "IMAGE_ID={{ key \"sonarr/config/image_id\" }}"
+        destination   = "image_id.env"
+        env           = true
       }
 
       resources {

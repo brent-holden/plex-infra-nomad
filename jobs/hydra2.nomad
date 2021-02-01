@@ -8,20 +8,18 @@ job "hydra2" {
   }
 
   update {
-    max_parallel = 1
-    min_healthy_time = "5s"
-    healthy_deadline = "2m"
+    max_parallel      = 1
+    min_healthy_time  = "5s"
+    healthy_deadline  = "2m"
     progress_deadline = "3m"
-    auto_revert = true
-    canary = 0
+    auto_revert       = true
+    canary            = 0
   }
 
   group "hydra2" {
     count = 1
     network {
-      port "hydra2" {
-        static = 5076
-      }
+      port "hydra2" { static = 5076 }
     }
 
     service {
@@ -38,8 +36,8 @@ job "hydra2" {
     }
 
     ephemeral_disk {
-      sticky = true
-      size = 2048
+      sticky  = true
+      size    = 2048
     }
 
     task "hydra2" {
@@ -51,16 +49,16 @@ job "hydra2" {
       }
 
       config {
-        image = "docker://linuxserver/nzbhydra2:latest"
-        network_mode = "bridge"
-        ports = ["hydra2"]
-        volumes = ["/opt/hydra2:/config","/mnt/downloads:/downloads"]
+        image         = "docker://linuxserver/nzbhydra2:latest"
+        network_mode  = "bridge"
+        ports         = ["hydra2"]
+        volumes       = ["/opt/hydra2:/config","/mnt/downloads:/downloads"]
       }
 
       template {
-        data = "IMAGE_ID={{ key \"hydra2/config/image_id\" }}"
-        destination = "image_id.env"
-        env = true
+        data          = "IMAGE_ID={{ key \"hydra2/config/image_id\" }}"
+        destination   = "image_id.env"
+        env           = true
       }
 
       resources {
