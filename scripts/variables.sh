@@ -32,3 +32,4 @@ PLEXGROUP=plex
 PLEXUID=1100
 PACKAGES="fuse rsync vim podman podman-docker podman-remote cockpit cockpit-podman"
 PLEX_TOKEN="X-Plex-Token: Qq9YyApAKHyzkptsS2_g"
+NOMAD_PLUGIN_DIR=/opt/nomad/plugins

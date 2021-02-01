@@ -77,7 +77,7 @@ job "plex" {
 
       template {
         data = <<EOF
-IMAGE_ID={{ key "pms-docker/config/version" }}
+IMAGE_ID={{ key "plex/config/version" }}
 EOF
 
         destination = "image_id.env"
