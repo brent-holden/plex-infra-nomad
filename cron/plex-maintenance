@@ -1,0 +1,2 @@
+35 4 * * * root %%SCRIPT_REPO%%/nightly.sh >/dev/null 2>&1
+
