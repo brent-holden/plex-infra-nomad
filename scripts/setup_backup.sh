@@ -5,27 +5,26 @@ source ${BASH_SOURCE%/*}/variables.sh
 echo -e "\n\n### Setting up Backups ###\n\n"
 
 # Test to make sure we're mounted or exit
-if $(mountpoint -q "$RCLONEBACKUPDIR"); then
-    echo "$RCLONEBACKUPDIR is mounted. Let's do this!"
+if $(mountpoint -q "${RCLONEBACKUPDIR}"); then
+    echo "${RCLONEBACKUPDIR} is mounted. Let's do this!"
 else
-    echo "$RCLONEBACKUPDIR is not a mounted. Exiting"
+    echo "${RCLONEBACKUPDIR}is not mounted. Exiting"
     exit 1
 fi
 
 # Loop over services defined
 for SERVICE in "${!SERVICES[@]}"; do
 
-  BACKUPDIR=$RCLONEBACKUPDIR/$SERVICE
-
-  if [ -d "$BACKUPDIR" ]; then
+  BACKUPDIR=${RCLONEBACKUPDIR}/${SERVICE}
+  if [ ! -d "${BACKUPDIR}" ]; then
     # Create backup directory
-    echo "Directory $BACKUPDIR not found. Creating."
-    sudo mkdir -p $BACKUPDIR
+    echo "Directory ${BACKUPDIR} not found. Creating."
+    sudo mkdir -p ${BACKUPDIR}
   fi
 
   # Change directory permissions
-  echo "Changing $BACKUPDIR permissions to: $PLEXUSER.$PLEXGROUP"
-  sudo chown -R $PLEXUSER.$PLEXGROUP $BACKUPDIR
+  echo "Changing ${BACKUPDIR} permissions to: ${PLEXUSER}.${PLEXGROUP}"
+  sudo chown -R ${PLEXUSER}.${PLEXGROUP} ${BACKUPDIR}
 
 done
 
