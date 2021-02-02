@@ -74,7 +74,7 @@ job "plex" {
       }
 
       template {
-        data          = "VERSION={{ key \"plex/config/version\" }}\nRELEASE={{ key \"plex/config/release\" }}"
+        data          = "IMAGE_ID={{ keyOrDefault \"tautulli/config/image_id\" \"1\" }}\nVERSION={{ keyOrDefault \"plex/config/version\" \"1.0\" }}\nRELEASE={{ keyOrDefault \"plex/config/release\" \"plexpass\"}}"
         destination   = "env_info"
         env           = true
       }
