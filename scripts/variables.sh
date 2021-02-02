@@ -12,6 +12,16 @@ declare -A SERVICES=( [lidarr]=docker.io/linuxserver/lidarr:latest
                       [caddy]=docker.io/library/caddy:alpine
                       [plex]=docker.io/plexinc/pms-docker:plexpass
                     )
+declare -A BACKUPS=(  [lidarr]=/opt/lidarr/Backups/scheduled
+                      [sonarr]=/opt/sonarr/Backups/scheduled
+                      [radarr]=/opt/radarr/Backups/scheduled
+                      [tautulli]=/opt/tautulli/backups
+                      [hydra2]=/opt/hydra2/backup
+                      [sabnzbd]=/opt/sabnzbd/
+                      [ombi]=/opt/ombi/
+                      [caddy]=/opt/caddy/
+                      [plex]=/opt/plex/Backups
+                    )
 DOWNLOADABLES=(movies tv music other)
 DATE=`date +%d-%m-%Y`
 CRONDIR=/etc/cron.d
