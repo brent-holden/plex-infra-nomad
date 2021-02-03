@@ -1,0 +1,27 @@
+[Unit]
+Description=rClone (Backup Folder)
+AssertPathIsDirectory=/mnt/rclone/backup
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=notify
+User=root
+Group=root
+ExecStart=/usr/bin/rclone mount \
+  --config /opt/rclone/rclone.conf \
+  --vfs-cache-mode writes \
+  --allow-other \
+  --dir-cache-time 96h \
+  --cache-info-age 97h \
+  --cache-db-path /mnt/rclone/cache-db \
+  --cache-chunk-path /mnt/rclone/cache/cache-backend \
+  --cache-dir /mnt/rclone/cache \
+  --fast-list \
+  backup-cache:/ /mnt/rclone/backup
+ExecStop=/bin/fusermount -uz /mnt/rclone/backup
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target
+
