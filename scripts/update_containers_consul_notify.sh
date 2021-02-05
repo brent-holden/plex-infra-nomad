@@ -8,8 +8,9 @@ do
   IMAGE=`echo ${IMGANDREPO} | awk -F : '{ print $1 }'`
   RELEASE=`echo ${IMGANDREPO} | awk -F : '{ print $2 }'`
 
+  echo "Pulling ${IMAGE}:${RELEASE}"
   # pull new image
-  sudo podman pull ${IMAGE}
+  sudo podman pull ${IMAGE}:${RELEASE}
   
   # get image Id
   ID=`sudo podman inspect --format "{{.Id}}" ${IMAGE}`
