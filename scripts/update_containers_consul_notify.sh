@@ -13,7 +13,7 @@ do
   sudo podman pull ${IMAGE}:${RELEASE}
   
   # get image Id
-  ID=`sudo podman inspect --format "{{.Id}}" ${IMAGE}`
+  ID=`sudo podman inspect --format "{{.Id}}" ${IMAGE}:${RELEASE}`
  
   # echo "Writing: ${SERVICE}/config/image as ${IMAGE}"
   consul kv put ${SERVICE}/config/image ${IMAGE}
