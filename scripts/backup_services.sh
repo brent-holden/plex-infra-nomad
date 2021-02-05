@@ -3,10 +3,10 @@
 source ${BASH_SOURCE%/*}/variables.sh
 
 # Test to make sure rclone is mounted or exit
-if $(mountpoint -q "$RCLONEBACKUPDIR"); then
-    echo "$RCLONEBACKUPDIR is mounted. Let's do this"
+if $(mountpoint -q "${RCLONEBACKUPDIR}"); then
+    echo "${RCLONEBACKUPDIR} is mounted. Let's do this"
 else
-    echo "$RCLONEBACKUPDIR is not mounted. Exiting"
+    echo "${RCLONEBACKUPDIR} is not mounted. Exiting"
     exit 1
 fi
 
@@ -16,14 +16,14 @@ CWD=$(pwd)
 for SERVICE in "${!SERVICES[@]}"; do
 
   # Define variables per service
-  FILENAME=backup_$DATE.tar.gz
+  FILENAME=backup_${DATE}.tar.gz
   LATEST=backup_latest.tar.gz
   SRCDIR=${BACKUPS[${SERVICE}]}
-  DESTDIR=$RCLONEBACKUPDIR/$SERVICE
+  DESTDIR=${RCLONEBACKUPDIR}/${SERVICE}
 
   # Change into service backups directory
   cd ${SRCDIR}
-  
+
   MATCHING=`ls *.zip 2>/dev/null | wc -l`
   if [ ${MATCHING} -eq "0" ]; then
     # Create the backup file
@@ -32,7 +32,7 @@ for SERVICE in "${!SERVICES[@]}"; do
 
     # Move it to the right place
     echo "Moving ${FILENAME} to ${DESTDIR}"
-    sudo mv ${TMPDIR}/${FILENAME} ${DESTDIR} 
+    sudo mv ${TMPDIR}/${FILENAME} ${DESTDIR}
   else
     echo "Found zip file backups in ${SRCDIR}. No need to create backups"
     echo "Copying them over to ${DESTDIR}"
@@ -40,4 +40,4 @@ for SERVICE in "${!SERVICES[@]}"; do
   fi
 done
 
-cd $CWD
+cd ${CWD}

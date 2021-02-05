@@ -5,12 +5,12 @@ source ${BASH_SOURCE%/*}/variables.sh
 echo -e "\n\n### Preparing your system ###\n\n"
 
 # Add the plex user and group with specified UID before doing anything
-echo "Adding $PLEXUSER with UID:$PLEXUID"
-sudo adduser $PLEXUSER --uid=$PLEXUID -U
+echo "Adding ${PLEXUSER} with UID:${PLEXUID}"
+sudo adduser ${PLEXUSER} --uid=${PLEXUID} -U
 
 # Install packages needed
-echo "Installing packages: $PACKAGES"
-sudo yum -y install $PACKAGES
+echo "Installing packages: ${PACKAGES}"
+sudo yum -y install ${PACKAGES}
 
 # Enable cockpit
 echo "Enabling cockpiti for remote web administration. Access via https://<ip>:9090"
@@ -27,20 +27,20 @@ sudo sed -i 's/^SELINUX=.*/SELINUX=disabled/' /etc/sysconfig/selinux
 # Create download directories
 for MEDIATYPE in "${DOWNLOADABLES[@]}"; do
 
-  MEDIADIR=$COMPLETEDDIR/$MEDIATYPE
+  MEDIADIR=${COMPLETEDDIR}/${MEDIATYPE}
 
-  echo "Creating $MEDIADIR"
-  sudo mkdir -p $MEDIADIR
+  echo "Creating ${MEDIADIR}"
+  sudo mkdir -p ${MEDIADIR}
 
-  echo "Changing permissions on $MEDIADIR to $PLEXUSER.$PLEXGROUP"
-  sudo chown -R $PLEXUSER.$PLEXGROUP $MEDIADIR
+  echo "Changing permissions on ${MEDIADIR} to ${PLEXUSER}.${PLEXGROUP}"
+  sudo chown -R ${PLEXUSER}.${PLEXGROUP} ${MEDIADIR}
 
 done
 
-echo "Creating $TRANSCODEDIR"
-sudo mkdir -p $TRANSCODEDIR
+echo "Creating ${TRANSCODEDIR}"
+sudo mkdir -p ${TRANSCODEDIR}
 
-echo "Changing permissions on $TRANSCODEDIR to $PLEXUSER.$PLEXGROUP"
-sudo chown -R $PLEXUSER.$PLEXGROUP $TRANSCODEDIR
+echo "Changing permissions on ${TRANSCODEDIR} to ${PLEXUSER}.${PLEXGROUP}"
+sudo chown -R ${PLEXUSER}.${PLEXGROUP} ${TRANSCODEDIR}
 
 echo "Done preparing your system. Ready for services installation"
