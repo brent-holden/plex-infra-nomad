@@ -62,8 +62,8 @@ job "sabnzbd" {
       }
 
       resources {
-        cpu    = 1000
-        memory = 2048
+        cpu    = 2000
+        memory = 4096
       }
 
       kill_timeout = "20s"
