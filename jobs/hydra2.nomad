@@ -62,8 +62,8 @@ job "hydra2" {
       }
 
       resources {
-        cpu    = 300
-        memory = 512
+        cpu    = 1000
+        memory = 2048
       }
 
       kill_timeout = "20s"
