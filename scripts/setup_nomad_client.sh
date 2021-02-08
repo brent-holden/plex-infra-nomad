@@ -27,4 +27,12 @@ systemctl enable --now io.podman.socket
 echo "Enabling and starting Nomad"
 sudo systemctl enable --now nomad
 
+# Setup cronjob
+echo "Copying podman cleaning configuration to /etc/cron.d"
+sudo cp ${BASH_SOURCE%/*}/../cron/clean-podman ${CRONDIR}
+sudo sed -i "s~%%SCRIPT_REPO%%~${REPODIR}~" ${CRONDIR}/clean-podman
+sudo systemctl restart crond
+
+#echo "Done setting up backups"
+
 echo "Done setting up Nomad client"
