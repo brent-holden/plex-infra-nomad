@@ -9,7 +9,7 @@ do
   RELEASE=`echo ${IMGANDREPO} | awk -F : '{ print $2 }'`
 
   echo "Pulling ${IMAGE}:${RELEASE}"
-  # pull new image
+  # pull defined image
   sudo podman pull ${IMAGE}:${RELEASE}
 
   # get image Id
