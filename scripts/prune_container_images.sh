@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-sudo podman image prune
+sudo podman image prune -f
