@@ -17,18 +17,18 @@ if [ ! -f "${RCLONECONF}" ]; then
 fi
 
 echo "Making service directories"
-sudo mkdir -p ${DOWNLOADSDIR}
-sudo mkdir -p ${RCLONEMEDIADIR}
-sudo mkdir -p ${RCLONEBACKUPDIR}
-sudo mkdir -p ${RCLONECONFIGDIR}
+sudo mkdir -p ${DOWNLOADS_DIR}
+sudo mkdir -p ${RCLONE_MEDIA_DIR}
+sudo mkdir -p ${RCLONE_BACKUP_DIR}
+sudo mkdir -p ${RCLONE_CONFIG_DIR}
 
-sudo cp ${RCLONECONF} ${RCLONECONFIGDIR}
+sudo cp ${RCLONECONF} ${RCLONE_CONFIG_DIR}
 
 echo "Installing rclone"
 sudo yum install -y https://downloads.rclone.org/rclone-current-linux-amd64.rpm
 
 echo "Copying service files over"
-sudo cp ${SYSTEMDSVCFILESDIR}/rclone* ${SYSTEMDDIR}
+sudo cp ${SYSTEMD_SVCFILES_DIR}/rclone* ${SYSTEMD_DIR}
 sudo systemctl daemon-reload
 
 echo "Enabling and starting rclone services"

@@ -5,8 +5,8 @@ source ${BASH_SOURCE%/*}/variables.sh
 echo -e "\n\n### Preparing your system ###\n\n"
 
 # Add the plex user and group with specified UID before doing anything
-echo "Adding ${PLEXUSER} with UID:${PLEXUID}"
-sudo adduser ${PLEXUSER} --uid=${PLEXUID} -U
+echo "Adding ${PLEX_USER} with UID:${PLEX_UID}"
+sudo adduser ${PLEX_USER} --uid=${PLEX_UID} -U
 
 # Install packages needed
 echo "Installing packages: ${PACKAGES}"
@@ -27,20 +27,20 @@ sudo sed -i 's/^SELINUX=.*/SELINUX=disabled/' /etc/sysconfig/selinux
 # Create download directories
 for MEDIATYPE in "${DOWNLOADABLES[@]}"; do
 
-  MEDIADIR=${COMPLETEDDIR}/${MEDIATYPE}
+  MEDIADIR=${COMPLETED_DIR}/${MEDIATYPE}
 
   echo "Creating ${MEDIADIR}"
   sudo mkdir -p ${MEDIADIR}
 
-  echo "Changing permissions on ${MEDIADIR} to ${PLEXUSER}.${PLEXGROUP}"
-  sudo chown -R ${PLEXUSER}.${PLEXGROUP} ${MEDIADIR}
+  echo "Changing permissions on ${MEDIADIR} to ${PLEX_USER}.${PLEX_GROUP}"
+  sudo chown -R ${PLEX_USER}.${PLEX_GROUP} ${MEDIADIR}
 
 done
 
-echo "Creating ${TRANSCODEDIR}"
-sudo mkdir -p ${TRANSCODEDIR}
+echo "Creating ${TRANSCODE_DIR}"
+sudo mkdir -p ${TRANSCODE_DIR}
 
-echo "Changing permissions on ${TRANSCODEDIR} to ${PLEXUSER}.${PLEXGROUP}"
-sudo chown -R ${PLEXUSER}.${PLEXGROUP} ${TRANSCODEDIR}
+echo "Changing permissions on ${TRANSCODE_DIR} to ${PLEX_USER}.${PLEX_GROUP}"
+sudo chown -R ${PLEX_USER}.${PLEX_GROUP} ${TRANSCODE_DIR}
 
 echo "Done preparing your system. Ready for services installation"

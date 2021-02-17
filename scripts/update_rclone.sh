@@ -15,11 +15,11 @@ done
 RCLONERPM=rclone-current-linux-amd64.rpm
 RCLONESITE=https://downloads.rclone.org
 
-echo "Runing wget -O ${TMPDIR}/${RCLONERPM} ${RCLONESITE}/${RCLONERPM}"
-wget -O ${TMPDIR}/${RCLONERPM} ${RCLONESITE}/${RCLONERPM}
+echo "Runing wget -O ${TMP_DIR}/${RCLONERPM} ${RCLONESITE}/${RCLONERPM}"
+wget -O ${TMP_DIR}/${RCLONERPM} ${RCLONESITE}/${RCLONERPM}
 
 CURRENTVER=$(rpm -q --queryformat '%{VERSION}\n' rclone)
-DOWNLOADVER=$(rpm -qp --queryformat '%{VERSION}\n' ${TMPDIR}/${RCLONERPM})
+DOWNLOADVER=$(rpm -qp --queryformat '%{VERSION}\n' ${TMP_DIR}/${RCLONERPM})
 
 echo "Installed version: ${CURRENTVER}"
 echo "Downloaded version: ${DOWNLOADVER}"
@@ -35,13 +35,13 @@ if [ ${CURRENTVER} != ${DOWNLOADVER} ]; then
     done
   fi
 
-	sudo yum install -y ${TMPDIR}/${RCLONERPM}
+	sudo yum install -y ${TMP_DIR}/${RCLONERPM}
 	sudo systemctl restart rclone-media-drive
 	sudo systemctl restart rclone-backup-drive
 	#sudo systemctl restart rclone-web
 fi
 
 #Clean up after ourselves
-rm ${TMPDIR}/${RCLONERPM}
+rm ${TMP_DIR}/${RCLONERPM}
 
 echo "Exiting"

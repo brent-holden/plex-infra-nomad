@@ -5,17 +5,17 @@ source ${BASH_SOURCE%/*}/variables.sh
 echo -e "\n\n### Setting up Backups ###\n\n"
 
 # Test to make sure we're mounted or exit
-if $(mountpoint -q "${RCLONEBACKUPDIR}"); then
-    echo "${RCLONEBACKUPDIR} is mounted. Let's do this!"
+if $(mountpoint -q "${RCLONE_BACKUP_DIR}"); then
+    echo "${RCLONE_BACKUP_DIR} is mounted. Let's do this!"
 else
-    echo "${RCLONEBACKUPDIR}is not mounted. Exiting"
+    echo "${RCLONE_BACKUP_DIR}is not mounted. Exiting"
     exit 1
 fi
 
 # Loop over services defined
 for SERVICE in "${!SERVICES[@]}"; do
 
-  BACKUPDIR=${RCLONEBACKUPDIR}/${SERVICE}
+  BACKUPDIR=${RCLONE_BACKUP_DIR}/${SERVICE}
   if [ ! -d "${BACKUPDIR}" ]; then
     # Create backup directory
     echo "Directory ${BACKUPDIR} not found. Creating."
@@ -23,8 +23,8 @@ for SERVICE in "${!SERVICES[@]}"; do
   fi
 
   # Change directory permissions
-  echo "Changing ${BACKUPDIR} permissions to: ${PLEXUSER}.${PLEXGROUP}"
-  sudo chown -R ${PLEXUSER}.${PLEXGROUP} ${BACKUPDIR}
+  echo "Changing ${BACKUPDIR} permissions to: ${PLEX_USER}.${PLEX_GROUP}"
+  sudo chown -R ${PLEX_USER}.${PLEX_GROUP} ${BACKUPDIR}
 
 done
 
@@ -33,8 +33,8 @@ REPODIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )
 
 # Setup cronjob
 echo "Copying backup configuration to /etc/cron.d"
-sudo cp ${BASH_SOURCE%/*}/../cron/plex-backups ${CRONDIR}
-sudo sed -i "s~%%SCRIPT_REPO%%~${REPODIR}~" ${CRONDIR}/plex-backups
+sudo cp ${BASH_SOURCE%/*}/../cron/plex-backups ${CRON_DIR}
+sudo sed -i "s~%%SCRIPT_REPO%%~${REPODIR}~" ${CRON_DIR}/plex-backups
 sudo systemctl restart crond
 
 #echo "Done setting up backups"

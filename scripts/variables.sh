@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-#SERVICES=(lidarr sonarr radarr tautulli hydra2 sabnzbd ombi caddy plex)
-
 declare -A SERVICES=( [lidarr]=docker.io/linuxserver/lidarr:latest
                       [sonarr]=docker.io/linuxserver/sonarr:preview
                       [radarr]=docker.io/linuxserver/radarr:latest
@@ -24,22 +22,22 @@ declare -A BACKUPS=(  [lidarr]=/opt/lidarr/Backups/scheduled
                     )
 DOWNLOADABLES=(movies tv music other)
 DATE=`date +%d-%m-%Y`
-CRONDIR=/etc/cron.d
-OPTDIR=/opt
-TMPDIR=/tmp
-RCLONEDIR=/mnt/rclone
-RCLONEMEDIADIR=${RCLONEDIR}/media
-RCLONECACHEDIR=${RCLONEDIR}/cache-db
-RCLONEBACKUPDIR=${RCLONEDIR}/backup
-RCLONECONFIGDIR=${OPTDIR}/rclone
-DOWNLOADSDIR=/mnt/downloads
-COMPLETEDDIR=${DOWNLOADSDIR}/complete
-TRANSCODEDIR=/mnt/transcode
-SYSTEMDSVCFILESDIR=../systemd
-SYSTEMDDIR=/usr/lib/systemd/system
-PLEXUSER=plex
-PLEXGROUP=plex
-PLEXUID=1100
+CRON_DIR=/etc/cron.d
+OPT_DIR=/opt
+TMP_DIR=/tmp
+RCLONE_DIR=/mnt/rclone
+RCLONE_MEDIA_DIR=${RCLONE_DIR}/media
+RCLONE_CACHE_DIR=${RCLONE_DIR}/cache-db
+RCLONE_BACKUP_DIR=${RCLONE_DIR}/backup
+RCLONE_CONFIG_DIR=${OPT_DIR}/rclone
+DOWNLOADS_DIR=/mnt/downloads
+COMPLETED_DIR=${DOWNLOADS_DIR}/complete
+TRANSCODE_DIR=/mnt/transcode
+SYSTEMD_SVCFILES_DIR=../systemd
+SYSTEMD_DIR=/usr/lib/systemd/system
+PLEX_USER=plex
+PLEX_GROUP=plex
+PLEX_UID=1100
 PACKAGES="fuse rsync vim podman podman-docker podman-remote cockpit cockpit-podman"
 PLEX_TOKEN="X-Plex-Token: Qq9YyApAKHyzkptsS2_g"
 NOMAD_PLUGIN_DIR=/opt/nomad/plugins

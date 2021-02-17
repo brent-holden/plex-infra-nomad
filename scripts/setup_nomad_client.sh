@@ -29,8 +29,8 @@ sudo systemctl enable --now nomad
 
 # Setup cronjob
 echo "Copying podman cleaning configuration to /etc/cron.d"
-sudo cp ${BASH_SOURCE%/*}/../cron/clean-podman ${CRONDIR}
-sudo sed -i "s~%%SCRIPT_REPO%%~${REPODIR}~" ${CRONDIR}/clean-podman
+sudo cp ${BASH_SOURCE%/*}/../cron/clean-podman ${CRON_DIR}
+sudo sed -i "s~%%SCRIPT_REPO%%~${REPODIR}~" ${CRON_DIR}/clean-podman
 sudo systemctl restart crond
 
 #echo "Done setting up backups"
