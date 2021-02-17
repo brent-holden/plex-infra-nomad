@@ -29,12 +29,12 @@ for SERVICE in "${!SERVICES[@]}"; do
 done
 
 # Get current directory of the repo scripts directory
-REPODIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )
+REPO_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )
 
 # Setup cronjob
 echo "Copying backup configuration to /etc/cron.d"
 sudo cp ${BASH_SOURCE%/*}/../cron/plex-backups ${CRON_DIR}
-sudo sed -i "s~%%SCRIPT_REPO%%~${REPODIR}~" ${CRON_DIR}/plex-backups
+sudo sed -i "s~%%SCRIPT_REPO%%~${REPO_DIR}~" ${CRON_DIR}/plex-backups
 sudo systemctl restart crond
 
 #echo "Done setting up backups"
