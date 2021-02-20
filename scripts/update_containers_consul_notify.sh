@@ -8,13 +8,14 @@ do
   IMAGE=`echo ${IMGANDREPO} | awk -F : '{ print $1 }'`
   RELEASE=`echo ${IMGANDREPO} | awk -F : '{ print $2 }'`
 
-  echo "Pulling ${IMAGE}:${RELEASE}"
   # pull defined image
+  echo "Pulling ${IMAGE}:${RELEASE}"
   podman pull ${IMAGE}:${RELEASE}
 
   # get image Id
   ID=`podman inspect --format "{{.Id}}" ${IMAGE}:${RELEASE}`
 
+  # Now write all the values to Consul KV
   # echo "Writing: ${SERVICE}/config/image as ${IMAGE}"
   consul kv put ${SERVICE}/config/image ${IMAGE}
 
