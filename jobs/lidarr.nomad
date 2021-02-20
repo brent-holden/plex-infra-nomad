@@ -19,6 +19,7 @@ job "lidarr" {
   group "lidarr" {
     count = 1
     network {
+      mode  = "bridge"
       port "lidarr" { static = 8686 }
     }
 
@@ -35,13 +36,8 @@ job "lidarr" {
       }
     }
 
-    ephemeral_disk {
-      sticky  = true
-      size    = 2048
-    }
-
     task "lidarr" {
-      driver = "podman"
+      driver = "containerd-driver"
 
       env {
         PGID = "1100"
@@ -49,10 +45,28 @@ job "lidarr" {
       }
 
       config {
-        image         = "docker://docker.io/linuxserver/lidarr:${RELEASE}"
-        network_mode  = "bridge"
-        ports         = ["lidarr"]
-        volumes       = ["/opt/lidarr:/config","/mnt/downloads:/downloads","/mnt/rclone/media/Music:/music"]
+        image         = "docker.io/linuxserver/lidarr:${RELEASE}"
+
+        mounts  = [
+                    {
+                      type    = "bind"
+                      target  = "/config"
+                      source  = "/opt/lidarr"
+                      options = ["rbind", "rw"]
+                    },
+                    {
+                      type    = "bind"
+                      target  = "/downloads"
+                      source  = "/mnt/downloads"
+                      options = ["rbind", "rw"]
+                    },
+                    {
+                      type    = "bind"
+                      target  = "/music"
+                      source  = "/mnt/rclone/media/Music"
+                      options = ["rbind", "rw"]
+                    }
+                  ]
       }
 
       template {

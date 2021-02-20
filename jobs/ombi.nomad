@@ -19,6 +19,7 @@ job "ombi" {
   group "ombi" {
     count = 1
     network {
+      mode = "bridge"
       port "ombi" { static = 3579 }
     }
 
@@ -35,13 +36,8 @@ job "ombi" {
       }
     }
 
-    ephemeral_disk {
-      sticky  = true
-      size    = 2048
-    }
-
     task "ombi" {
-      driver = "podman"
+      driver = "containerd-driver"
 
       env {
        PGID = "1100"
@@ -50,10 +46,15 @@ job "ombi" {
       }
 
       config {
-        image         = "docker://docker.io/linuxserver/ombi:${RELEASE}"
-        network_mode  = "bridge"
-        ports         = ["ombi"]
-        volumes       = ["/opt/ombi:/config"]
+        image         = "docker.io/linuxserver/ombi:${RELEASE}"
+        mounts  = [
+                    {
+                      type    = "bind"
+                      target  = "/config"
+                      source  = "/opt/ombi"
+                      options = ["rbind", "rw"]
+                    }
+                  ]
       }
 
       template {

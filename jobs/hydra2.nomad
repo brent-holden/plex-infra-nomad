@@ -19,7 +19,10 @@ job "hydra2" {
   group "hydra2" {
     count = 1
     network {
-      port "hydra2" { static = 5076 }
+      mode = "bridge"
+      port "hydra2" {
+        static = 5076
+      }
     }
 
     service {
@@ -35,13 +38,8 @@ job "hydra2" {
       }
     }
 
-    ephemeral_disk {
-      sticky  = true
-      size    = 2048
-    }
-
     task "hydra2" {
-      driver = "podman"
+      driver = "containerd-driver"
 
       env {
        PGID = "1100"
@@ -49,10 +47,21 @@ job "hydra2" {
       }
 
       config {
-        image         = "docker://docker.io/linuxserver/nzbhydra2:${RELEASE}"
-        network_mode  = "bridge"
-        ports         = ["hydra2"]
-        volumes       = ["/opt/hydra2:/config","/mnt/downloads:/downloads"]
+        image   = "docker.io/linuxserver/nzbhydra2:${RELEASE}"
+        mounts  = [
+                    {
+                      type    = "bind"
+                      target  = "/config"
+                      source  = "/opt/hydra2"
+                      options = ["rbind", "rw"]
+                    },
+                    {
+                      type    = "bind"
+                      target  = "/downloads"
+                      source  = "/mnt/downloads"
+                      options = ["rbind", "rw"]
+                    }
+                  ]
       }
 
       template {

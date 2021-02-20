@@ -19,6 +19,7 @@ job "sonarr" {
   group "sonarr" {
     count = 1
     network {
+      mode  = "bridge"
       port "sonarr" { static = 8989 }
     }
 
@@ -35,24 +36,37 @@ job "sonarr" {
       }
     }
 
-    ephemeral_disk {
-      sticky  = true
-      size    = 2048
-    }
-
     task "sonarr" {
-      driver = "podman"
+      driver = "containerd-driver"
 
       env {
-        PGID = "1100"
-        PUID = "1100" 
+        PGID  = "1100"
+        PUID  = "1100"
+        TZ    = "America/New_York"
       }
 
       config {
-        image         = "docker://docker.io/linuxserver/sonarr:${RELEASE}"
-        network_mode  = "bridge"
-        ports         = ["sonarr"]
-        volumes       = ["/opt/sonarr:/config","/mnt/downloads:/downloads","/mnt/rclone/media/TV:/tv","/etc/localtime:/etc/localtime:ro"]
+        image   = "docker.io/linuxserver/sonarr:${RELEASE}"
+        mounts  = [
+                    {
+                      type    = "bind"
+                      target  = "/config"
+                      source  = "/opt/sonarr"
+                      options = ["rbind", "rw"]
+                    },
+                    {
+                      type    = "bind"
+                      target  = "/downloads"
+                      source  = "/mnt/downloads"
+                      options = ["rbind", "rw"]
+                    },
+                    {
+                      type    = "bind"
+                      target  = "/tv"
+                      source  = "/mnt/rclone/media/TV"
+                      options = ["rbind", "rw"]
+                    }
+                  ]
       }
 
       template {

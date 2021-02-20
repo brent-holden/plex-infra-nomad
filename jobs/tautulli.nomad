@@ -19,6 +19,7 @@ job "tautulli" {
   group "tautulli" {
     count = 1
     network {
+      mode  = "bridge"
       port "tautulli" { static = 8181 }
     }
 
@@ -35,13 +36,8 @@ job "tautulli" {
       }
     }
 
-    ephemeral_disk {
-      sticky = true
-      size = 2048
-    }
-
     task "tautulli" {
-      driver = "podman"
+      driver = "containerd-driver"
 
       env {
         PGID  = "1100"
@@ -50,10 +46,22 @@ job "tautulli" {
       }
 
       config {
-        image         = "docker://docker.io/linuxserver/tautulli:${RELEASE}"
-        network_mode  = "bridge"
-        ports         = ["tautulli"]
-        volumes       = ["/opt/tautulli:/config","/opt/plex/Library/Application Support/Plex Media Server/Logs:/plex_logs"]
+        image         = "docker.io/linuxserver/tautulli:${RELEASE}"
+
+        mounts  = [
+                    {
+                      type    = "bind"
+                      target  = "/config"
+                      source  = "/opt/tautulli"
+                      options = ["rbind", "rw"]
+                    },
+                    {
+                      type    = "bind"
+                      target  = "/plex_logs"
+                      source  = "/opt/plex/Library/Application Support/Plex Media Server/Logs"
+                      options = ["rbind", "ro"]
+                    }
+                  ]
       }
 
       template {

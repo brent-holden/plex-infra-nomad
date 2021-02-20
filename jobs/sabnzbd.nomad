@@ -19,6 +19,7 @@ job "sabnzbd" {
   group "sabnzbd" {
     count = 1
     network {
+      mode = "bridge"
       port "sabnzbd" { static = 8080 }
     }
 
@@ -35,13 +36,8 @@ job "sabnzbd" {
       }
     }
 
-    ephemeral_disk {
-      sticky  = true
-      size    = 2048
-    }
-
     task "sabnzbd" {
-      driver = "podman"
+      driver = "containerd-driver"
 
       env {
         PGID = "1100"
@@ -49,10 +45,22 @@ job "sabnzbd" {
       }
 
       config {
-        image         = "docker://docker.io/linuxserver/sabnzbd:${RELEASE}"
-        network_mode  = "bridge"
-        ports         = ["sabnzbd"]
-        volumes       = ["/opt/sabnzbd:/config","/mnt/downloads:/downloads"]
+        image         = "docker.io/linuxserver/sabnzbd:${RELEASE}"
+
+        mounts  = [
+                    {
+                      type    = "bind"
+                      target  = "/config"
+                      source  = "/opt/sabnzbd"
+                      options = ["rbind", "rw"]
+                    },
+                    {
+                      type    = "bind"
+                      target  = "/downloads"
+                      source  = "/mnt/downloads"
+                      options = ["rbind", "rw"]
+                    }
+                  ]
       }
 
       template {

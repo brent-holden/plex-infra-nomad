@@ -19,6 +19,7 @@ job "radarr" {
   group "radarr" {
     count = 1
     network {
+      mode  = "bridge"
       port "radarr" { static = 7878 }
     }
 
@@ -41,18 +42,37 @@ job "radarr" {
     }
 
     task "radarr" {
-      driver = "podman"
+      driver = "containerd-driver"
 
       env {
-        PGID = "1100"
-        PUID = "1100" 
+        PGID  = "1100"
+        PUID  = "1100" 
+        TZ    = "America/New_York"
       }
 
       config {
-        image         = "docker://docker.io/linuxserver/radarr:${RELEASE}"
-        network_mode  = "bridge"
-        ports         = ["radarr"]
-        volumes       = ["/opt/radarr:/config","/mnt/downloads:/downloads","/mnt/rclone/media/Movies:/media/movies","/etc/localtime:/etc/localtime:ro"]
+        image   = "docker.io/linuxserver/radarr:${RELEASE}"
+
+        mounts  = [
+                    {
+                      type    = "bind"
+                      target  = "/config"
+                      source  = "/opt/radarr"
+                      options = ["rbind", "rw"]
+                    },
+                    {
+                      type    = "bind"
+                      target  = "/downloads"
+                      source  = "/mnt/downloads"
+                      options = ["rbind", "rw"]
+                    },
+                    {
+                      type    = "bind"
+                      target  = "/media/movies"
+                      source  = "/mnt/rclone/media/Movies"
+                      options = ["rbind", "rw"]
+                    }
+                  ]
       }
 
       template {

@@ -9,7 +9,7 @@ job "caddy" {
 
   update {
     max_parallel      = 1
-    min_healthy_time  = "5s"
+    min_healthy_time  = "30s"
     healthy_deadline  = "2m"
     progress_deadline = "3m"
     auto_revert       = true
@@ -31,24 +31,39 @@ job "caddy" {
       check {
         type     = "tcp"
         port     = "https"
-        interval = "60s"
-        timeout  = "2s"
+        interval = "120s"
+        timeout  = "60s"
       }
     }
 
-    ephemeral_disk {
-      sticky  = true
-      size    = 2048
-    }
-
     task "caddy" {
-      driver = "podman"
+      driver = "containerd-driver"
 
       config {
-        image         = "docker://docker.io/caddy:${RELEASE}"
-        network_mode  = "bridge"
-        ports         = ["http", "https"]
-        volumes       = ["/opt/caddy/config:/config","/opt/caddy/data:/data","/opt/caddy/Caddyfile:/etc/caddy/Caddyfile"]
+        image   = "docker.io/library/caddy:${RELEASE}"
+        host_network  = true
+        cap_add = ["CAP_NET_BIND_SERVICE"]
+
+        mounts  = [
+                    {
+                      type    = "bind"
+                      target  = "/config"
+                      source  = "/opt/caddy/config"
+                      options = ["rbind", "rw"]
+                    },
+                    {
+                      type    = "bind"
+                      target  = "/data"
+                      source  = "/opt/caddy/data"
+                      options = ["rbind", "rw"]
+                    },
+                    {
+                      type    = "bind"
+                      target  = "/etc/caddy/Caddyfile"
+                      source  = "/opt/caddy/Caddyfile"
+                      options = ["rbind", "rw"]
+                    }
+                  ]
       }
 
       template {

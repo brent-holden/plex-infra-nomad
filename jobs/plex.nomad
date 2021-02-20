@@ -1,6 +1,7 @@
 job "plex" {
   datacenters = ["lab"]
-  type = "service"
+  type        = "service"
+  priority    = 20
 
   constraint {
     attribute = "${meta.media_node}"
@@ -50,13 +51,8 @@ job "plex" {
       }
     }
 
-    ephemeral_disk {
-      sticky  = true
-      size    = 10240
-    }
-
     task "plex" {
-      driver = "podman"
+      driver = "containerd-driver"
 
       env {
         PLEX_GID    = "1100"
@@ -67,10 +63,28 @@ job "plex" {
       }
 
       config {
-        image         = "docker://docker.io/plexinc/pms-docker:${RELEASE}"
-        network_mode  = "host"
-        ports         = ["plex"]
-        volumes       = ["/opt/plex:/config","/mnt/rclone/media:/media:ro","/mnt/transcode:/transcode"]
+        image         = "docker.io/plexinc/pms-docker:${RELEASE}"
+        host_network  = true
+        mounts        = [
+                          {
+                            type    = "bind"
+                            target  = "/config"
+                            source  = "/opt/plex"
+                            options = ["rbind", "rw"]
+                          },
+                          {
+                            type    = "bind"
+                            target  = "/media"
+                            source  = "/mnt/rclone/media"
+                            options = ["rbind", "ro"]
+                          },
+                          {
+                            type    = "bind"
+                            target  = "/transcode"
+                            source  = "/mnt/transcode"
+                            options = ["rbind", "rw"]
+                          }
+                    ]
       }
 
       template {
