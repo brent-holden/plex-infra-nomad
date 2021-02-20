@@ -40,9 +40,9 @@ job "caddy" {
       driver = "containerd-driver"
 
       config {
-        image   = "docker.io/library/caddy:${RELEASE}"
+        image         = "docker.io/library/caddy:${RELEASE}"
         host_network  = true
-        cap_add = ["CAP_NET_BIND_SERVICE"]
+        cap_add       = ["CAP_NET_BIND_SERVICE"]
 
         mounts  = [
                     {

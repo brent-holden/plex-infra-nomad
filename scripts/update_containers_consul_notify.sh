@@ -10,10 +10,10 @@ do
 
   echo "Pulling ${IMAGE}:${RELEASE}"
   # pull defined image
-  sudo podman pull ${IMAGE}:${RELEASE}
+  podman pull ${IMAGE}:${RELEASE}
 
   # get image Id
-  ID=`sudo podman inspect --format "{{.Id}}" ${IMAGE}:${RELEASE}`
+  ID=`podman inspect --format "{{.Id}}" ${IMAGE}:${RELEASE}`
 
   # echo "Writing: ${SERVICE}/config/image as ${IMAGE}"
   consul kv put ${SERVICE}/config/image ${IMAGE}
