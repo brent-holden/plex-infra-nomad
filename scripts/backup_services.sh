@@ -28,15 +28,15 @@ for SERVICE in "${!SERVICES[@]}"; do
   if [ ${MATCHING} -eq "0" ]; then
     # Create the backup file
     echo "Backing up ${SRC_DIR} to ${TMP_DIR}/${FILENAME}"
-    sudo tar -cpzf ${TMP_DIR}/${FILENAME} . 2>/dev/null
+    tar -cpzf ${TMP_DIR}/${FILENAME} . 2>/dev/null
 
     # Move it to the right place
     echo "Moving ${FILENAME} to ${DEST_DIR}"
-    sudo mv ${TMP_DIR}/${FILENAME} ${DEST_DIR}
+    mv ${TMP_DIR}/${FILENAME} ${DEST_DIR}
   else
     echo "Found zip file backups in ${SRC_DIR}. No need to create backups"
     echo "Copying them over to ${DEST_DIR}"
-    sudo cp *.zip ${DEST_DIR}
+    cp *.zip ${DEST_DIR}
   fi
 done
 

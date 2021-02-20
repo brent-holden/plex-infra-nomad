@@ -19,12 +19,12 @@ for SERVICE in "${!SERVICES[@]}"; do
   if [ ! -d "${BACKUPDIR}" ]; then
     # Create backup directory
     echo "Directory ${BACKUPDIR} not found. Creating."
-    sudo mkdir -p ${BACKUPDIR}
+    mkdir -p ${BACKUPDIR}
   fi
 
   # Change directory permissions
   echo "Changing ${BACKUPDIR} permissions to: ${PLEX_USER}.${PLEX_GROUP}"
-  sudo chown -R ${PLEX_USER}.${PLEX_GROUP} ${BACKUPDIR}
+  chown -R ${PLEX_USER}.${PLEX_GROUP} ${BACKUPDIR}
 
 done
 
@@ -33,8 +33,8 @@ REPO_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )
 
 # Setup cronjob
 echo "Copying backup configuration to /etc/cron.d"
-sudo cp ${BASH_SOURCE%/*}/../cron/plex-backups ${CRON_DIR}
-sudo sed -i "s~%%SCRIPT_REPO%%~${REPO_DIR}~" ${CRON_DIR}/plex-backups
-sudo systemctl restart crond
+cp ${BASH_SOURCE%/*}/../cron/plex-backups ${CRON_DIR}
+sed -i "s~%%SCRIPT_REPO%%~${REPO_DIR}~" ${CRON_DIR}/plex-backups
+systemctl restart crond
 
-#echo "Done setting up backups"
+echo "Done setting up backups"

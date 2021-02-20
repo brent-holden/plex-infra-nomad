@@ -35,10 +35,10 @@ if [ ${CURRENTVER} != ${DOWNLOADVER} ]; then
     done
   fi
 
-	sudo yum install -y ${TMP_DIR}/${RCLONERPM}
-	sudo systemctl restart rclone-media-drive
-	sudo systemctl restart rclone-backup-drive
-	#sudo systemctl restart rclone-web
+	yum install -y ${TMP_DIR}/${RCLONERPM}
+	systemctl restart rclone-media-drive
+	systemctl restart rclone-backup-drive
+	#systemctl restart rclone-web
 fi
 
 #Clean up after ourselves
