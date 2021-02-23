@@ -17,8 +17,11 @@ echo "Enabling cockpiti for remote web administration. Access via https://<ip>:9
 systemctl enable --now cockpit.socket
 
 # Set default zone to trusted assuming you're on a private net behind a firewall
-echo "Setting FirewallD to live in a trusted zone. Comment this out if you're in a DMZ"
-firewall-cmd --set-default-zone=trusted
+#echo "Setting FirewallD to live in a trusted zone. Comment this out if you're in a DMZ"
+#firewall-cmd --set-default-zone=trusted
+
+echo "Disabling FirewallD for containerd"
+systemctl disable --now firewalld
 
 # Disable SELinux because reasons. Sorry Dan
 echo "Disabling SELinux. This will require a reboot to take effect"
