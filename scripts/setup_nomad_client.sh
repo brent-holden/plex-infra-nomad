@@ -8,7 +8,7 @@ echo "Configuring repos and installing packages"
 yum install -y yum-utils git golang make
 
 yum-config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
-yum install -y containerd.io docker-ce
+yum install -y containerd.io
 
 yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
 yum install -y nomad
