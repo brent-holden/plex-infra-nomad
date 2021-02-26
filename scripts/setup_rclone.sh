@@ -35,6 +35,4 @@ echo "Enabling and starting rclone services"
 systemctl enable --now rclone-media-drive
 systemctl enable --now rclone-backup-drive
 
-#systemctl enable --now rclone-web
-
 echo "rClone Installed!"
