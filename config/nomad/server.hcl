@@ -13,10 +13,10 @@ client {
   servers = ["nomad.service.consul:4647"]
 
   options = {
-    "driver.denylist" = "docker,java,exec,raw_exec,qemu"
+    "driver.denylist" = "docker,java,exec,qemu"
   }
 
-  host_network "lan" {
+  host_network "default" {
     cidr = "192.168.0.0/23"
   }
 
@@ -32,12 +32,10 @@ client {
 
 plugin_dir = "/opt/nomad/plugins"
 
-plugin "nomad-driver-podman" {
+plugin "containerd-driver" {
   config {
-    volumes {
-      enabled      = true
-      selinuxlabel = "z"
-    }
+    enabled = true
+    containerd_runtime = "io.containerd.runc.v2"
+    stats_interval = "5s"
   }
 }
-
