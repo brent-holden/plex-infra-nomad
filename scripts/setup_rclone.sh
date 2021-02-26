@@ -21,6 +21,9 @@ mkdir -p ${DOWNLOADS_DIR}
 mkdir -p ${RCLONE_MEDIA_DIR}
 mkdir -p ${RCLONE_BACKUP_DIR}
 mkdir -p ${RCLONE_CONFIG_DIR}
+mkdir -p ${RCLONE_MEDIA_CACHE_DIR}
+mkdir -p ${RCLONE_BACKUP_CACHE_DIR}
+
 
 cp ${RCLONECONF} ${RCLONE_CONFIG_DIR}
 
