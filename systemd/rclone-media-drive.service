@@ -1,7 +1,7 @@
 [Unit]
 Description=rClone (Media Folder)
 AssertPathIsDirectory=/mnt/rclone/media
-AssertPathIsDirectory=/mnt/rclone/cache-db
+AssertPathIsDirectory=/mnt/rclone/cache/media
 Wants=network-online.target
 After=network-online.target
 
@@ -10,27 +10,24 @@ Type=notify
 User=root
 Group=root
 ExecStart=/usr/bin/rclone mount \
-  --config /opt/rclone/rclone.conf \
-  --vfs-cache-mode full \
-  --vfs-cache-max-age 6h \
-  --buffer-size=128M \
-  --use-mmap \
-  --allow-other \
-  --allow-non-empty \
-  --dir-cache-time 48h \
-  --cache-info-age 48h \
-  --fast-list \
-  --umask 002 \
-  --gid 1100 \
-  --uid 1100 \
-  --log-level INFO \
-  --cache-chunk-path /mnt/rclone/cache/cache-backend \
-  --cache-dir /mnt/rclone/cache \
-  --cache-db-path /mnt/rclone/cache-db \
-  media-cache:/ /mnt/rclone/media
+	--config /opt/rclone/rclone.conf \
+	--buffer-size=128M \
+	--allow-other \
+	--allow-non-empty \
+	--fast-list \
+	--use-mmap \
+	--umask 002 \
+	--gid 1100 \
+	--uid 1100 \
+	--log-level INFO \
+	--dir-cache-time 48h \
+  --write-back-cache \
+  --cache-dir /mnt/rclone/cache/media \
+	--vfs-cache-mode full \
+	--vfs-cache-max-age 48h \
+	google-drive:/Media /mnt/rclone/media
 ExecStop=/bin/fusermount -uz /mnt/rclone/media
 Restart=on-abort
 
 [Install]
 WantedBy=multi-user.target
-
