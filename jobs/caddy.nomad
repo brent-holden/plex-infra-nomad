@@ -56,12 +56,6 @@ job "caddy" {
                       target  = "/data"
                       source  = "/opt/caddy/data"
                       options = ["rbind", "rw"]
-                    },
-                    {
-                      type    = "bind"
-                      target  = "/etc/caddy/Caddyfile"
-                      source  = "/opt/caddy/Caddyfile"
-                      options = ["rbind", "rw"]
                     }
                   ]
       }
@@ -70,6 +64,44 @@ job "caddy" {
         data          = "IMAGE_ID={{ keyOrDefault \"caddy/config/image_id\" \"1\" }}\nRELEASE={{ keyOrDefault \"caddy/config/release\" \"latest\" }}"
         destination   = "env_info"
         env           = true
+      }
+
+      template {
+        data        = <<EOT
+
+{{ key "/caddy/config/external_hostname" }}
+
+reverse_proxy /*          ombi.service.consul:3579
+
+redir         /sonarr     /sonarr/
+reverse_proxy /sonarr/*   sonarr.service.consul:8989
+
+redir         /radarr     /radarr/
+reverse_proxy /radarr/*   radarr.service.consul:7878
+
+redir         /lidarr     /lidarr/
+reverse_proxy /lidarr/*   lidarr.service.consul:8686
+
+redir         /sabnzbd    /sabnzbd/
+reverse_proxy /sabnzbd/*  sabnzbd.service.consul:8080
+
+redir         /hydra2     /hydra2/
+reverse_proxy /hydra2/*   hydra2.service.consul:5076
+
+redir         /tautulli   /tautulli/
+reverse_proxy /tautulli*  tautulli.service.consul:8181
+
+handle_path   /downloads/* {
+  root  * /downloads
+  file_server browse
+  basicauth {
+    {{ range tree "caddy/config/basicauth_users/" -}}
+      {{- .Key }} {{ .Value }}
+    {{ end -}}
+  }
+}
+EOT
+        destination = "/etc/caddy/Caddyfile"
       }
 
       resources {
