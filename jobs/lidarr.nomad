@@ -31,7 +31,7 @@ job "lidarr" {
       check {
         type      = "http"
 	      port      = "lidarr"
-        path      = "/lidarr/login/
+        path      = "/lidarr/login/"
         interval  = "30s"
         timeout   = "2s"
       }
