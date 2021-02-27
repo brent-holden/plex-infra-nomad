@@ -31,10 +31,11 @@ job "hydra2" {
       port = "hydra2"
 
       check {
-        type     = "tcp"
-        port     = "hydra2"
-        interval = "120s"
-        timeout  = "60s"
+        type      = "http"
+        port      = "hydra2"
+        path      = "/hydra2/login.html"
+        interval  = "120s"
+        timeout   = "60s"
       }
     }
 
