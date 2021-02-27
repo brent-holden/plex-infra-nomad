@@ -29,10 +29,11 @@ job "lidarr" {
       port = "lidarr"
 
       check {
-        type     = "tcp"
-	      port     = "lidarr"
-        interval = "60s"
-        timeout  = "2s"
+        type      = "http"
+	      port      = "lidarr"
+        path      = "/lidarr/login/
+        interval  = "30s"
+        timeout   = "2s"
       }
     }
 
