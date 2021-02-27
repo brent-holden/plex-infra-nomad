@@ -29,10 +29,11 @@ job "sonarr" {
       port = "sonarr"
 
       check {
-        type     = "tcp"
-        port     = "sonarr"
-        interval = "60s"
-        timeout  = "2s"
+        type      = "http"
+        port      = "sonarr"
+        path      = "/sonarr/login"
+        interval  = "30s"
+        timeout   = "2s"
       }
     }
 
