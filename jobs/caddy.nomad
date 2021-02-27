@@ -41,21 +41,34 @@ job "caddy" {
 
       config {
         image         = "docker.io/library/caddy:${RELEASE}"
+        command       = "caddy"
+        args          = [
+                          "run",
+                          "-config",
+                          "/local/Caddyfile"
+                        ]
+
         host_network  = true
         cap_add       = ["CAP_NET_BIND_SERVICE"]
 
         mounts  = [
                     {
                       type    = "bind"
-                      target  = "/config"
                       source  = "/opt/caddy/config"
+                      target  = "/config"
                       options = ["rbind", "rw"]
                     },
                     {
                       type    = "bind"
-                      target  = "/data"
                       source  = "/opt/caddy/data"
+                      target  = "/data"
                       options = ["rbind", "rw"]
+                    },
+                    {
+                      type    = "bind"
+                      target  = "/downloads"
+                      source  = "/mnt/downloads/complete"
+                      options = ["rbind", "ro"]
                     }
                   ]
       }
@@ -67,8 +80,7 @@ job "caddy" {
       }
 
       template {
-        data        = <<EOT
-
+        data        = <<EOH
 {{ key "/caddy/config/external_hostname" }}
 
 reverse_proxy /*          ombi.service.consul:3579
@@ -91,7 +103,7 @@ reverse_proxy /hydra2/*   hydra2.service.consul:5076
 redir         /tautulli   /tautulli/
 reverse_proxy /tautulli*  tautulli.service.consul:8181
 
-handle_path   /downloads/* {
+handle_path   /downloads* {
   root  * /downloads
   file_server browse
   basicauth {
@@ -100,8 +112,9 @@ handle_path   /downloads/* {
     {{ end -}}
   }
 }
-EOT
-        destination = "/etc/caddy/Caddyfile"
+EOH
+        destination = "local/Caddyfile"
+        change_mode = "restart"
       }
 
       resources {
