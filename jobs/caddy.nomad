@@ -8,16 +8,21 @@ job "caddy" {
   }
 
   update {
-    max_parallel      = 1
-    min_healthy_time  = "30s"
-    healthy_deadline  = "1m"
-    progress_deadline = "3m"
-    auto_revert       = true
-    canary            = 0
+    max_parallel  = 0
+    health_check  = "checks"
+    auto_revert   = true
   }
 
   group "caddy" {
     count = 1
+
+    restart {
+      interval  = "12h"
+      attempts  = 720
+      delay     = "60s"
+      mode      = "delay"
+    }
+
     network {
       port "http"   { static  = 80 }
       port "https"  { static  = 443 }
@@ -31,8 +36,13 @@ job "caddy" {
       check {
         type     = "tcp"
         port     = "https"
-        interval = "60s"
-        timeout  = "5s"
+        interval = "30s"
+        timeout  = "2s"
+
+        check_restart {
+          limit = 10000
+          grace = "60s"
+        }
       }
     }
 
