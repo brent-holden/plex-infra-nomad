@@ -29,10 +29,11 @@ job "ombi" {
       port = "ombi"
 
       check {
-        type     = "tcp"
-        port     = "ombi"
-        interval = "30s"
-        timeout  = "2s"
+        type      = "http"
+        port      = "ombi"
+        path      = "/"
+        interval  = "30s"
+        timeout   = "2s"
       }
     }
 
