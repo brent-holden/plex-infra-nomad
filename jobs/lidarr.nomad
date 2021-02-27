@@ -81,7 +81,10 @@ job "lidarr" {
       }
 
       template {
-        data          = "IMAGE_ID={{ keyOrDefault \"lidarr/config/image_id\" \"1\" }}\nRELEASE={{ keyOrDefault \"lidarr/config/release\" \"latest\" }}"
+        data          = <<EOH
+IMAGE_ID={{ keyOrDefault "lidarr/config/image_id" "1" }}
+RELEASE={{ keyOrDefault "lidarr/config/release" "latest" }}
+EOH
         destination   = "env_info"
         env           = true
       }

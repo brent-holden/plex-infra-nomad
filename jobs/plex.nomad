@@ -84,7 +84,11 @@ job "plex" {
       }
 
       template {
-        data          = "IMAGE_ID={{ keyOrDefault \"plex/config/image_id\" \"1\" }}\nVERSION={{ keyOrDefault \"plex/config/version\" \"1.0\" }}\nRELEASE={{ keyOrDefault \"plex/config/release\" \"plexpass\"}}"
+        data          = <<EOH
+IMAGE_ID={{ keyOrDefault "plex/config/image_id" "1" }}
+VERSION={{ keyOrDefault "plex/config/version" "1.0" }}
+RELEASE={{ keyOrDefault "plex/config/release" "plexpass" }}
+EOH
         destination   = "env_info"
         env           = true
       }

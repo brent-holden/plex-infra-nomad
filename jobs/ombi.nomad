@@ -69,7 +69,10 @@ job "ombi" {
       }
 
       template {
-        data          = "IMAGE_ID={{ keyOrDefault \"ombi/config/image_id\" \"1\" }}\nRELEASE={{ keyOrDefault \"ombi/config/release\" \"latest\" }}"
+        data          = <<EOH
+IMAGE_ID={{ keyOrDefault "ombi/config/image_id" "1" }}
+RELEASE={{ keyOrDefault "ombi/config/release" "latest" }}
+EOH
         destination   = "env_info"
         env           = true
       }

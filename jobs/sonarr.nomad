@@ -81,7 +81,10 @@ job "sonarr" {
       }
 
       template {
-        data          = "IMAGE_ID={{ keyOrDefault \"sonarr/config/image_id\" \"1\" }}\nRELEASE={{ keyOrDefault \"sonarr/config/release\" \"latest\" }}"
+        data          = <<EOH
+IMAGE_ID={{ keyOrDefault "sonarr/config/image_id" "1" }}
+RELEASE={{ keyOrDefault "sonarr/config/release" "latest" }}"
+EOH
         destination   = "env_info"
         env           = true
       }

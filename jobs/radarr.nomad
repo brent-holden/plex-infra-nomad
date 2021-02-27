@@ -87,7 +87,10 @@ job "radarr" {
       }
 
       template {
-        data          = "IMAGE_ID={{ keyOrDefault \"radarr/config/image_id\" \"1\" }}\nRELEASE={{ keyOrDefault \"radarr/config/release\" \"latest\" }}"
+        data          = <<EOH
+IMAGE_ID={{ keyOrDefault "radarr/config/image_id" "1" }}
+RELEASE={{ keyOrDefault "radarr/config/release" "latest" }}
+EOH
         destination   = "env_info"
         env           = true
       }

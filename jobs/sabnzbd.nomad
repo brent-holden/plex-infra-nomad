@@ -75,7 +75,10 @@ job "sabnzbd" {
       }
 
       template {
-        data          = "IMAGE_ID={{ keyOrDefault \"sabnzbd/config/image_id\" \"1\" }}\nRELEASE={{ keyOrDefault \"sabnzbd/config/release\" \"latest\" }}"
+        data          = <<EOH
+IMAGE_ID={{ keyOrDefault "sabnzbd/config/image_id" "1" }}
+RELEASE={{ keyOrDefault "sabnzbd/config/release" "latest" }}
+EOH
         destination   = "env_info"
         env           = true
       }

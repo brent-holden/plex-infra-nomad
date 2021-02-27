@@ -84,7 +84,10 @@ job "caddy" {
       }
 
       template {
-        data          = "IMAGE_ID={{ keyOrDefault \"caddy/config/image_id\" \"1\" }}\nRELEASE={{ keyOrDefault \"caddy/config/release\" \"latest\" }}"
+        data          = <<EOH
+IMAGE_ID={{ keyOrDefault "caddy/config/image_id" "1" }}
+RELEASE={{ keyOrDefault "caddy/config/release" "latest" }}
+EOH
         destination   = "env_info"
         env           = true
       }

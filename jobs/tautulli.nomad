@@ -76,7 +76,10 @@ job "tautulli" {
       }
 
       template {
-        data          = "IMAGE_ID={{ keyOrDefault \"tautulli/config/image_id\" \"1\" }}\nRELEASE={{ keyOrDefault \"tautulli/config/release\" \"latest\" }}"
+        data          = <<EOH
+IMAGE_ID={{ keyOrDefault "tautulli/config/image_id" "1" }}
+RELEASE={{ keyOrDefault "tautulli/config/release" "latest" }}
+EOH
         destination   = "env_info"
         env           = true
       }
