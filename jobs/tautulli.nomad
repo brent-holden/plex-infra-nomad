@@ -29,9 +29,10 @@ job "tautulli" {
       port = "tautulli"
 
       check {
-        type     = "tcp"
+        type     = "http"
         port     = "tautulli"
-        interval = "60s"
+        path      = "/tautulli/auth/login"
+        interval = "63s"
         timeout  = "2s"
       }
     }
