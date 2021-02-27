@@ -29,10 +29,11 @@ job "sabnzbd" {
       port = "sabnzbd"
 
       check {
-        type     = "tcp"
-        port     = "sabnzbd"
-        interval = "60s"
-        timeout  = "2s"
+        type      = "http"
+        port      = "sabnzbd"
+        path      = "/sabnzbd/login/"
+        interval  = "30s"
+        timeout   = "2s"
       }
     }
 
@@ -45,7 +46,7 @@ job "sabnzbd" {
       }
 
       config {
-        image         = "docker.io/linuxserver/sabnzbd:${RELEASE}"
+        image   = "docker.io/linuxserver/sabnzbd:${RELEASE}"
 
         mounts  = [
                     {
