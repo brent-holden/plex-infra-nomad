@@ -10,7 +10,7 @@ do
 
   # pull defined image
   echo "Pulling ${IMAGE}:${RELEASE}"
-  podman pull ${IMAGE}:${RELEASE}
+  podman pull -q ${IMAGE}:${RELEASE}
 
   # get image Id
   ID=$(podman inspect --format "{{.Id}}" ${IMAGE}:${RELEASE})
