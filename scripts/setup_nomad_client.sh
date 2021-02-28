@@ -31,7 +31,7 @@ echo "Enabling and starting Nomad"
 systemctl enable --now nomad
 
 # Setup cronjob
-echo "Copying podman cleaning configuration to /etc/cron.d"
+echo "Copying containerd cleaning configuration to /etc/cron.d"
 cp ${BASH_SOURCE%/*}/../cron/clean-containerd ${CRON_DIR}
 sed -i "s~%%SCRIPT_REPO%%~${REPO_DIR}~" ${CRON_DIR}/clean-containerd
 systemctl restart crond
