@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 SERVICE="caddy"
+CADDY_IMAGE="docker.io/library/caddy:alpine"
 HOSTNAME=$(hostname)
 
 echo -e "\nIf you want to access Caddy externally, you'll need to forward ports 80/443 to your Caddy host.\n"
@@ -20,8 +21,7 @@ while [[ -z "${EXTERNAL_PASSWORD}" ]]; do
 done
 
 echo -e "\n\nPulling caddy container to generate our bcrypt password"
-podman pull -q docker.io/library/caddy:alpine > /dev/null 2>&1 
-HASHED_PASSWORD=$(podman run --rm caddy:alpine caddy hash-password --plaintext ${EXTERNAL_PASSWORD})
+HASHED_PASSWORD=$(podman run --rm ${CADDY_IMAGE} caddy hash-password --plaintext ${EXTERNAL_PASSWORD} && podman rmi ${CADDY_IMAGE})
 echo "Hashed password has been generated"
 
 consul kv put ${SERVICE}/config/external_hostname ${EXTERNAL_HOST}
