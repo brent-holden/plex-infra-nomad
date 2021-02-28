@@ -1,47 +1,36 @@
 #!/usr/bin/env bash
 
-source variables.sh
+source ${BASH_SOURCE%/*}/variables.sh
 
-APPLY=false
+function upgrade_available () {
+  echo "Running wget -O ${TMP_DIR}/${RCLONE_RPM} ${RCLONE_URL}/${RCLONE_RPM}"
+  wget -O ${TMP_DIR}/${RCLONE_RPM} ${RCLONE_URL}/${RCLONE_RPM}
 
-while getopts "y" OPT; do
-  case ${OPT} in
-    f )
-      APPLY=true
-      ;;
-  esac
-done
+  CURRENT_VER=$(rpm -q --queryformat '%{VERSION}\n' rclone)
+  DOWNLOAD_VER=$(rpm -qp --queryformat '%{VERSION}\n' ${TMP_DIR}/${RCLONE_RPM})
 
-RCLONERPM=rclone-current-linux-amd64.rpm
-RCLONESITE=https://downloads.rclone.org
+  rm ${TMP_DIR}/${RCLONE_RPM}
 
-echo "Runing wget -O ${TMP_DIR}/${RCLONERPM} ${RCLONESITE}/${RCLONERPM}"
-wget -O ${TMP_DIR}/${RCLONERPM} ${RCLONESITE}/${RCLONERPM}
+  echo "Installed version:" ${CURRENT_VER}
+  echo "Downloaded version:" ${DOWNLOAD_VER}
+  echo "-----------"
 
-CURRENTVER=$(rpm -q --queryformat '%{VERSION}\n' rclone)
-DOWNLOADVER=$(rpm -qp --queryformat '%{VERSION}\n' ${TMP_DIR}/${RCLONERPM})
+  [[ ${CURRENT_VER} != ${DOWNLOAD_VER} ]]
+    return
+}
 
-echo "Installed version: ${CURRENTVER}"
-echo "Downloaded version: ${DOWNLOADVER}"
+function update_rclone () {
+  yum install -y ${TMP_DIR}/${RCLONE_RPM}
+  systemctl restart rclone-media-drive
+  systemctl restart rclone-backup-drive
+}
 
-if [ ${CURRENTVER} != ${DOWNLOADVER} ]; then
-  if [ ${APPLY} != true ]; then
-    echo "Do you wish to update rclone?"
-    select yn in "Yes" "No"; do
-      case ${yn} in
-        Yes ) APPLY=true; break;;
-        No ) exit 1;;
-      esac
-    done
-  fi
 
-	yum install -y ${TMP_DIR}/${RCLONERPM}
-	systemctl restart rclone-media-drive
-	systemctl restart rclone-backup-drive
-	#systemctl restart rclone-web
+if upgrade_available; then
+  echo "Update to rclone available. Updating.."
+  update_rclone
+else
+  echo "No update available"
 fi
 
-#Clean up after ourselves
-rm ${TMP_DIR}/${RCLONERPM}
-
-echo "Exiting"
+echo "Exiting."
