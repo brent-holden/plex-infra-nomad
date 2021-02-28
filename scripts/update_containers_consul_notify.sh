@@ -4,29 +4,25 @@ source ${BASH_SOURCE%/*}/variables.sh
 
 for SERVICE in "${!SERVICES[@]}"
 do
-  IMGANDREPO=${SERVICES[${SERVICE}]}
-  IMAGE=`echo ${IMGANDREPO} | awk -F : '{ print $1 }'`
-  RELEASE=`echo ${IMGANDREPO} | awk -F : '{ print $2 }'`
+  IMG_AND_RELEASE=${SERVICES[${SERVICE}]}
+  IMAGE=$(echo ${IMG_AND_RELEASE} | awk -F ':' '{ print $1 }')
+  RELEASE=$(echo ${IMG_AND_RELEASE} | awk -F ':' '{ print $2 }' | awk -F ',' '{print $1}')
+  UPDATE=$(consul kv get ${SERVICE}/config/auto_update)
 
-  # pull defined image
-  echo "Pulling ${IMAGE}:${RELEASE}"
-  podman pull -q ${IMAGE}:${RELEASE}
+  if [[ ${UPDATE} == true ]]; then
+    echo -e "\nGot auto update configuration for ${SERVICE} from Consul. Here we go."
 
-  # get image Id
-  ID=$(podman inspect --format "{{.Id}}" ${IMAGE}:${RELEASE})
-  DIGEST=$(podman inspect --format "{{.Digest}}" ${IMAGE}:${RELEASE})
+    # Pull defined image
+    echo "Pulling ${IMAGE}:${RELEASE}"
+    ctr image pull ${IMAGE}:${RELEASE}
 
-  # Now write all the values to Consul KV
-#  echo "Writing: ${SERVICE}/config/image as ${IMAGE}"
-  consul kv put ${SERVICE}/config/image ${IMAGE}
+    # Get image Id
+    DIGEST=$(ctr image ls | grep "${IMAGE}:${RELEASE}" | awk -F ' ' '{print $3}')
 
-#  echo "Writing: ${SERVICE}/config/release as ${RELEASE}"
-  consul kv put ${SERVICE}/config/release ${RELEASE}
-
-#  echo "Writing: ${SERVICE}/config/image_id as ${ID}"
-  consul kv put ${SERVICE}/config/image_id ${ID}
-
-#  echo "Writing: ${SERVICE}/config/image_digest as ${DIGEST}"
-  consul kv put ${SERVICE}/config/image_digest ${DIGEST}
+    echo "Setting initial key for ${SERVICE}/config/image_digest as ${DIGEST}"
+    consul kv put ${SERVICE}/config/image_digest ${DIGEST}
+  else
+    echo "${SERVICE} auto_update key set to ${UPDATE}. Not updating"
+  fi
 
 done
