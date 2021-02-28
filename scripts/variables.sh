@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
-declare -A SERVICES=( [lidarr]=docker.io/linuxserver/lidarr:latest
-                      [sonarr]=docker.io/linuxserver/sonarr:preview
-                      [radarr]=docker.io/linuxserver/radarr:latest
-                      [tautulli]=docker.io/linuxserver/tautulli:latest
-                      [hydra2]=docker.io/linuxserver/nzbhydra2:latest
-                      [sabnzbd]=docker.io/linuxserver/sabnzbd:latest
-                      [ombi]=docker.io/linuxserver/ombi:v4-preview
-                      [caddy]=docker.io/library/caddy:alpine
-                      [plex]=docker.io/plexinc/pms-docker:plexpass
+declare -A SERVICES=( [lidarr]=docker.io/linuxserver/lidarr:latest,auto_update
+                      [sonarr]=docker.io/linuxserver/sonarr:preview,auto_update
+                      [radarr]=docker.io/linuxserver/radarr:latest,auto_update
+                      [tautulli]=docker.io/linuxserver/tautulli:latest,auto_update
+                      [hydra2]=docker.io/linuxserver/nzbhydra2:latest,auto_update
+                      [sabnzbd]=docker.io/linuxserver/sabnzbd:latest,auto_update
+                      [ombi]=docker.io/linuxserver/ombi:v4-preview,auto_update
+                      [caddy]=docker.io/library/caddy:alpine,auto_update
+                      [plex]=docker.io/plexinc/pms-docker:plexpass,auto_update
                     )
 declare -A BACKUPS=(  [lidarr]=/opt/lidarr/Backups/scheduled
                       [sonarr]=/opt/sonarr/Backups/scheduled
