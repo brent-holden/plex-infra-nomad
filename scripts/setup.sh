@@ -78,7 +78,7 @@ case "$CHOICE" in
     setup_media_host
     ;;
   *)
-    echo "Setup mode cancelled. Must select either 'infra' or 'media'" >&2
+    echo "Setup mode cancelled. Supported modes are 'infra' or 'media'" >&2
     exit 0
     ;;
 esac
