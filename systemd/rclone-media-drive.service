@@ -3,6 +3,7 @@ Description=rClone (Media Folder)
 AssertPathIsDirectory=/mnt/rclone/media
 AssertPathIsDirectory=/mnt/rclone/cache/media
 Wants=network-online.target
+Requires=consul-template.service
 After=network-online.target consul-template.service
 
 [Service]
