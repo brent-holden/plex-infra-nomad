@@ -16,6 +16,9 @@ curl https://releases.hashicorp.com/${NAME}/${RELEASE}/${NAME}_${RELEASE}_${PLAT
 "Installing ${NAME} to ${DEST}"
 unzip -qo /tmp/${NAME}-${RELEASE}_${PLATFORM}.zip -d ${DEST}
 
+echo "Creating consul-template sysconfig file for setting options"
+echo "OPTIONS=" > /etc/sysconfig/consul-template
+
 echo "Creating configuration directory ${CONSUL_TEMPLATE_CONF_DIR}"
 mkdir -p ${CONSUL_TEMPLATE_CONF_DIR}
 
