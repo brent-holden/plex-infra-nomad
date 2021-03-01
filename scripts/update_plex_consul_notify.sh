@@ -5,7 +5,7 @@ UPDATE=$(consul kv get plex/config/auto_update)
 if [[ ${UPDATE} == true ]]; then
   echo -e "\nGot auto update configuration for plex from Consul. Here we go."
 
-  PLEX_VER_ONSITE=`curl -s "https://plex.tv/api/downloads/5.json?channel=plexpass" | jq -r '.computer.Linux.version'`
+  PLEX_VER_ONSITE=$(curl -s "https://plex.tv/api/downloads/5.json?channel=plexpass" | jq -r '.computer.Linux.version')
 
   if [ $? -eq 0 ] && [ ${PLEX_VER_ONSITE} != null ]
   then
