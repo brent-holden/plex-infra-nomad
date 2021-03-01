@@ -3,7 +3,7 @@ Description=rClone (Backup Folder)
 AssertPathIsDirectory=/mnt/rclone/backup
 AssertPathIsDirectory=/mnt/rclone/cache/backup
 Wants=network-online.target
-After=network-online.target
+After=network-online.target consul-template.service
 
 [Service]
 Type=notify

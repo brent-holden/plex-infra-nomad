@@ -16,5 +16,15 @@ curl https://releases.hashicorp.com/${NAME}/${RELEASE}/${NAME}_${RELEASE}_${PLAT
 "Installing ${NAME} to ${DEST}"
 unzip -qo /tmp/${NAME}-${RELEASE}_${PLATFORM}.zip -d ${DEST}
 
+echo "Creating configuration directory ${CONSUL_TEMPLATE_CONF_DIR}"
+mkdir -p ${CONSUL_TEMPLATE_CONF_DIR}
+
+echo "Copying over systemd unit files"
+cp ${SYSTEMD_SVCFILES_DIR}/consul-template.service ${SYSTEMD_DIR}
+systemctl daemon-reload
+
+echo "Enabling consul-template"
+systemctl enable --now consul-template
+
 echo -e "\n### Done setting up Consul Template"
 
