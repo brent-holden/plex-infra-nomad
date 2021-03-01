@@ -25,6 +25,7 @@ DATE=`date +%d-%m-%Y`
 CRON_DIR=/etc/cron.d
 OPT_DIR=/opt
 TMP_DIR=/tmp
+JOBS_DIR=../jobs
 CONSUL_TEMPLATE_CONF_DIR=/etc/consul-template.d
 RCLONE_RPM=rclone-current-linux-amd64.rpm
 RCLONE_URL=https://downloads.rclone.org
