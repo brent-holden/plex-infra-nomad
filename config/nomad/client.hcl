@@ -9,7 +9,7 @@ client {
   servers = ["nomad.service.consul:4647"]
 
   options = {
-    "driver.denylist" = "docker,java,exec,qemu"
+    "driver.denylist" = "docker,java"
   }
 
   meta = {
