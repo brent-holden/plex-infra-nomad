@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-
 shopt -s extglob
-source variables.sh
+
+source ${BASH_SOURCE%/*}/variables.sh
 
 echo -e "\n\n### Setting up rClone ###\n\n"
 
@@ -33,7 +33,6 @@ mkdir -p ${RCLONE_BACKUP_DIR}
 mkdir -p ${RCLONE_CONFIG_DIR}
 mkdir -p ${RCLONE_MEDIA_CACHE_DIR}
 mkdir -p ${RCLONE_BACKUP_CACHE_DIR}
-
 
 echo "Copying the rclone.conf template to the config directory"
 cp ${RCLONE_CONF_TEMPLATE} ${RCLONE_CONFIG_DIR}
