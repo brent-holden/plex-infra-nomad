@@ -27,7 +27,8 @@ echo "
 Usage: setup.sh [options]
 
   This setup script will install and configure all of the necessary components
-  needed to operate Plex and its associated services.
+  needed to operate Plex and its associated services. This will need root access
+  to modify the parts of the OS necessary, so run either as root or with sudo.
 
 Options:
 
@@ -39,7 +40,13 @@ Options:
         * media
         * infra
 
-Example usage: setup.sh -i infra
+
+  -h
+      Prints this useful help dialog
+
+Example:
+
+  setup.sh -i infra
 " >&2
 }
 
