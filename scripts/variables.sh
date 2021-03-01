@@ -45,5 +45,5 @@ SYSTEMD_DIR=/usr/lib/systemd/system
 PLEX_USER=plex
 PLEX_GROUP=plex
 PLEX_UID=1100
-PACKAGES="fuse rsync vim git golang podman"
+PACKAGES="fuse rsync vim git podman"
 NOMAD_PLUGIN_DIR=/opt/nomad/plugins
