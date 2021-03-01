@@ -32,14 +32,13 @@ Usage: setup.sh [options]
 
 Options:
 
-  -i=<host_type>
+  -i <host_type>
+
       Sets the host type that you want to install. Useful for automation scripts.
 
       host_type can be one of two options:
-
         * media
         * infra
-
 
   -h
       Prints this useful help dialog
