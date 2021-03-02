@@ -7,20 +7,13 @@ job "ombi" {
     value     = "true"
   }
 
-  update {
-    max_parallel  = 0
-    health_check  = "checks"
-    auto_revert   = true
-  }
-
   group "ombi" {
     count = 1
 
-    restart {
-      interval  = "12h"
-      attempts  = 720
-      delay     = "60s"
-      mode      = "delay"
+    update {
+      max_parallel  = 0
+      health_check  = "checks"
+      auto_revert   = true
     }
 
     network {
@@ -28,27 +21,39 @@ job "ombi" {
       port "ombi" { static = 3579 }
     }
 
-    service {
-      name = "ombi"
-      tags = ["http","request"]
-      port = "ombi"
-
-      check {
-        type      = "http"
-        port      = "ombi"
-        path      = "/"
-        interval  = "30s"
-        timeout   = "2s"
-
-        check_restart {
-          limit = 10000
-          grace = "60s"
-        }
-      }
-    }
-
     task "ombi" {
       driver = "containerd-driver"
+
+      service {
+        name = "ombi"
+        port = "ombi"
+        tags = [
+          "traefik.enable=true",
+          "traefik.http.routers.ombi.rule=PathPrefix(`/`)",
+          "traefik.http.routers.ombi.entrypoints=http",
+          "traefik.http.services.ombi.loadbalancer.server.port=${NOMAD_HOST_PORT_ombi}",
+        ]
+
+        check {
+          type      = "http"
+          port      = "ombi"
+          path      = "/"
+          interval  = "30s"
+          timeout   = "2s"
+
+          check_restart {
+            limit = 10000
+            grace = "60s"
+          }
+        }
+      }
+
+      restart {
+        interval  = "12h"
+        attempts  = 720
+        delay     = "60s"
+        mode      = "delay"
+      }
 
       env {
        PGID = "1100"
