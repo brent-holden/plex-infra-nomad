@@ -16,41 +16,44 @@ job "hydra2" {
   group "hydra2" {
     count = 1
 
-    restart {
-      interval  = "12h"
-      attempts  = 720
-      delay     = "60s"
-      mode      = "delay"
-    }
-
     network {
       mode = "bridge"
-      port "hydra2" {
-        static = 5076
-      }
-    }
-
-    service {
-      name = "hydra2"
-      tags = ["http","index"]
-      port = "hydra2"
-
-      check {
-        type      = "http"
-        port      = "hydra2"
-        path      = "/hydra2/login.html"
-        interval  = "30s"
-        timeout   = "2s"
-
-        check_restart {
-          limit = 10000
-          grace = "60s"
-        }
-      }
+      port "hydra2" { static = 5076 }
     }
 
     task "hydra2" {
       driver = "containerd-driver"
+
+      service {
+        name = "hydra2"
+        port = "hydra2"
+        tags = [
+          "traefik.enable=true",
+          "traefik.http.routers.hydra2.rule=PathPrefix(`/hydra2`)",
+          "traefik.http.routers.hydra2.entrypoints=http",
+          "traefik.http.services.hydra2.loadbalancer.server.port=${NOMAD_HOST_PORT_hydra2}",
+        ]
+
+        check {
+          type      = "http"
+          port      = "hydra2"
+          path      = "/hydra2/login.html"
+          interval  = "30s"
+          timeout   = "2s"
+
+          check_restart {
+            limit = 10000
+            grace = "60s"
+          }
+        }
+      }
+
+      restart {
+        interval  = "12h"
+        attempts  = 720
+        delay     = "60s"
+        mode      = "delay"
+      }
 
       env {
        PGID = "1100"
