@@ -16,39 +16,44 @@ job "lidarr" {
   group "lidarr" {
     count = 1
 
-    restart {
-      interval  = "12h"
-      attempts  = 720
-      delay     = "60s"
-      mode      = "delay"
-    }
-
     network {
       mode  = "bridge"
       port "lidarr" { static = 8686 }
     }
 
-    service {
-      name = "lidarr"
-      tags = ["http","music"]
-      port = "lidarr"
-
-      check {
-        type      = "http"
-	      port      = "lidarr"
-        path      = "/lidarr/login/"
-        interval  = "30s"
-        timeout   = "2s"
-
-        check_restart {
-          limit = 10000
-          grace = "60s"
-        }
-      }
-    }
-
     task "lidarr" {
       driver = "containerd-driver"
+
+      service {
+        name = "lidarr"
+        port = "lidarr"
+        tags = [
+          "traefik.enable=true",
+          "traefik.http.routers.lidarr.rule=PathPrefix(`/lidarr`)",
+          "traefik.http.routers.lidarr.entrypoints=http",
+          "traefik.http.services.lidarr.loadbalancer.server.port=${NOMAD_HOST_PORT_lidarr}", 
+        ]
+
+        check {
+          type      = "http"
+          port      = "lidarr"
+          path      = "/lidarr/login/"
+          interval  = "30s"
+          timeout   = "2s"
+
+          check_restart {
+            limit = 10000
+            grace = "60s"
+          }
+        }
+      }
+
+      restart {
+        interval  = "12h"
+        attempts  = 720
+        delay     = "60s"
+        mode      = "delay"
+      }
 
       env {
         PGID = "1100"
