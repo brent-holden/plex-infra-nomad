@@ -28,25 +28,6 @@ job "radarr" {
       port "radarr" { static = 7878 }
     }
 
-    service {
-      name = "radarr"
-      tags = ["http","music"]
-      port = "radarr"
-
-      check {
-        type      = "http"
-        port      = "radarr"
-        path      = "/radarr/login"
-        interval  = "30s"
-        timeout   = "2s"
-
-        check_restart {
-          limit = 10000
-          grace = "60s"
-        }
-      }
-    }
-
     ephemeral_disk {
       sticky = true
       size = 2048
@@ -54,6 +35,29 @@ job "radarr" {
 
     task "radarr" {
       driver = "containerd-driver"
+      service {
+        name = "radarr"
+        port = "radarr"
+        tags = [
+          "traefik.enable=true",
+          "traefik.http.routers.radarr.rule=PathPrefix(`/radarr`)",
+          "traefik.http.routers.radarr.entrypoints=http",
+          "traefik.http.services.radarr.loadbalancer.server.port=${NOMAD_HOST_PORT_radarr}",
+        ]
+
+        check {
+          type      = "http"
+          port      = "radarr"
+          path      = "/radarr/login"
+          interval  = "30s"
+          timeout   = "2s"
+
+          check_restart {
+            limit = 10000
+            grace = "60s"
+          }
+        }
+      }
 
       env {
         PGID  = "1100"
