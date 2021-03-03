@@ -12,8 +12,24 @@ function setup_media_host() {
   source ${BASH_SOURCE%/*}/setup_consul_agent.sh
   source ${BASH_SOURCE%/*}/setup_consul_template.sh
   source ${BASH_SOURCE%/*}/setup_nomad_client.sh
-  source ${BASH_SOURCE%/*}/setup_rclone.sh
   source ${BASH_SOURCE%/*}/setup_containerd.sh
+  source ${BASH_SOURCE%/*}/setup_rclone.sh
+  source ${BASH_SOURCE%/*}/setup_caddy.sh
+  source ${BASH_SOURCE%/*}/setup_traefik.sh
+  source ${BASH_SOURCE%/*}/setup_services.sh
+  source ${BASH_SOURCE%/*}/setup_backup.sh
+  source ${BASH_SOURCE%/*}/update_containers_consul_notify.sh
+  source ${BASH_SOURCE%/*}/update_plex_consul_notify.sh
+  source ${BASH_SOURCE%/*}/start_services.sh
+}
+
+function setup_allinone() {
+  source ${BASH_SOURCE%/*}/prep_media_host.sh
+  source ${BASH_SOURCE%/*}/setup_consul_server.sh
+  source ${BASH_SOURCE%/*}/setup_consul_template.sh
+  source ${BASH_SOURCE%/*}/setup_nomad_allinone.sh
+  source ${BASH_SOURCE%/*}/setup_containerd.sh
+  source ${BASH_SOURCE%/*}/setup_rclone.sh
   source ${BASH_SOURCE%/*}/setup_caddy.sh
   source ${BASH_SOURCE%/*}/setup_traefik.sh
   source ${BASH_SOURCE%/*}/setup_services.sh
@@ -66,7 +82,13 @@ if [ -z "$CHOICE" ]; then
   CHOICE=$(whiptail --title "Installation" --menu "Which host do you want to do? Setup the infra host first" 20 118 10 \
     "infra" "Select this to bootstrap the host used for hosting infrastructure (Nomad and Consul servers)" \
     "media" "Select this to bootstrap the host used for running media services" \
+    "allinone" "Select this to install an all-in-one host that does both" \
     3>&2 2>&1 1>&3)
+fi
+
+if [[ -z ${CHOICE} ]]; then
+  echo "User chose to exit."
+  exit 0
 fi
 
 case "$CHOICE" in
@@ -78,8 +100,12 @@ case "$CHOICE" in
     echo "Setting up the media host"
     setup_media_host
     ;;
+  "allinone")
+    echo "Setting up the allinone host"
+    setup_allinone
+    ;;
   *)
-    echo "Setup mode cancelled. Supported modes are 'infra' or 'media'" >&2
+    echo "Undefined install mode specified. Supported modes are 'infra', 'media', or 'allinone'. Only specify one" >&2
     exit 0
     ;;
 esac
