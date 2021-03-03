@@ -23,7 +23,7 @@ job "tautulli" {
         port = "tautulli"
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.tautulli.rule=PathPrefix(`/tautulli`)",
+          "traefik.http.routers.tautulli.rule=Host(`${ACME_HOST}`) && PathPrefix(`/tautulli`)",
         ]
 
         check {
@@ -76,6 +76,7 @@ job "tautulli" {
         data          = <<EOH
 IMAGE_ID={{ keyOrDefault "tautulli/config/image_id" "1" }}
 RELEASE={{ keyOrDefault "tautulli/config/release" "latest" }}
+ACME_HOST={{ key "traefik/config/acme_host" }}
 EOH
         destination   = "env_info"
         env           = true

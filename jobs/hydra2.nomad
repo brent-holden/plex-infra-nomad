@@ -29,7 +29,7 @@ job "hydra2" {
         port = "hydra2"
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.hydra2.rule=PathPrefix(`/hydra2`)",
+          "traefik.http.routers.hydra2.rule=Host(`${ACME_HOST}`) && PathPrefix(`/hydra2`)",
         ]
 
         check {
@@ -80,6 +80,7 @@ job "hydra2" {
         data          = <<EOH
 IMAGE_ID={{ keyOrDefault "hydra2/config/image_id" "1" }}
 RELEASE={{ keyOrDefault "hydra2/config/release" "latest" }}
+ACME_HOST={{ key "traefik/config/acme_host" }}
 EOH
         destination   = "env_info"
         env           = true

@@ -29,7 +29,7 @@ job "lidarr" {
         port = "lidarr"
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.lidarr.rule=PathPrefix(`/lidarr`)",
+          "traefik.http.routers.lidarr.rule=Host(`${ACME_HOST}`) && PathPrefix(`/lidarr`)",
         ]
 
         check {
@@ -86,6 +86,7 @@ job "lidarr" {
         data          = <<EOH
 IMAGE_ID={{ keyOrDefault "lidarr/config/image_id" "1" }}
 RELEASE={{ keyOrDefault "lidarr/config/release" "latest" }}
+ACME_HOST={{ key "traefik/config/acme_host" }}
 EOH
         destination   = "env_info"
         env           = true

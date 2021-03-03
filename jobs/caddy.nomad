@@ -29,7 +29,7 @@ job "caddy" {
         port = "caddy"
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.caddy.rule=PathPrefix(`/downloads`)",
+          "traefik.http.routers.caddy.rule=Host(`${ACME_HOST}`) && PathPrefix(`/downloads`)",
         ]
 
         check {
@@ -89,6 +89,7 @@ job "caddy" {
         data          = <<EOH
 IMAGE_ID={{ keyOrDefault "caddy/config/image_id" "1" }}
 RELEASE={{ keyOrDefault "caddy/config/release" "latest" }}
+ACME_HOST={{ key "traefik/config/acme_host" }}
 EOH
         destination   = "env_info"
         env           = true

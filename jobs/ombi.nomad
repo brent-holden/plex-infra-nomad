@@ -29,7 +29,7 @@ job "ombi" {
         port = "ombi"
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.ombi.rule=PathPrefix(`/`)",
+          "traefik.http.routers.ombi.rule=Host(`${ACME_HOST}`) && PathPrefix(`/`)",
         ]
 
         check {
@@ -75,6 +75,7 @@ job "ombi" {
         data          = <<EOH
 IMAGE_ID={{ keyOrDefault "ombi/config/image_id" "1" }}
 RELEASE={{ keyOrDefault "ombi/config/release" "latest" }}
+ACME_HOST={{ key "traefik/config/acme_host" }}
 EOH
         destination   = "env_info"
         env           = true

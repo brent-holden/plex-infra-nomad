@@ -28,7 +28,7 @@ job "radarr" {
         port = "radarr"
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.radarr.rule=PathPrefix(`/radarr`)",
+          "traefik.http.routers.radarr.rule=Host(`${ACME_HOST}`) && PathPrefix(`/radarr`)",
         ]
 
         check {
@@ -87,6 +87,7 @@ job "radarr" {
         data          = <<EOH
 IMAGE_ID={{ keyOrDefault "radarr/config/image_id" "1" }}
 RELEASE={{ keyOrDefault "radarr/config/release" "latest" }}
+ACME_HOST={{ key "traefik/config/acme_host" }}
 EOH
         destination   = "env_info"
         env           = true

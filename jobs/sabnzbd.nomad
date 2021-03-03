@@ -29,7 +29,7 @@ job "sabnzbd" {
         port = "sabnzbd"
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.sabnzbd.rule=PathPrefix(`/sabnzbd`)",
+          "traefik.http.routers.sabnzbd.rule=Host(`${ACME_HOST}`) && PathPrefix(`/sabnzbd`)",
         ]
 
         check {
@@ -81,6 +81,7 @@ job "sabnzbd" {
         data          = <<EOH
 IMAGE_ID={{ keyOrDefault "sabnzbd/config/image_id" "1" }}
 RELEASE={{ keyOrDefault "sabnzbd/config/release" "latest" }}
+ACME_HOST={{ key "traefik/config/acme_host" }}
 EOH
         destination   = "env_info"
         env           = true

@@ -29,7 +29,7 @@ job "sonarr" {
         port = "sonarr"
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.sonarr.rule=PathPrefix(`/sonarr`)",
+          "traefik.http.routers.sonarr.rule=Host(`${ACME_HOST}`) && PathPrefix(`/sonarr`)",
         ]
 
         check {
@@ -86,6 +86,7 @@ job "sonarr" {
         data          = <<EOH
 IMAGE_ID={{ keyOrDefault "sonarr/config/image_id" "1" }}
 RELEASE={{ keyOrDefault "sonarr/config/release" "latest" }}
+ACME_HOST={{ key "traefik/config/acme_host" }}
 EOH
         destination   = "env_info"
         env           = true
