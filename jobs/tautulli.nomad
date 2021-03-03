@@ -7,48 +7,45 @@ job "tautulli" {
     value     = "true"
   }
 
-  update {
-    max_parallel  = 0
-    health_check  = "checks"
-    auto_revert   = true
-  }
-
   group "tautulli" {
     count = 1
 
-    restart {
-      interval  = "12h"
-      attempts  = 720
-      delay     = "60s"
-      mode      = "delay"
-    }
-
     network {
       mode  = "bridge"
-      port "tautulli" { static = 8181 }
-    }
-
-    service {
-      name = "tautulli"
-      tags = ["http","music"]
-      port = "tautulli"
-
-      check {
-        type     = "http"
-        port     = "tautulli"
-        path      = "/tautulli/auth/login"
-        interval = "63s"
-        timeout  = "2s"
-
-        check_restart {
-          limit = 10000
-          grace = "60s"
-        }
-      }
+      port "tautulli" { to = 8181 }
     }
 
     task "tautulli" {
       driver = "containerd-driver"
+
+      service {
+        name = "tautulli"
+        port = "tautulli"
+        tags = [
+          "traefik.enable=true",
+          "traefik.http.routers.tautulli.rule=PathPrefix(`/tautulli`)",
+        ]
+
+        check {
+          type     = "http"
+          port     = "tautulli"
+          path      = "/tautulli/auth/login"
+          interval = "63s"
+          timeout  = "2s"
+
+          check_restart {
+            limit = 10000
+            grace = "60s"
+          }
+        }
+      }
+
+      restart {
+        interval  = "12h"
+        attempts  = 720
+        delay     = "60s"
+        mode      = "delay"
+      }
 
       env {
         PGID  = "1100"

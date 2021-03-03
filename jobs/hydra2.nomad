@@ -7,18 +7,18 @@ job "hydra2" {
     value     = "true"
   }
 
-  update {
-    max_parallel  = 0
-    health_check  = "checks"
-    auto_revert   = true
-  }
-
   group "hydra2" {
     count = 1
 
     network {
       mode = "bridge"
       port "hydra2" { static = 5076 }
+    }
+
+    update {
+      max_parallel  = 0
+      health_check  = "checks"
+      auto_revert   = true
     }
 
     task "hydra2" {
@@ -30,8 +30,6 @@ job "hydra2" {
         tags = [
           "traefik.enable=true",
           "traefik.http.routers.hydra2.rule=PathPrefix(`/hydra2`)",
-          "traefik.http.routers.hydra2.entrypoints=http",
-          "traefik.http.services.hydra2.loadbalancer.server.port=${NOMAD_HOST_PORT_hydra2}",
         ]
 
         check {

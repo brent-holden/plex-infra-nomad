@@ -7,48 +7,51 @@ job "sabnzbd" {
     value     = "true"
   }
 
-  update {
-    max_parallel  = 0
-    health_check  = "checks"
-    auto_revert   = true
-  }
-
   group "sabnzbd" {
     count = 1
-
-    restart {
-      interval  = "12h"
-      attempts  = 720
-      delay     = "60s"
-      mode      = "delay"
-    }
 
     network {
       mode = "bridge"
       port "sabnzbd" { static = 8080 }
     }
 
-    service {
-      name = "sabnzbd"
-      tags = ["http","downloader"]
-      port = "sabnzbd"
-
-      check {
-        type      = "http"
-        port      = "sabnzbd"
-        path      = "/sabnzbd/login/"
-        interval  = "30s"
-        timeout   = "2s"
-
-        check_restart {
-          limit = 10000
-          grace = "60s"
-        }
-      }
+    update {
+      max_parallel  = 0
+      health_check  = "checks"
+      auto_revert   = true
     }
 
     task "sabnzbd" {
       driver = "containerd-driver"
+
+      service {
+        name = "sabnzbd"
+        port = "sabnzbd"
+        tags = [
+          "traefik.enable=true",
+          "traefik.http.routers.sabnzbd.rule=PathPrefix(`/sabnzbd`)",
+        ]
+
+        check {
+          type      = "http"
+          port      = "sabnzbd"
+          path      = "/sabnzbd/login/"
+          interval  = "30s"
+          timeout   = "2s"
+
+          check_restart {
+            limit = 10000
+            grace = "60s"
+          }
+        }
+      }
+
+      restart {
+        interval  = "12h"
+        attempts  = 720
+        delay     = "60s"
+        mode      = "delay"
+      }
 
       env {
         PGID = "1100"

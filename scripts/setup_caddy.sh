@@ -2,13 +2,6 @@
 
 SERVICE="caddy"
 CADDY_IMAGE="docker.io/library/caddy:alpine"
-HOSTNAME=$(hostname)
-
-echo -e "\nIf you want to access Caddy externally, you'll need to forward ports 80/443 to your Caddy host.\n"
-read -e -p "Enter the externally accessible hostname for Caddy (Default: ${HOSTNAME}: " EH
-EXTERNAL_HOST="${EH:-$HOSTNAME}"
-
-echo "${EXTERNAL_HOST}"
 
 echo -e "\nLet's protect your /downloads directory from uninvited guests."
 

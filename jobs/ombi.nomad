@@ -18,7 +18,7 @@ job "ombi" {
 
     network {
       mode = "bridge"
-      port "ombi" { static = 3579 }
+      port "ombi" { to = 3579 }
     }
 
     task "ombi" {
@@ -30,8 +30,6 @@ job "ombi" {
         tags = [
           "traefik.enable=true",
           "traefik.http.routers.ombi.rule=PathPrefix(`/`)",
-          "traefik.http.routers.ombi.entrypoints=http",
-          "traefik.http.services.ombi.loadbalancer.server.port=${NOMAD_HOST_PORT_ombi}",
         ]
 
         check {

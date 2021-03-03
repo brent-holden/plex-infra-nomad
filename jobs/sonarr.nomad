@@ -7,57 +7,59 @@ job "sonarr" {
     value     = "true"
   }
 
- update {
-    max_parallel  = 0
-    health_check  = "checks"
-    auto_revert   = true
-  }
-
   group "sonarr" {
     count = 1
 
-    restart {
-      interval  = "12h"
-      attempts  = 720
-      delay     = "60s"
-      mode      = "delay"
-    }
-
     network {
       mode  = "bridge"
-      port "sonarr" { static = 8989 }
+      port "sonarr" { to = 8989 }
     }
 
-    service {
-      name = "sonarr"
-      tags = ["http","music"]
-      port = "sonarr"
-
-      check {
-        type      = "http"
-        port      = "sonarr"
-        path      = "/sonarr/login"
-        interval  = "30s"
-        timeout   = "2s"
-
-        check_restart {
-          limit = 10000
-          grace = "60s"
-        }
-      }
+    update {
+      max_parallel  = 0
+      health_check  = "checks"
+      auto_revert   = true
     }
 
     task "sonarr" {
       driver = "containerd-driver"
 
+      service {
+        name = "sonarr"
+        port = "sonarr"
+        tags = [
+          "traefik.enable=true",
+          "traefik.http.routers.sonarr.rule=PathPrefix(`/sonarr`)",
+        ]
+
+        check {
+          type      = "http"
+          port      = "sonarr"
+          path      = "/sonarr/login/"
+          interval  = "30s"
+          timeout   = "2s"
+
+          check_restart {
+            limit = 10000
+            grace = "60s"
+          }
+        }
+      }
+
+      restart {
+        interval  = "12h"
+        attempts  = 720
+        delay     = "60s"
+        mode      = "delay"
+      }
+
       env {
-        PGID  = "1100"
-        PUID  = "1100"
-        TZ    = "America/New_York"
+        PGID = "1100"
+        PUID = "1100" 
       }
 
       config {
-        image   = "docker.io/linuxserver/sonarr:${RELEASE}"
+        image         = "docker.io/linuxserver/sonarr:${RELEASE}"
         mounts  = [
                     {
                       type    = "bind"
@@ -83,7 +85,7 @@ job "sonarr" {
       template {
         data          = <<EOH
 IMAGE_ID={{ keyOrDefault "sonarr/config/image_id" "1" }}
-RELEASE={{ keyOrDefault "sonarr/config/release" "latest" }}"
+RELEASE={{ keyOrDefault "sonarr/config/release" "latest" }}
 EOH
         destination   = "env_info"
         env           = true

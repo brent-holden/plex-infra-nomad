@@ -17,9 +17,8 @@ job "caddy" {
     }
 
     network {
-      port "http"   { static  = 80 }
-      port "https"  { static  = 443 }
-      port "caddy-admin"  { static  = 2019 }
+      mode  = "bridge"
+      port "caddy" { to  = 2020 }
     }
 
     task "caddy" {
@@ -27,12 +26,15 @@ job "caddy" {
 
       service {
         name = "caddy"
-        tags = ["https","request"]
-        port = "https"
+        port = "caddy"
+        tags = [
+          "traefik.enable=true",
+          "traefik.http.routers.caddy.rule=PathPrefix(`/downloads`)",
+        ]
 
         check {
           type     = "tcp"
-          port     = "https"
+          port     = "caddy"
           interval = "30s"
           timeout  = "2s"
 
@@ -59,7 +61,6 @@ job "caddy" {
                           "/local/Caddyfile"
                         ]
 
-        host_network  = true
         cap_add       = ["CAP_NET_BIND_SERVICE"]
 
         mounts  = [
@@ -95,36 +96,20 @@ EOH
 
       template {
         data        = <<EOH
-{{ key "/caddy/config/external_hostname" }}
+{
+  admin       off
+  auto_https  off
+}
 
-reverse_proxy /*          ombi.service.consul:3579
-
-redir         /sonarr     /sonarr/
-reverse_proxy /sonarr/*   sonarr.service.consul:8989
-
-redir         /radarr     /radarr/
-reverse_proxy /radarr/*   radarr.service.consul:7878
-
-redir         /lidarr     /lidarr/
-reverse_proxy /lidarr/*   lidarr.service.consul:8686
-
-redir         /sabnzbd    /sabnzbd/
-reverse_proxy /sabnzbd/*  sabnzbd.service.consul:8080
-
-redir         /hydra2     /hydra2/
-reverse_proxy /hydra2/*   hydra2.service.consul:5076
-
-redir         /tautulli   /tautulli/
-reverse_proxy /tautulli*  tautulli.service.consul:8181
-
-handle_path   /downloads* {
-  root  * /downloads
-  file_server browse
-  basicauth {
-    {{ range tree "caddy/config/basicauth_users/" -}}
-      {{- .Key }} {{ .Value }}
-    {{ end -}}
-  }
+http://:2020 {
+  handle_path   /downloads* {
+    file_server browse
+    root  * /downloads
+    basicauth {
+      {{ range tree "caddy/config/basicauth_users/" -}}
+        {{- .Key }} {{ .Value }}
+      {{ end -}}
+      }
 }
 EOH
         destination = "local/Caddyfile"

@@ -7,18 +7,18 @@ job "lidarr" {
     value     = "true"
   }
 
-  update {
-    max_parallel  = 0
-    health_check  = "checks"
-    auto_revert   = true
-  }
-
   group "lidarr" {
     count = 1
 
     network {
       mode  = "bridge"
-      port "lidarr" { static = 8686 }
+      port "lidarr" { to = 8686 }
+    }
+
+    update {
+      max_parallel  = 0
+      health_check  = "checks"
+      auto_revert   = true
     }
 
     task "lidarr" {
@@ -30,8 +30,6 @@ job "lidarr" {
         tags = [
           "traefik.enable=true",
           "traefik.http.routers.lidarr.rule=PathPrefix(`/lidarr`)",
-          "traefik.http.routers.lidarr.entrypoints=http",
-          "traefik.http.services.lidarr.loadbalancer.server.port=${NOMAD_HOST_PORT_lidarr}", 
         ]
 
         check {

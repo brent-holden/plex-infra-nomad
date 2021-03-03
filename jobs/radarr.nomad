@@ -7,30 +7,18 @@ job "radarr" {
     value     = "true"
   }
 
-  update {
-    max_parallel  = 0
-    health_check  = "checks"
-    auto_revert   = true
-  }
-
   group "radarr" {
     count = 1
 
-    restart {
-      interval  = "12h"
-      attempts  = 720
-      delay     = "60s"
-      mode      = "delay"
-    }
-
     network {
       mode  = "bridge"
-      port "radarr" { static = 7878 }
+      port "radarr" { to = 7878 }
     }
 
-    ephemeral_disk {
-      sticky = true
-      size = 2048
+    update {
+      max_parallel  = 0
+      health_check  = "checks"
+      auto_revert   = true
     }
 
     task "radarr" {
@@ -41,8 +29,6 @@ job "radarr" {
         tags = [
           "traefik.enable=true",
           "traefik.http.routers.radarr.rule=PathPrefix(`/radarr`)",
-          "traefik.http.routers.radarr.entrypoints=http",
-          "traefik.http.services.radarr.loadbalancer.server.port=${NOMAD_HOST_PORT_radarr}",
         ]
 
         check {
@@ -57,6 +43,13 @@ job "radarr" {
             grace = "60s"
           }
         }
+      }
+
+      restart {
+        interval  = "12h"
+        attempts  = 720
+        delay     = "60s"
+        mode      = "delay"
       }
 
       env {
