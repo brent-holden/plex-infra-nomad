@@ -25,6 +25,7 @@ job "traefik" {
         tags = [
           "traefik.enable=true",
           "traefik.http.services.traefik.loadbalancer.server.port=80",
+          "traefik.http.routers.traefik.rule=Host(`${ACME_HOST}`)",
         ]
 
         check {
@@ -49,7 +50,7 @@ job "traefik" {
       }
 
       config {
-        image         = "docker.io/library/traefik:latest"
+        image         = "docker.io/library/traefik:${RELEASE}"
         host_network  = true
 
         mounts  = [
@@ -102,13 +103,14 @@ job "traefik" {
 
       template {
         data          = <<EOH
+IMAGE_ID={{ keyOrDefault "traefik/config/image_id" "1" }}
+RELEASE={{ keyOrDefault "traefik/config/release" "latest" }}
 ACME_EMAIL={{ key "traefik/config/acme_email" }}
 ACME_HOST={{ key "traefik/config/acme_host" }}
 EOH
         destination   = "env_info"
         env           = true
       }
-
 
       resources {
         cpu    = 100
