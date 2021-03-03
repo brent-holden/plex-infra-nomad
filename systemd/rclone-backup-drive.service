@@ -18,7 +18,8 @@ ExecStart=/usr/bin/rclone mount \
   --dir-cache-time 48h \
   --cache-dir /mnt/rclone/cache/backup \
 	--vfs-cache-mode full \
-  --vfs-cache-max-age 48h \
+  --vfs-cache-max-age 12h \
+  --vfs-cache-max-size 10G \
 	google-drive:/Backup /mnt/rclone/backup
 ExecStop=/bin/fusermount -uz /mnt/rclone/backup
 Restart=on-abort
