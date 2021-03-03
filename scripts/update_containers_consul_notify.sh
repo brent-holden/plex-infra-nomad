@@ -16,7 +16,7 @@ do
     echo "Pulling ${IMAGE}:${RELEASE}"
     ctr image pull ${IMAGE}:${RELEASE}
 
-    # Get image Id
+    # Get image Digest
     DIGEST=$(ctr image ls | grep "${IMAGE}:${RELEASE}" | awk -F ' ' '{print $3}')
 
     echo "Setting initial key for ${SERVICE}/config/image_digest as ${DIGEST}"
