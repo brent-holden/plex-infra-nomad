@@ -8,47 +8,47 @@ job "plex" {
     value     = "true"
   }
 
-  update {
-    max_parallel  = 0
-    health_check  = "checks"
-    auto_revert   = true
-  }
-
   group "plex" {
     count = 1
 
-    restart {
-      interval  = "12h"
-      attempts  = 720
-      delay     = "60s"
-      mode      = "delay"
+    update {
+      max_parallel  = 0
+      health_check  = "checks"
+      auto_revert   = true
     }
 
     network {
       port "plex" { static = 32400 }
     }
 
-    service {
-      name = "plex"
-      tags = ["http","media"]
-      port = "plex"
-
-      check {
-        type     = "http"
-        port     = "plex"
-        path     = "/web/index.html"
-        interval = "30s"
-        timeout  = "5s"
-
-        check_restart {
-          limit = 10000
-          grace = "60s"
-        }
-      }
-    }
-
     task "plex" {
       driver = "containerd-driver"
+
+      service {
+        name = "plex"
+        tags = ["http","media"]
+        port = "plex"
+
+        check {
+          type     = "http"
+          port     = "plex"
+          path     = "/web/index.html"
+          interval = "30s"
+          timeout  = "5s"
+
+          check_restart {
+            limit = 10000
+            grace = "60s"
+          }
+        }
+      }
+    
+      restart {
+        interval  = "12h"
+        attempts  = 720
+        delay     = "60s"
+        mode      = "delay"
+      }
 
       env {
         PLEX_GID    = "1100"
