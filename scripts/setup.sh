@@ -15,6 +15,7 @@ function setup_media_host() {
   source ${BASH_SOURCE%/*}/setup_rclone.sh
   source ${BASH_SOURCE%/*}/setup_containerd.sh
   source ${BASH_SOURCE%/*}/setup_caddy.sh
+  source ${BASH_SOURCE%/*}/setup_traefik.sh
   source ${BASH_SOURCE%/*}/setup_services.sh
   source ${BASH_SOURCE%/*}/setup_backup.sh
   source ${BASH_SOURCE%/*}/update_containers_consul_notify.sh
