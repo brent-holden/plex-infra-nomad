@@ -58,7 +58,7 @@ job "caddy" {
         args          = [
                           "run",
                           "-config",
-                          "/local/Caddyfile"
+                          "local/Caddyfile"
                         ]
 
         cap_add       = ["CAP_NET_BIND_SERVICE"]
