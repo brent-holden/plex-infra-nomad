@@ -26,8 +26,8 @@ job "plex" {
 
       service {
         name = "plex"
-        tags = ["http","media"]
         port = "plex"
+        tags = ["media"]
 
         check {
           type     = "http"
@@ -55,7 +55,7 @@ job "plex" {
         PLEX_UID    = "1100" 
         VERSION     = "docker"
         TZ          = "America/New_York"
-        PLEX_CLAIM  = "claim-XXXXX"
+        PLEX_CLAIM  = "${PLEX_CLAIM}"
       }
 
       config {
@@ -88,6 +88,7 @@ job "plex" {
 IMAGE_ID={{ keyOrDefault "plex/config/image_id" "1" }}
 VERSION={{ keyOrDefault "plex/config/version" "1.0" }}
 RELEASE={{ keyOrDefault "plex/config/release" "plexpass" }}
+PLEX_CLAIM={{ keyOrDefault "plex/config/claim_token" "claim-XXXXX" }}
 EOH
         destination   = "env_info"
         env           = true
