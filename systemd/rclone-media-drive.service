@@ -11,23 +11,23 @@ Type=notify
 User=root
 Group=root
 ExecStart=/usr/bin/rclone mount \
-	--config /opt/rclone/rclone.conf \
-	--buffer-size=128M \
-	--allow-other \
-	--allow-non-empty \
-	--fast-list \
-	--use-mmap \
-	--umask 002 \
-	--gid 1100 \
-	--uid 1100 \
-	--log-level INFO \
-	--dir-cache-time 48h \
+  --config /opt/rclone/rclone.conf \
+  --buffer-size=128M \
+  --allow-other \
+  --allow-non-empty \
+  --fast-list \
+  --use-mmap \
+  --umask 002 \
+  --gid 1100 \
+  --uid 1100 \
+  --log-level INFO \
+  --dir-cache-time 48h \
   --write-back-cache \
   --cache-dir /mnt/rclone/cache/media \
-	--vfs-cache-mode full \
-	--vfs-cache-max-age 12h \
+  --vfs-cache-mode full \
+  --vfs-cache-max-age 12h \
   --vfs-cache-max-size 256G \
-	google-drive:/Media /mnt/rclone/media
+  google-drive:/Media /mnt/rclone/media
 ExecStop=/bin/fusermount -uz /mnt/rclone/media
 Restart=on-abort
 
