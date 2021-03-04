@@ -58,7 +58,7 @@ job "caddy" {
         args          = [
                           "run",
                           "-config",
-                          "local/Caddyfile"
+                          "/local/Caddyfile"
                         ]
 
         mounts        = [
@@ -111,7 +111,7 @@ http://:2020 {
       }
 }
 EOH
-        destination = "local/Caddyfile"
+        destination = "/local/Caddyfile"
         change_mode = "restart"
       }
 
