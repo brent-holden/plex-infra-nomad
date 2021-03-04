@@ -32,9 +32,6 @@ do
     consul kv put ${SERVICE}/config/auto_update false
   fi
 
-  echo "Setting initial key for ${SERVICE}/config/image_id as ${ID}"
-  consul kv put ${SERVICE}/config/image_id ${ID}
-
   echo "Setting initial key for ${SERVICE}/config/image_digest as ${DIGEST}"
   consul kv put ${SERVICE}/config/image_digest ${DIGEST}
 

@@ -85,7 +85,7 @@ job "radarr" {
 
       template {
         data          = <<EOH
-IMAGE_ID={{ keyOrDefault "radarr/config/image_id" "1" }}
+IMAGE_DIGEST={{ keyOrDefault "radarr/config/image_digest" "1" }}
 RELEASE={{ keyOrDefault "radarr/config/release" "latest" }}
 ACME_HOST={{ key "traefik/config/acme_host" }}
 EOH

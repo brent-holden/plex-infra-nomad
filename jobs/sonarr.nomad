@@ -84,7 +84,7 @@ job "sonarr" {
 
       template {
         data          = <<EOH
-IMAGE_ID={{ keyOrDefault "sonarr/config/image_id" "1" }}
+IMAGE_DIGEST={{ keyOrDefault "sonarr/config/image_digest" "1" }}
 RELEASE={{ keyOrDefault "sonarr/config/release" "latest" }}
 ACME_HOST={{ key "traefik/config/acme_host" }}
 EOH

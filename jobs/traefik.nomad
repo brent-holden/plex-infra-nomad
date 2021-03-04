@@ -103,7 +103,7 @@ job "traefik" {
 
       template {
         data          = <<EOH
-IMAGE_ID={{ keyOrDefault "traefik/config/image_id" "1" }}
+IMAGE_DIGEST={{ keyOrDefault "traefik/config/image_digest" "1" }}
 RELEASE={{ keyOrDefault "traefik/config/release" "latest" }}
 ACME_EMAIL={{ key "traefik/config/acme_email" }}
 ACME_HOST={{ key "traefik/config/acme_host" }}

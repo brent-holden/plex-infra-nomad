@@ -84,7 +84,7 @@ job "lidarr" {
 
       template {
         data          = <<EOH
-IMAGE_ID={{ keyOrDefault "lidarr/config/image_id" "1" }}
+IMAGE_DIGEST={{ keyOrDefault "lidarr/config/image_digest" "1" }}
 RELEASE={{ keyOrDefault "lidarr/config/release" "latest" }}
 ACME_HOST={{ key "traefik/config/acme_host" }}
 EOH

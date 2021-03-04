@@ -87,7 +87,7 @@ job "caddy" {
 
       template {
         data          = <<EOH
-IMAGE_ID={{ keyOrDefault "caddy/config/image_id" "1" }}
+IMAGE_DIGEST={{ keyOrDefault "caddy/config/image_digest" "1" }}
 RELEASE={{ keyOrDefault "caddy/config/release" "latest" }}
 ACME_HOST={{ key "traefik/config/acme_host" }}
 EOH

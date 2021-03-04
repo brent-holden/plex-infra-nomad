@@ -74,7 +74,7 @@ job "tautulli" {
 
       template {
         data          = <<EOH
-IMAGE_ID={{ keyOrDefault "tautulli/config/image_id" "1" }}
+IMAGE_DIGEST={{ keyOrDefault "tautulli/config/image_digest" "1" }}
 RELEASE={{ keyOrDefault "tautulli/config/release" "latest" }}
 ACME_HOST={{ key "traefik/config/acme_host" }}
 EOH

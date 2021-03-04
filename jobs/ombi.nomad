@@ -73,7 +73,7 @@ job "ombi" {
 
       template {
         data          = <<EOH
-IMAGE_ID={{ keyOrDefault "ombi/config/image_id" "1" }}
+IMAGE_DIGEST={{ keyOrDefault "ombi/config/image_digest" "1" }}
 RELEASE={{ keyOrDefault "ombi/config/release" "latest" }}
 ACME_HOST={{ key "traefik/config/acme_host" }}
 EOH

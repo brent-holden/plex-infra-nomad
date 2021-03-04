@@ -78,7 +78,7 @@ job "hydra2" {
 
       template {
         data          = <<EOH
-IMAGE_ID={{ keyOrDefault "hydra2/config/image_id" "1" }}
+IMAGE_DIGEST={{ keyOrDefault "hydra2/config/image_digest" "1" }}
 RELEASE={{ keyOrDefault "hydra2/config/release" "latest" }}
 ACME_HOST={{ key "traefik/config/acme_host" }}
 EOH

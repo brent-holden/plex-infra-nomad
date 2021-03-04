@@ -85,7 +85,7 @@ job "plex" {
 
       template {
         data          = <<EOH
-IMAGE_ID={{ keyOrDefault "plex/config/image_id" "1" }}
+IMAGE_DIGEST={{ keyOrDefault "plex/config/image_digest" "1" }}
 VERSION={{ keyOrDefault "plex/config/version" "1.0" }}
 RELEASE={{ keyOrDefault "plex/config/release" "plexpass" }}
 PLEX_CLAIM={{ keyOrDefault "plex/config/claim_token" "claim-XXXXX" }}
