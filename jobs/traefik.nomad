@@ -50,8 +50,39 @@ job "traefik" {
       }
 
       config {
-        image         = "docker.io/library/traefik:${RELEASE}"
         host_network  = true
+        image         = "docker.io/library/traefik:${RELEASE}"
+        command       = "traefik"
+
+        args    = [
+                    "--api",
+                    "--api.dashboard",
+                    "--api.insecure",
+                    "--log",
+                    "--log.level=INFO",
+                    "--accesslog",
+                    "--accesslog.filepath=logs/access.log",
+                    "--entrypoints.web.address=:80",
+                    "--entrypoints.web.forwardedheaders.insecure=true",
+                    "--entrypoints.web.http.redirections.entryPoint.to=web-secure",
+                    "--entrypoints.web.http.redirections.entryPoint.scheme=https",
+                    "--entrypoints.web.http.redirections.entrypoint.permanent=true",
+                    "--entrypoints.web-secure.address=:443",
+                    "--entrypoints.web-secure.http.tls=true",
+                    "--entrypoints.web-secure.http.tls.certresolver=letsencrypt",
+                    "--entrypoints.web-secure.http.tls.domains=${ACME_HOST}",
+                    "--entrypoints.traefik.address=:8081",
+                    "--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL}",
+                    "--certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/acme.json",
+                    "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-v02.api.letsencrypt.org/directory",
+                    "--certificatesresolvers.letsencrypt.acme.httpchallenge=true",
+                    "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web",
+                    "--providers.consulcatalog=true",
+                    "--providers.consulcatalog.prefix=traefik",
+                    "--providers.consulcatalog.exposedbydefault=false",
+                    "--providers.consulcatalog.endpoint.address=127.0.0.1:8500",
+                    "--providers.consulcatalog.endpoint.scheme=http",
+                  ]
 
         mounts  = [
                     {
@@ -67,38 +98,6 @@ job "traefik" {
                       options = ["rbind", "rw"]
                     }
                   ]
-
-        command = "traefik"
-
-        args    = [
-          "--api",
-          "--api.dashboard",
-          "--api.insecure",
-          "--log",
-          "--log.level=INFO",
-          "--accesslog",
-          "--accesslog.filepath=logs/access.log",
-          "--entrypoints.web.address=:80",
-          "--entrypoints.web.forwardedheaders.insecure=true",
-          "--entrypoints.web.http.redirections.entryPoint.to=web-secure",
-          "--entrypoints.web.http.redirections.entryPoint.scheme=https",
-          "--entrypoints.web.http.redirections.entrypoint.permanent=true",
-          "--entrypoints.web-secure.address=:443",
-          "--entrypoints.web-secure.http.tls=true",
-          "--entrypoints.web-secure.http.tls.certresolver=letsencrypt",
-          "--entrypoints.web-secure.http.tls.domains=${ACME_HOST}",
-          "--entrypoints.traefik.address=:8081",
-          "--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL}",
-          "--certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/acme.json",
-          "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-v02.api.letsencrypt.org/directory",
-          "--certificatesresolvers.letsencrypt.acme.httpchallenge=true",
-          "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web",
-          "--providers.consulcatalog=true",
-          "--providers.consulcatalog.prefix=traefik",
-          "--providers.consulcatalog.exposedbydefault=false",
-          "--providers.consulcatalog.endpoint.address=127.0.0.1:8500",
-          "--providers.consulcatalog.endpoint.scheme=http",
-        ]
       }
 
       template {

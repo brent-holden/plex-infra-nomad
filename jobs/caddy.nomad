@@ -18,7 +18,7 @@ job "caddy" {
 
     network {
       mode  = "bridge"
-      port "caddy" { to  = 2020 }
+      port "caddy" { to = 2020 }
     }
 
     task "caddy" {
@@ -61,28 +61,26 @@ job "caddy" {
                           "local/Caddyfile"
                         ]
 
-        cap_add       = ["CAP_NET_BIND_SERVICE"]
-
-        mounts  = [
-                    {
-                      type    = "bind"
-                      source  = "/opt/caddy/config"
-                      target  = "/config"
-                      options = ["rbind", "rw"]
-                    },
-                    {
-                      type    = "bind"
-                      source  = "/opt/caddy/data"
-                      target  = "/data"
-                      options = ["rbind", "rw"]
-                    },
-                    {
-                      type    = "bind"
-                      target  = "/downloads"
-                      source  = "/mnt/downloads/complete"
-                      options = ["rbind", "ro"]
-                    }
-                  ]
+        mounts        = [
+                          {
+                            type    = "bind"
+                            source  = "/opt/caddy/config"
+                            target  = "/config"
+                            options = ["rbind", "rw"]
+                          },
+                          {
+                            type    = "bind"
+                            source  = "/opt/caddy/data"
+                            target  = "/data"
+                            options = ["rbind", "rw"]
+                          },
+                          {
+                            type    = "bind"
+                            target  = "/downloads"
+                            source  = "/mnt/downloads/complete"
+                            options = ["rbind", "ro"]
+                          }
+                        ]
       }
 
       template {
