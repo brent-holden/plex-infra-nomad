@@ -24,6 +24,9 @@ do
   echo "Setting initial key for ${SERVICE}/config/release as ${RELEASE}"
   consul kv put ${SERVICE}/config/release ${RELEASE}
 
+  echo "Setting initial key for ${SERVICE}/config/image_digest as ${DIGEST}"
+  consul kv put ${SERVICE}/config/image_digest ${DIGEST}
+
   if [[ ${UPDATE} == "auto_update" ]]; then
     echo "Setting auto_update key set to true"
     consul kv put ${SERVICE}/config/auto_update true
@@ -31,8 +34,5 @@ do
     echo "Setting auto_update key set to false. Key was ${UPDATE}"
     consul kv put ${SERVICE}/config/auto_update false
   fi
-
-  echo "Setting initial key for ${SERVICE}/config/image_digest as ${DIGEST}"
-  consul kv put ${SERVICE}/config/image_digest ${DIGEST}
 
 done
