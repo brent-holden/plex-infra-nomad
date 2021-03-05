@@ -16,10 +16,6 @@ yum -y install ${PACKAGES}
 echo "Enabling cockpiti for remote web administration. Access via https://<ip>:9090"
 systemctl enable --now cockpit.socket
 
-# Set default zone to trusted assuming you're on a private net behind a firewall
-#echo "Setting FirewallD to live in a trusted zone. Comment this out if you're in a DMZ"
-#firewall-cmd --set-default-zone=trusted
-
 echo "Disabling FirewallD for containerd"
 systemctl disable --now firewalld
 
