@@ -57,7 +57,7 @@ job "caddy" {
         command       = "caddy"
         args          = [
                           "run",
-                          "-config",
+                          "--config",
                           "/local/Caddyfile"
                         ]
 
