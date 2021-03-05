@@ -12,7 +12,7 @@ mkdir -p /opt/cni
 ln -sf /usr/libexec/cni /opt/cni/bin
 
 echo "Setting sysctls for containerd.."
-cat <<EOH >> /etc/sysctl.d/50-container
+cat <<EOH >> /etc/sysctl.d/50-containerd.conf
 net.ipv4.ip_unprivileged_port_start=0
 net.bridge.bridge-nf-call-arptables=1
 net.bridge.bridge-nf-call-ip6tables=1
