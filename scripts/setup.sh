@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function setup_infra_host() {
-  source ${BASH_SOURCE%/*}/prep_network_host.sh
+  source ${BASH_SOURCE%/*}/prep_infra_host.sh
   source ${BASH_SOURCE%/*}/setup_containerd.sh
   source ${BASH_SOURCE%/*}/setup_consul_server.sh
   source ${BASH_SOURCE%/*}/setup_nomad_server.sh
