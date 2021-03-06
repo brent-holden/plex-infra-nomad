@@ -29,7 +29,7 @@ job "ombi" {
         port = "ombi"
         tags = [
           "traefik.enable=true",
-          "traefik.http.routers.ombi.rule=Host(`${ACME_HOST}`)",
+          "traefik.http.routers.ombi.rule=Host(`${ACME_HOST}`) && PathPrefix(`/ombi`)",
         ]
 
         check {

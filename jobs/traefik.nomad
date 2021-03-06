@@ -25,7 +25,10 @@ job "traefik" {
         tags = [
           "traefik.enable=true",
           "traefik.http.services.traefik.loadbalancer.server.port=80",
-          "traefik.http.routers.traefik.rule=Host(`${ACME_HOST}`)",
+          "traefik.http.routers.traefik.rule=Host(`${ACME_HOST}`) && Path(`/`)",
+          "traefik.http.routers.traefik.middlewares=redirect-root-ombi",
+          "traefik.http.middlewares.redirect-root-ombi.redirectregex.regex=.*",
+          "traefik.http.middlewares.redirect-root-ombi.redirectregex.replacement=/ombi",
         ]
 
         check {
