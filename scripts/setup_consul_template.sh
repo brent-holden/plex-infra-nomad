@@ -24,6 +24,9 @@ echo "OPTIONS=" > /etc/sysconfig/consul-template
 echo "Creating configuration directory ${CONSUL_TEMPLATE_CONF_DIR}"
 mkdir -p ${CONSUL_TEMPLATE_CONF_DIR}
 
+echo "Copying over consul-template config"
+cp ../config/consul-template/config.hcl ${CONSUL_TEMPLATE_CONF_DIR}
+
 echo "Copying over systemd unit files"
 cp ${SYSTEMD_SVCFILES_DIR}/consul-template.service ${SYSTEMD_DIR}
 systemctl daemon-reload
