@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source ${BASH_SOURCE%/*}/variables.sh
+
 NAME="consul-template"
 RELEASE="0.25.2"
 PLATFORM="linux_amd64"
