@@ -15,7 +15,7 @@ yum install -y unzip
 echo "Downloading ${NAME}_${RELEASE} for ${PLATFORM}"
 curl https://releases.hashicorp.com/${NAME}/${RELEASE}/${NAME}_${RELEASE}_${PLATFORM}.zip --output /tmp/${NAME}-${RELEASE}_${PLATFORM}.zip
 
-"Installing ${NAME} to ${DEST}"
+echo "Installing ${NAME} to ${DEST}"
 unzip -qo /tmp/${NAME}-${RELEASE}_${PLATFORM}.zip -d ${DEST}
 
 echo "Creating consul-template sysconfig file for setting options"
