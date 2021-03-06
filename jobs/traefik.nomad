@@ -29,6 +29,7 @@ job "traefik" {
           "traefik.http.routers.traefik.middlewares=redirect-root-ombi",
           "traefik.http.middlewares.redirect-root-ombi.redirectregex.regex=.*",
           "traefik.http.middlewares.redirect-root-ombi.redirectregex.replacement=/ombi",
+          "traefik.http.middlewares.redirect-root-ombi.redirectregex.permanent=true",
         ]
 
         check {
