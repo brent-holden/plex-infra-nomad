@@ -10,15 +10,15 @@ job "caddy" {
   group "caddy" {
     count = 1
 
+    network {
+      mode  = "bridge"
+      port "caddy" { to = 2020 }
+    }
+
     update {
       max_parallel  = 0
       health_check  = "checks"
       auto_revert   = true
-    }
-
-    network {
-      mode  = "bridge"
-      port "caddy" { to = 2020 }
     }
 
     task "caddy" {

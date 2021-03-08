@@ -11,14 +11,14 @@ job "plex" {
   group "plex" {
     count = 1
 
+    network {
+      port "plex" { static = 32400 }
+    }
+
     update {
       max_parallel  = 0
       health_check  = "checks"
       auto_revert   = true
-    }
-
-    network {
-      port "plex" { static = 32400 }
     }
 
     task "plex" {

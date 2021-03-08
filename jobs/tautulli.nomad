@@ -15,6 +15,12 @@ job "tautulli" {
       port "tautulli" { to = 8181 }
     }
 
+    update {
+      max_parallel  = 0
+      health_check  = "checks"
+      auto_revert   = true
+    }
+
     task "tautulli" {
       driver = "containerd-driver"
 

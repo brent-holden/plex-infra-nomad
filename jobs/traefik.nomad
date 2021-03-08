@@ -15,6 +15,12 @@ job "traefik" {
       port "traefik" { static = 8081 }
     }
 
+    update {
+      max_parallel  = 0
+      health_check  = "checks"
+      auto_revert   = true
+    }
+
     task "traefik" {
       driver = "containerd-driver"
 

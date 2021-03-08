@@ -10,15 +10,15 @@ job "ombi" {
   group "ombi" {
     count = 1
 
+    network {
+      mode = "bridge"
+      port "ombi" { to = 3579 }
+    }
+
     update {
       max_parallel  = 0
       health_check  = "checks"
       auto_revert   = true
-    }
-
-    network {
-      mode = "bridge"
-      port "ombi" { to = 3579 }
     }
 
     task "ombi" {
