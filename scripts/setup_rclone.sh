@@ -3,6 +3,37 @@ shopt -s extglob
 
 source ${BASH_SOURCE%/*}/variables.sh
 
+function usage() {
+
+echo "
+Usage: setup_rclone.sh [options]
+
+  This setup script will install and configure rclone drives assuming that you have a working rclone
+  configuration file alredy created.
+
+Options:
+
+  -s or --skipconfig
+
+      If you have the rclone configuration already in Consul, you can skip this section using this flag.
+
+
+  -b or --backuponly
+
+      Skip the setup of the media drive and only setup the backup drive
+
+
+  -h or --help
+
+      Prints this useful help dialog
+
+Example:
+
+  setup_rclone.sh --skipconfig
+" >&2
+
+}
+
 function setup_rclone_config() {
 
   read -p "Point me to rclone.conf (default value: /root/.config/rclone/rclone.conf): " RCLONE_CONF
@@ -74,9 +105,8 @@ function install_rclone() {
 
 }
 
-
-SHORT=sb
-LONG=skipconfig,backuponly
+SHORTOPTS=sb
+LONGOPTS=skipconfig,backuponly
 SKIPCONFIG=false
 BACKUPONLY=false
 
@@ -85,7 +115,7 @@ echo -e "\n### Setting up rClone ###\n\n"
 echo "!! You'll need a working rclone configuration to proceed !!"
 echo -e "You can follow the documentation posted at http://rclone.org\n\n"
 
-OPTS=$(getopt --options ${SHORT} --long ${LONG})
+OPTS=$(getopt --options ${SHORTOPTS} --long ${LONGOPTS})
 
 while true ; do
   case "$1" in
@@ -97,10 +127,13 @@ while true ; do
       BACKUPONLY=true
       shift
       ;;
+    -h | --help )
+      usage
+      exit 0
+      ;;
     * ) break ;;
   esac
 done
-
 
 if [[ ${SKIPCONFIG} = false ]]; then
   setup_rclone_config
