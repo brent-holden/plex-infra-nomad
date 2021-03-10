@@ -12,7 +12,7 @@ job "hydra2" {
 
     network {
       mode = "bridge"
-      port "hydra2" { static = 5076 }
+      port "hydra2" { to = 5076 }
     }
 
     update {
