@@ -2,6 +2,42 @@
 
 source ${BASH_SOURCE%/*}/variables.sh
 
+function usage() {
+
+echo "
+Usage: update_containers_consul_notify.sh [options]
+
+  This script will pull containers and update the Consul key assigned. The script will ignore
+  the service if the <service>/config/auto_update key is set to false.
+
+Options:
+
+  -f
+
+      This will override the setting on the auto_update key and force the service container to be updated
+
+  -h
+      Prints this useful help dialog
+
+Example:
+
+  update_containers_consul_notify.sh -f
+" >&2
+}
+
+FORCE=false
+
+while getopts hf FLAG
+do
+  case "${FLAG}" in
+    f)
+      FORCE=true;;
+    h)
+      usage
+      exit 0;;
+  esac
+done
+
 for SERVICE in "${!SERVICES[@]}"
 do
   IMG_AND_RELEASE=${SERVICES[${SERVICE}]}
@@ -9,7 +45,7 @@ do
   RELEASE=$(echo ${IMG_AND_RELEASE} | awk -F ':' '{ print $2 }' | awk -F ',' '{print $1}')
   UPDATE=$(consul kv get ${SERVICE}/config/auto_update)
 
-  if [[ ${UPDATE} == true ]]; then
+  if [[ ${UPDATE} == true || ${FORCE} == true ]]; then
     echo -e "\nGot auto update configuration for ${SERVICE} from Consul. Here we go."
 
     # Pull defined image
