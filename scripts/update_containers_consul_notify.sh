@@ -10,6 +10,9 @@ Usage: update_containers_consul_notify.sh [options]
   This script will pull containers and update the Consul key assigned. The script will ignore
   the service if the <service>/config/auto_update key is set to false.
 
+  The interaction with containerd will require you to use sudo while running this script, or
+  it will need to be run as root.
+
 Options:
 
   -f
