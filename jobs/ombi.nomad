@@ -30,6 +30,8 @@ job "ombi" {
         tags = [
           "traefik.enable=true",
           "traefik.http.routers.ombi.rule=Host(`${ACME_HOST}`) && PathPrefix(`/ombi`)",
+          "traefik.frontend.redirect.regex=^https:\\\\/\\\\/([^\\\\/]+)\\\\/?$$",
+          "traefik.frontend.redirect.replacement=https://$$1/ombi/",
         ]
 
         check {
