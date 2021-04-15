@@ -37,8 +37,8 @@ job "plex" {
           timeout  = "5s"
 
           check_restart {
-            limit = 10000
-            grace = "60s"
+            limit = 2
+            grace = "10s"
           }
         }
       }
