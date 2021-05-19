@@ -6,7 +6,7 @@ declare -A SERVICES=( [lidarr]=docker.io/linuxserver/lidarr:latest,auto_update
                       [tautulli]=docker.io/linuxserver/tautulli:latest,auto_update
                       [hydra2]=docker.io/linuxserver/nzbhydra2:latest,auto_update
                       [sabnzbd]=docker.io/linuxserver/sabnzbd:latest,auto_update
-                      [ombi]=docker.io/linuxserver/ombi:v4-preview,auto_update
+                      [ombi]=docker.io/linuxserver/ombi:development,auto_update
                       [caddy]=docker.io/library/caddy:alpine,auto_update
                       [traefik]=docker.io/library/traefik:latest,auto_update
                       [plex]=docker.io/plexinc/pms-docker:plexpass,auto_update
