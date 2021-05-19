@@ -22,7 +22,7 @@ job "lidarr" {
     }
 
     task "lidarr" {
-      driver = "containerd-driver"
+      driver = "docker"
 
       service {
         name = "lidarr"
@@ -59,35 +59,46 @@ job "lidarr" {
       }
 
       config {
-        image         = "docker.io/linuxserver/lidarr:${RELEASE}"
-        mounts  = [
-                    {
-                      type    = "bind"
-                      target  = "/config"
-                      source  = "/opt/lidarr"
-                      options = ["rbind", "rw"]
-                    },
-                    {
-                      type    = "bind"
-                      target  = "/downloads"
-                      source  = "/mnt/downloads"
-                      options = ["rbind", "rw"]
-                    },
-                    {
-                      type    = "bind"
-                      target  = "/music"
-                      source  = "/mnt/rclone/media/Music"
-                      options = ["rbind", "rw"]
-                    }
-                  ]
+        image = "docker.io/linuxserver/lidarr:${RELEASE}"
+
+        mount {
+          type    = "bind"
+          target  = "/config"
+          source  = "/opt/lidarr"
+          readonly = false
+          bind_options {
+            propagation = "rshared"
+          }
+        }
+
+        mount {
+          type    = "bind"
+          target  = "/downloads"
+          source  = "/mnt/downloads"
+          readonly = false
+          bind_options {
+            propagation = "rshared"
+          }
+        }
+
+        mount {
+          type    = "bind"
+          target  = "/music"
+          source  = "/mnt/rclone/media/Music"
+          readonly = false
+          bind_options {
+            propagation = "rshared"
+          }
+        }
+
       }
 
       template {
-        data          = <<EOH
-IMAGE_DIGEST={{ keyOrDefault "lidarr/config/image_digest" "1" }}
-RELEASE={{ keyOrDefault "lidarr/config/release" "latest" }}
-ACME_HOST={{ key "traefik/config/acme_host" }}
-EOH
+        data          = <<-EOH
+          IMAGE_DIGEST={{ keyOrDefault "lidarr/config/image_digest" "1" }}
+          RELEASE={{ keyOrDefault "lidarr/config/release" "latest" }}
+          ACME_HOST={{ key "traefik/config/acme_host" }}
+          EOH
         destination   = "env_info"
         env           = true
       }

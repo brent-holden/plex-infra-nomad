@@ -22,7 +22,7 @@ job "radarr" {
     }
 
     task "radarr" {
-      driver = "containerd-driver"
+      driver = "docker"
       service {
         name = "radarr"
         port = "radarr"
@@ -61,34 +61,44 @@ job "radarr" {
       config {
         image   = "docker.io/linuxserver/radarr:${RELEASE}"
 
-        mounts  = [
-                    {
-                      type    = "bind"
-                      target  = "/config"
-                      source  = "/opt/radarr"
-                      options = ["rbind", "rw"]
-                    },
-                    {
-                      type    = "bind"
-                      target  = "/downloads"
-                      source  = "/mnt/downloads"
-                      options = ["rbind", "rw"]
-                    },
-                    {
-                      type    = "bind"
-                      target  = "/media/movies"
-                      source  = "/mnt/rclone/media/Movies"
-                      options = ["rbind", "rw"]
-                    }
-                  ]
+        mount {
+          type      = "bind"
+          target    = "/config"
+          source    = "/opt/radarr"
+          readonly  = false
+          bind_options {
+            propagation = "rshared"
+          }
+        }
+
+        mount {
+          type      = "bind"
+          target    = "/downloads"
+          source    = "/mnt/downloads"
+          readonly  = false
+          bind_options {
+            propagation = "rshared"
+          }
+        }
+
+        mount {
+          type      = "bind"
+          target    = "/media/movies"
+          source    = "/mnt/rclone/media/Movies"
+          readonly  = false
+          bind_options {
+            propagation = "rshared"
+          }
+        }
+
       }
 
       template {
-        data          = <<EOH
-IMAGE_DIGEST={{ keyOrDefault "radarr/config/image_digest" "1" }}
-RELEASE={{ keyOrDefault "radarr/config/release" "latest" }}
-ACME_HOST={{ key "traefik/config/acme_host" }}
-EOH
+        data          = <<-EOH
+          IMAGE_DIGEST={{ keyOrDefault "radarr/config/image_digest" "1" }}
+          RELEASE={{ keyOrDefault "radarr/config/release" "latest" }}
+          ACME_HOST={{ key "traefik/config/acme_host" }}
+          EOH
         destination   = "env_info"
         env           = true
       }

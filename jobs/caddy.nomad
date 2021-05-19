@@ -22,7 +22,7 @@ job "caddy" {
     }
 
     task "caddy" {
-      driver = "containerd-driver"
+      driver = "docker"
 
       service {
         name = "caddy"
@@ -61,56 +61,66 @@ job "caddy" {
                           "/local/Caddyfile"
                         ]
 
-        mounts        = [
-                          {
-                            type    = "bind"
-                            source  = "/opt/caddy/config"
-                            target  = "/config"
-                            options = ["rbind", "rw"]
-                          },
-                          {
-                            type    = "bind"
-                            source  = "/opt/caddy/data"
-                            target  = "/data"
-                            options = ["rbind", "rw"]
-                          },
-                          {
-                            type    = "bind"
-                            target  = "/downloads"
-                            source  = "/mnt/downloads/complete"
-                            options = ["rbind", "ro"]
-                          }
-                        ]
+        mount {
+          type      = "bind"
+          target    = "/config"
+          source    = "/opt/caddy/config"
+          readonly  = false
+          bind_options {
+            propagation = "rshared"
+          }
+        }
+
+        mount {
+          type      = "bind"
+          target    = "/downloads"
+          source    = "/mnt/downloads/complete"
+          readonly  = false
+          bind_options {
+            propagation = "rshared"
+          }
+        }
+
+        mount {
+          type      = "bind"
+          target    = "/data"
+          source    = "/opt/caddy/data"
+          readonly  = false
+          bind_options {
+            propagation = "rshared"
+          }
+        }
+
       }
 
       template {
-        data          = <<EOH
-IMAGE_DIGEST={{ keyOrDefault "caddy/config/image_digest" "1" }}
-RELEASE={{ keyOrDefault "caddy/config/release" "latest" }}
-ACME_HOST={{ key "traefik/config/acme_host" }}
-EOH
+        data          = <<-EOH
+          IMAGE_DIGEST={{ keyOrDefault "caddy/config/image_digest" "1" }}
+          RELEASE={{ keyOrDefault "caddy/config/release" "latest" }}
+          ACME_HOST={{ key "traefik/config/acme_host" }}
+          EOH
         destination   = "env_info"
         env           = true
       }
 
       template {
-        data        = <<EOH
-{
-  admin       off
-  auto_https  off
-}
+        data        = <<-EOH
+          {
+            admin       off
+            auto_https  off
+          }
 
-http://:2020 {
-  handle_path   /downloads* {
-    file_server browse
-    root  * /downloads
-    basicauth {
-      {{ range tree "caddy/config/basicauth_users/" -}}
-        {{- .Key }} {{ .Value }}
-      {{ end -}}
-      }
-}
-EOH
+          http://:2020 {
+            handle_path   /downloads* {
+              file_server browse
+              root  * /downloads
+              basicauth {
+                {{ range tree "caddy/config/basicauth_users/" -}}
+                  {{- .Key }} {{ .Value }}
+                {{ end -}}
+                }
+          }
+          EOH
         destination = "/local/Caddyfile"
         change_mode = "restart"
       }

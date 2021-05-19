@@ -22,7 +22,7 @@ job "hydra2" {
     }
 
     task "hydra2" {
-      driver = "containerd-driver"
+      driver = "docker"
 
       service {
         name = "hydra2"
@@ -60,28 +60,34 @@ job "hydra2" {
 
       config {
         image   = "docker.io/linuxserver/nzbhydra2:${RELEASE}"
-        mounts  = [
-                    {
-                      type    = "bind"
-                      target  = "/config"
-                      source  = "/opt/hydra2"
-                      options = ["rbind", "rw"]
-                    },
-                    {
-                      type    = "bind"
-                      target  = "/downloads"
-                      source  = "/mnt/downloads"
-                      options = ["rbind", "rw"]
-                    }
-                  ]
+        mount {
+          type    = "bind"
+          target  = "/config"
+          source  = "/opt/hydra2"
+          readonly = false
+          bind_options {
+            propagation = "rshared"
+          }
+        }
+
+        mount {
+          type    = "bind"
+          target  = "/downloads"
+          source  = "/mnt/downloads"
+          readonly = false
+          bind_options {
+            propagation = "rshared"
+          }
+        }
+
       }
 
       template {
-        data          = <<EOH
-IMAGE_DIGEST={{ keyOrDefault "hydra2/config/image_digest" "1" }}
-RELEASE={{ keyOrDefault "hydra2/config/release" "latest" }}
-ACME_HOST={{ key "traefik/config/acme_host" }}
-EOH
+        data          = <<-EOH
+          IMAGE_DIGEST={{ keyOrDefault "hydra2/config/image_digest" "1" }}
+          RELEASE={{ keyOrDefault "hydra2/config/release" "latest" }}
+          ACME_HOST={{ key "traefik/config/acme_host" }}
+          EOH
         destination   = "env_info"
         env           = true
       }

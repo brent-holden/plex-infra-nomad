@@ -22,7 +22,7 @@ job "plex" {
     }
 
     task "plex" {
-      driver = "containerd-driver"
+      driver = "docker"
 
       service {
         name = "plex"
@@ -60,36 +60,48 @@ job "plex" {
 
       config {
         image         = "docker.io/plexinc/pms-docker:${RELEASE}"
-        host_network  = true
-        mounts        = [
-                          {
-                            type    = "bind"
-                            target  = "/config"
-                            source  = "/opt/plex"
-                            options = ["rbind", "rw"]
-                          },
-                          {
-                            type    = "bind"
-                            target  = "/media"
-                            source  = "/mnt/rclone/media"
-                            options = ["rbind", "ro"]
-                          },
-                          {
-                            type    = "bind"
-                            target  = "/transcode"
-                            source  = "/mnt/transcode"
-                            options = ["rbind", "rw"]
-                          }
-                    ]
+
+        network_mode  = "host"
+
+        mount {
+          type    = "bind"
+          target  = "/config"
+          source  = "/opt/plex"
+          readonly = false
+          bind_options {
+            propagation = "rshared"
+          }
+        }
+
+        mount {
+          type    = "bind"
+          target  = "/media"
+          source  = "/mnt/rclone/media"
+          readonly = true
+          bind_options {
+            propagation = "rshared"
+          }
+        }
+
+        mount {
+          type    = "bind"
+          target  = "/transcode"
+          source  = "/mnt/transcode"
+          readonly = false
+          bind_options {
+            propagation = "rshared"
+          }
+        }
+
       }
 
       template {
-        data          = <<EOH
-IMAGE_DIGEST={{ keyOrDefault "plex/config/image_digest" "1" }}
-VERSION={{ keyOrDefault "plex/config/version" "1.0" }}
-RELEASE={{ keyOrDefault "plex/config/release" "plexpass" }}
-PLEX_CLAIM={{ keyOrDefault "plex/config/claim_token" "claim-XXXXX" }}
-EOH
+        data          = <<-EOH
+          IMAGE_DIGEST={{ keyOrDefault "plex/config/image_digest" "1" }}
+          VERSION={{ keyOrDefault "plex/config/version" "1.0" }}
+          RELEASE={{ keyOrDefault "plex/config/release" "plexpass" }}
+          PLEX_CLAIM={{ keyOrDefault "plex/config/claim_token" "claim-XXXXX" }}
+          EOH
         destination   = "env_info"
         env           = true
       }

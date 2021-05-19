@@ -53,10 +53,10 @@ do
 
     # Pull defined image
     echo "Pulling ${IMAGE}:${RELEASE}"
-    ctr image pull ${IMAGE}:${RELEASE}
+    docker image pull ${IMAGE}:${RELEASE}
 
     # Get image Digest
-    DIGEST=$(ctr image ls | grep "${IMAGE}:${RELEASE}" | awk -F ' ' '{print $3}')
+    DIGEST=$(docker image inspect --format='{{.Config.Image}}')
 
     echo "Setting initial key for ${SERVICE}/config/image_digest as ${DIGEST}"
     consul kv put ${SERVICE}/config/image_digest ${DIGEST}

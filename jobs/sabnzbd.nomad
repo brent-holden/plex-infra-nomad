@@ -22,7 +22,7 @@ job "sabnzbd" {
     }
 
     task "sabnzbd" {
-      driver = "containerd-driver"
+      driver = "docker"
 
       service {
         name = "sabnzbd"
@@ -61,28 +61,34 @@ job "sabnzbd" {
       config {
         image   = "docker.io/linuxserver/sabnzbd:${RELEASE}"
 
-        mounts  = [
-                    {
-                      type    = "bind"
-                      target  = "/config"
-                      source  = "/opt/sabnzbd"
-                      options = ["rbind", "rw"]
-                    },
-                    {
-                      type    = "bind"
-                      target  = "/downloads"
-                      source  = "/mnt/downloads"
-                      options = ["rbind", "rw"]
-                    }
-                  ]
+        mount {
+          type    = "bind"
+          target  = "/config"
+          source  = "/opt/sabnzbd"
+          readonly = false
+          bind_options {
+            propagation = "rshared"
+          }
+        }
+
+        mount {
+          type    = "bind"
+          target  = "/downloads"
+          source  = "/mnt/downloads"
+          readonly = false
+          bind_options {
+            propagation = "rshared"
+          }
+        }
+
       }
 
       template {
-        data          = <<EOH
-IMAGE_DIGEST={{ keyOrDefault "sabnzbd/config/image_digest" "1" }}
-RELEASE={{ keyOrDefault "sabnzbd/config/release" "latest" }}
-ACME_HOST={{ key "traefik/config/acme_host" }}
-EOH
+        data          = <<-EOH
+          IMAGE_DIGEST={{ keyOrDefault "sabnzbd/config/image_digest" "1" }}
+          RELEASE={{ keyOrDefault "sabnzbd/config/release" "latest" }}
+          ACME_HOST={{ key "traefik/config/acme_host" }}
+          EOH
         destination   = "env_info"
         env           = true
       }

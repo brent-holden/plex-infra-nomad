@@ -22,7 +22,7 @@ job "sonarr" {
     }
 
     task "sonarr" {
-      driver = "containerd-driver"
+      driver = "docker"
 
       service {
         name = "sonarr"
@@ -59,35 +59,46 @@ job "sonarr" {
       }
 
       config {
-        image         = "docker.io/linuxserver/sonarr:${RELEASE}"
-        mounts  = [
-                    {
-                      type    = "bind"
-                      target  = "/config"
-                      source  = "/opt/sonarr"
-                      options = ["rbind", "rw"]
-                    },
-                    {
-                      type    = "bind"
-                      target  = "/downloads"
-                      source  = "/mnt/downloads"
-                      options = ["rbind", "rw"]
-                    },
-                    {
-                      type    = "bind"
-                      target  = "/tv"
-                      source  = "/mnt/rclone/media/TV"
-                      options = ["rbind", "rw"]
-                    }
-                  ]
+        image       = "docker.io/linuxserver/sonarr:${RELEASE}"
+
+        mount {
+          type      = "bind"
+          target    = "/config"
+          source    = "/opt/sonarr"
+          readonly  = false
+          bind_options {
+            propagation = "rshared"
+          }
+        }
+
+        mount {
+          type      = "bind"
+          target    = "/downloads"
+          source    = "/mnt/downloads"
+          readonly  = false
+          bind_options {
+            propagation = "rshared"
+          }
+        }
+
+        mount {
+          type      = "bind"
+          target    = "/tv"
+          source    = "/mnt/rclone/media/TV"
+          readonly  = false
+          bind_options {
+            propagation = "rshared"
+          }
+        }
+
       }
 
       template {
-        data          = <<EOH
-IMAGE_DIGEST={{ keyOrDefault "sonarr/config/image_digest" "1" }}
-RELEASE={{ keyOrDefault "sonarr/config/release" "latest" }}
-ACME_HOST={{ key "traefik/config/acme_host" }}
-EOH
+        data          = <<-EOH
+          IMAGE_DIGEST={{ keyOrDefault "sonarr/config/image_digest" "1" }}
+          RELEASE={{ keyOrDefault "sonarr/config/release" "latest" }}
+          ACME_HOST={{ key "traefik/config/acme_host" }}
+          EOH
         destination   = "env_info"
         env           = true
       }

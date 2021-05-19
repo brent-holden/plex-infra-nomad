@@ -22,7 +22,7 @@ job "tautulli" {
     }
 
     task "tautulli" {
-      driver = "containerd-driver"
+      driver = "docker"
 
       service {
         name = "tautulli"
@@ -62,28 +62,34 @@ job "tautulli" {
       config {
         image         = "docker.io/linuxserver/tautulli:${RELEASE}"
 
-        mounts  = [
-                    {
-                      type    = "bind"
-                      target  = "/config"
-                      source  = "/opt/tautulli"
-                      options = ["rbind", "rw"]
-                    },
-                    {
-                      type    = "bind"
-                      target  = "/plex_logs"
-                      source  = "/opt/plex/Library/Application Support/Plex Media Server/Logs"
-                      options = ["rbind", "ro"]
-                    }
-                  ]
+        mount {
+          type    = "bind"
+          target  = "/config"
+          source  = "/opt/tautulli"
+          readonly = false
+          bind_options {
+            propagation = "rshared"
+          }
+        }
+
+        mount {
+          type    = "bind"
+          target  = "/plex_logs"
+          source  = "/opt/plex/Library/Application Support/Plex Media Server/Logs"
+          readonly = true
+          bind_options {
+            propagation = "rshared"
+          }
+        }
+
       }
 
       template {
-        data          = <<EOH
-IMAGE_DIGEST={{ keyOrDefault "tautulli/config/image_digest" "1" }}
-RELEASE={{ keyOrDefault "tautulli/config/release" "latest" }}
-ACME_HOST={{ key "traefik/config/acme_host" }}
-EOH
+        data          = <<-EOH
+          IMAGE_DIGEST={{ keyOrDefault "tautulli/config/image_digest" "1" }}
+          RELEASE={{ keyOrDefault "tautulli/config/release" "latest" }}
+          ACME_HOST={{ key "traefik/config/acme_host" }}
+          EOH
         destination   = "env_info"
         env           = true
       }

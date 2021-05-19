@@ -22,7 +22,7 @@ job "ombi" {
     }
 
     task "ombi" {
-      driver = "containerd-driver"
+      driver = "docker"
 
       service {
         name = "ombi"
@@ -62,23 +62,26 @@ job "ombi" {
       }
 
       config {
-        image         = "docker.io/linuxserver/ombi:${RELEASE}"
-        mounts  = [
-                    {
-                      type    = "bind"
-                      target  = "/config"
-                      source  = "/opt/ombi"
-                      options = ["rbind", "rw"]
-                    }
-                  ]
+        image       = "docker.io/linuxserver/ombi:${RELEASE}"
+
+        mount {
+          type      = "bind"
+          target    = "/config"
+          source    = "/opt/ombi"
+          readonly  = false
+          bind_options {
+            propagation = "rshared"
+          }
+        }
+
       }
 
       template {
-        data          = <<EOH
-IMAGE_DIGEST={{ keyOrDefault "ombi/config/image_digest" "1" }}
-RELEASE={{ keyOrDefault "ombi/config/release" "latest" }}
-ACME_HOST={{ key "traefik/config/acme_host" }}
-EOH
+        data          = <<-EOH
+          IMAGE_DIGEST={{ keyOrDefault "ombi/config/image_digest" "1" }}
+          RELEASE={{ keyOrDefault "ombi/config/release" "latest" }}
+          ACME_HOST={{ key "traefik/config/acme_host" }}
+          EOH
         destination   = "env_info"
         env           = true
       }

@@ -10,6 +10,7 @@ job "traefik" {
     count = 1
 
     network {
+      mode = "bridge"
       port "web" { static = 80 }
       port "web-secure" { static = 443 }
       port "traefik" { static = 8081 }
@@ -22,7 +23,7 @@ job "traefik" {
     }
 
     task "traefik" {
-      driver = "containerd-driver"
+      driver = "docker"
 
       service {
         name = "traefik"
@@ -60,7 +61,6 @@ job "traefik" {
       }
 
       config {
-        host_network  = true
         image         = "docker.io/library/traefik:${RELEASE}"
         command       = "traefik"
 
@@ -90,33 +90,39 @@ job "traefik" {
                     "--providers.consulcatalog=true",
                     "--providers.consulcatalog.prefix=traefik",
                     "--providers.consulcatalog.exposedbydefault=false",
-                    "--providers.consulcatalog.endpoint.address=127.0.0.1:8500",
+                    "--providers.consulcatalog.endpoint.address=consul.service.consul:8500",
                     "--providers.consulcatalog.endpoint.scheme=http",
                   ]
 
-        mounts  = [
-                    {
-                      type    = "bind"
-                      target  = "/etc/traefik"
-                      source  = "/opt/traefik/config"
-                      options = ["rbind", "rw"]
-                    },
-                    {
-                      type    = "bind"
-                      target  = "/logs"
-                      source  = "/opt/traefik/logs"
-                      options = ["rbind", "rw"]
-                    }
-                  ]
+        mount {
+          type    = "bind"
+          target  = "/etc/traefik"
+          source  = "/opt/traefik/config"
+          readonly = false
+          bind_options {
+            propagation = "rshared"
+          }
+        }
+
+        mount {
+          type    = "bind"
+          target  = "/logs"
+          source  = "/opt/traefik/logs"
+          readonly = false
+          bind_options {
+            propagation = "rshared"
+          }
+        }
+
       }
 
       template {
-        data          = <<EOH
-IMAGE_DIGEST={{ keyOrDefault "traefik/config/image_digest" "1" }}
-RELEASE={{ keyOrDefault "traefik/config/release" "latest" }}
-ACME_EMAIL={{ key "traefik/config/acme_email" }}
-ACME_HOST={{ key "traefik/config/acme_host" }}
-EOH
+        data          = <<-EOH
+          IMAGE_DIGEST={{ keyOrDefault "traefik/config/image_digest" "1" }}
+          RELEASE={{ keyOrDefault "traefik/config/release" "latest" }}
+          ACME_EMAIL={{ key "traefik/config/acme_email" }}
+          ACME_HOST={{ key "traefik/config/acme_host" }}
+          EOH
         destination   = "env_info"
         env           = true
       }
