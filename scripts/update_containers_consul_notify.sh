@@ -56,7 +56,7 @@ do
     docker image pull ${IMAGE}:${RELEASE}
 
     # Get image Digest
-    DIGEST=$(docker image inspect --format='{{.Config.Image}}')
+    DIGEST=$(docker image inspect --format='{{.Config.Image}}' ${IMAGE}:${RELEASE})
 
     echo "Setting initial key for ${SERVICE}/config/image_digest as ${DIGEST}"
     consul kv put ${SERVICE}/config/image_digest ${DIGEST}
