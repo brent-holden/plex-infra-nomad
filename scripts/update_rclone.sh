@@ -9,7 +9,6 @@ function upgrade_available () {
   CURRENT_VER=$(rpm -q --queryformat '%{VERSION}\n' rclone)
   DOWNLOAD_VER=$(rpm -qp --queryformat '%{VERSION}\n' ${TMP_DIR}/${RCLONE_RPM})
 
-  rm ${TMP_DIR}/${RCLONE_RPM}
 
   echo "Installed version:" ${CURRENT_VER}
   echo "Downloaded version:" ${DOWNLOAD_VER}
@@ -26,9 +25,27 @@ function update_rclone () {
 }
 
 
+function cleanup () {
+
+  rm ${TMP_DIR}/${RCLONE_RPM}
+
+}
+
 if upgrade_available; then
-  echo "Update to rclone available. Updating.."
-  update_rclone
+  echo "Update to rclone available.."
+
+  read -r -p "Would you like to upgrade? [y/N] " response
+  case "$response" in
+    [yY][eE][sS]|[yY])
+      update_rclone
+      ;;
+    *)
+      echo "Not upgrading.."
+      ;;
+  esac
+
+  cleanup
+
 else
   echo "No update available"
 fi
