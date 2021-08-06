@@ -27,6 +27,7 @@ function update_rclone () {
 
 function cleanup () {
 
+  echo "Cleaning up ${TMP_DIR}/${RCLONE_RPM}"
   rm ${TMP_DIR}/${RCLONE_RPM}
 
 }
@@ -44,10 +45,10 @@ if upgrade_available; then
       ;;
   esac
 
-  cleanup
-
 else
   echo "No update available"
 fi
+
+cleanup
 
 echo "Exiting."
