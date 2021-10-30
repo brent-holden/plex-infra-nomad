@@ -33,12 +33,12 @@ job "plex" {
           type     = "http"
           port     = "plex"
           path     = "/web/index.html"
-          interval = "30s"
+          interval = "5m"
           timeout  = "5s"
 
           check_restart {
             limit = 2
-            grace = "10s"
+            grace = "60s"
           }
         }
       }
