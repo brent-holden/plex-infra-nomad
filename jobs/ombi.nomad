@@ -62,7 +62,7 @@ job "ombi" {
       }
 
       config {
-        image       = "docker.io/linuxserver/ombi:${RELEASE}"
+        image       = "ghcr.io/linuxserver/ombi:${RELEASE}"
 
         mount {
           type      = "bind"

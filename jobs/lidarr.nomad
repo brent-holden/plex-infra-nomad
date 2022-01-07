@@ -59,7 +59,7 @@ job "lidarr" {
       }
 
       config {
-        image = "docker.io/linuxserver/lidarr:${RELEASE}"
+        image = "ghcr.io/linuxserver/lidarr:${RELEASE}"
 
         mount {
           type    = "bind"

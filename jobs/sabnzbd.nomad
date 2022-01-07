@@ -59,7 +59,7 @@ job "sabnzbd" {
       }
 
       config {
-        image   = "docker.io/linuxserver/sabnzbd:${RELEASE}"
+        image   = "ghcr.io/linuxserver/sabnzbd:${RELEASE}"
 
         mount {
           type    = "bind"

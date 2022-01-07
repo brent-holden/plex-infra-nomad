@@ -53,7 +53,7 @@ job "caddy" {
       }
 
       config {
-        image         = "docker.io/library/caddy:${RELEASE}"
+        image         = "ghcr.io/library/caddy:${RELEASE}"
         command       = "caddy"
         args          = [
                           "run",

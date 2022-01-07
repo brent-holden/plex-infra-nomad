@@ -59,7 +59,7 @@ job "sonarr" {
       }
 
       config {
-        image       = "docker.io/linuxserver/sonarr:${RELEASE}"
+        image       = "ghcr.io/linuxserver/sonarr:${RELEASE}"
 
         mount {
           type      = "bind"

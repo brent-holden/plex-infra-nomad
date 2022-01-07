@@ -35,7 +35,7 @@ job "hydra2" {
         check {
           type      = "http"
           port      = "hydra2"
-          path      = "/hydra2/login.html"
+          path      = "/hydra2/login"
           interval  = "30s"
           timeout   = "2s"
 
@@ -59,7 +59,7 @@ job "hydra2" {
       }
 
       config {
-        image   = "docker.io/linuxserver/nzbhydra2:${RELEASE}"
+        image   = "ghcr.io/linuxserver/nzbhydra2:${RELEASE}"
         mount {
           type    = "bind"
           target  = "/config"
