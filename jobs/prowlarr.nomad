@@ -32,18 +32,18 @@ job "prowlarr" {
           "traefik.http.routers.prowlarr.rule=Host(`${ACME_HOST}`) && PathPrefix(`/prowlarr`)",
         ]
 
-#        check {
-#          type      = "http"
-#          port      = "prowlarr"
-#          path      = "/prowlarr/login"
-#          interval  = "30s"
-#          timeout   = "2s"
-#
-#          check_restart {
-#            limit = 2
-#            grace = "10s"
-#          }
-#        }
+        check {
+          type      = "http"
+          port      = "prowlarr"
+          path      = "/prowlarr/login"
+          interval  = "30s"
+          timeout   = "2s"
+
+          check_restart {
+            limit = 2
+            grace = "10s"
+          }
+        }
       }
 
       restart {
