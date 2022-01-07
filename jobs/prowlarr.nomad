@@ -93,7 +93,7 @@ job "prowlarr" {
       }
 
       resources {
-        cpu    = 1000
+        cpu    = 500
         memory = 2048
       }
 
