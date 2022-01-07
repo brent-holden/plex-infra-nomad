@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
-declare -A SERVICES=( [lidarr]=docker.io/linuxserver/lidarr:latest,auto_update
-                      [sonarr]=docker.io/linuxserver/sonarr:preview,auto_update
-                      [radarr]=docker.io/linuxserver/radarr:latest,auto_update
-                      [tautulli]=docker.io/linuxserver/tautulli:latest,auto_update
-                      [hydra2]=docker.io/linuxserver/nzbhydra2:latest,auto_update
-                      [sabnzbd]=docker.io/linuxserver/sabnzbd:latest,auto_update
-                      [ombi]=docker.io/linuxserver/ombi:development,auto_update
-                      [caddy]=docker.io/library/caddy:alpine,auto_update
-                      [traefik]=docker.io/library/traefik:latest,auto_update
-                      [plex]=docker.io/plexinc/pms-docker:plexpass,auto_update
+declare -A SERVICES=( [lidarr]=ghcr.io/linuxserver/lidarr:latest,auto_update
+                      [sonarr]=ghcr.io/linuxserver/sonarr:preview,auto_update
+                      [radarr]=ghcr.io/linuxserver/radarr:latest,auto_update
+                      [tautulli]=ghcr.io/linuxserver/tautulli:latest,auto_update
+                      [hydra2]=ghcr.io/linuxserver/nzbhydra2:latest,auto_update
+                      [sabnzbd]=ghcr.io/linuxserver/sabnzbd:latest,auto_update
+                      [ombi]=ghcr.io/linuxserver/ombi:development,auto_update
+                      [caddy]=ghcr.io/library/caddy:alpine,auto_update
+                      [traefik]=ghcr.io/library/traefik:latest,auto_update
+                      [plex]=ghcr.io/plexinc/pms-docker:plexpass,auto_update
                     )
 declare -A BACKUPS=(  [lidarr]=/opt/lidarr/Backups/scheduled
                       [sonarr]=/opt/sonarr/Backups/scheduled
