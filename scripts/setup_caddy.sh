@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 SERVICE="caddy"
-CADDY_IMAGE="docker.io/library/caddy:alpine"
+CADDY_IMAGE="ghcr.io/library/caddy:alpine"
 
 echo -e "\nLet's protect your /downloads directory from uninvited guests."
 
