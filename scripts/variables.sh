@@ -4,7 +4,7 @@ declare -A SERVICES=( [lidarr]=ghcr.io/linuxserver/lidarr:latest,auto_update
                       [sonarr]=ghcr.io/linuxserver/sonarr:preview,auto_update
                       [radarr]=ghcr.io/linuxserver/radarr:latest,auto_update
                       [tautulli]=ghcr.io/linuxserver/tautulli:latest,auto_update
-                      [hydra2]=ghcr.io/linuxserver/nzbhydra2:latest,auto_update
+                      [prowlarr]=ghcr.io/linuxserver/prowlarr:nightly,auto_update
                       [sabnzbd]=ghcr.io/linuxserver/sabnzbd:latest,auto_update
                       [ombi]=ghcr.io/linuxserver/ombi:development,auto_update
                       [caddy]=ghcr.io/library/caddy:alpine,auto_update
@@ -15,7 +15,7 @@ declare -A BACKUPS=(  [lidarr]=/opt/lidarr/Backups/scheduled
                       [sonarr]=/opt/sonarr/Backups/scheduled
                       [radarr]=/opt/radarr/Backups/scheduled
                       [tautulli]=/opt/tautulli/backups
-                      [hydra2]=/opt/hydra2/backup
+                      [prowlarr]=/opt/prowlarr/Backups/scheduled
                       [sabnzbd]=/opt/sabnzbd/
                       [ombi]=/opt/ombi/
                       [caddy]=/opt/caddy/
