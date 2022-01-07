@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 SERVICE="traefik"
-CADDY_IMAGE="docker.io/library/traefik:latest"
+CADDY_IMAGE="ghcr.io/library/traefik:latest"
 HOSTNAME=$(hostname)
 
 echo -e "\nIf you want to access Traefik externally, you'll need to forward ports 80/443 to your Traefik host.\n"
