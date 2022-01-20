@@ -31,8 +31,9 @@ job "traefik" {
 
         tags = [
           "traefik.enable=true",
-          "traefik.http.services.traefik.loadbalancer.server.port=80",
-          "traefik.http.routers.traefik.rule=Host(`${ACME_HOST}`) && Path(`/`)",
+          "traefik.http.routers.traefik.rule=Host(`${ACME_HOST}`)",
+          "traefik.http.routers.traefik.tls=true",
+          "traefik.http.routers.traefik.tls.certresolver=letsencrypt",
           "traefik.http.routers.traefik.middlewares=redirect-root-ombi",
           "traefik.http.middlewares.redirect-root-ombi.redirectregex.regex=.*",
           "traefik.http.middlewares.redirect-root-ombi.redirectregex.replacement=/ombi",
@@ -61,7 +62,7 @@ job "traefik" {
       }
 
       config {
-        image         = "ghcr.io/library/traefik:${RELEASE}"
+        image         = "docker.io/library/traefik:${RELEASE}"
         command       = "traefik"
 
         args    = [
@@ -72,16 +73,14 @@ job "traefik" {
                     "--log.level=INFO",
                     "--accesslog",
                     "--accesslog.filepath=logs/access.log",
+                    "--entrypoints.traefik.address=:8081",
                     "--entrypoints.web.address=:80",
                     "--entrypoints.web.forwardedheaders.insecure=true",
                     "--entrypoints.web.http.redirections.entryPoint.to=web-secure",
                     "--entrypoints.web.http.redirections.entryPoint.scheme=https",
                     "--entrypoints.web.http.redirections.entrypoint.permanent=true",
                     "--entrypoints.web-secure.address=:443",
-                    "--entrypoints.web-secure.http.tls=true",
                     "--entrypoints.web-secure.http.tls.certresolver=letsencrypt",
-                    "--entrypoints.web-secure.http.tls.domains=${ACME_HOST}",
-                    "--entrypoints.traefik.address=:8081",
                     "--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL}",
                     "--certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/acme.json",
                     "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-v02.api.letsencrypt.org/directory",
