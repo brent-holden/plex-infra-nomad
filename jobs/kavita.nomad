@@ -34,26 +34,26 @@ job "kavita" {
           "traefik.http.routers.kavita.tls.certresolver=letsencrypt",
         ]
 
-#        check {
-#          type      = "http"
-#          port      = "kavita"
-#          path      = "/kavita/index"
-#          interval  = "30s"
-#          timeout   = "2s"
-#
-#          check_restart {
-#            limit = 2
-#            grace = "10s"
-#          }
-#        }
+        check {
+          type      = "http"
+          port      = "kavita"
+          path      = "/"
+          interval  = "30s"
+          timeout   = "2s"
+
+          check_restart {
+            limit = 2
+            grace = "10s"
+          }
+        }
       }
-#
-#      restart {
-#        interval  = "12h"
-#        attempts  = 720
-#        delay     = "60s"
-#        mode      = "delay"
-#      }
+
+      restart {
+        interval  = "12h"
+        attempts  = 720
+        delay     = "60s"
+        mode      = "delay"
+      }
 
       env {
         PGID = "1100"
