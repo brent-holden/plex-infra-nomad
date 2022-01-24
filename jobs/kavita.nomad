@@ -61,8 +61,7 @@ job "kavita" {
       }
 
       config {
-        image   = "docker.io/kizaing/kavita:${RELEASE}"
-        ports = ["kavita"]
+        image = "docker.io/kizaing/kavita:${RELEASE}"
 
         mount {
           type    = "bind"
