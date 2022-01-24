@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 
-declare -A SERVICES=( [lidarr]=ghcr.io/linuxserver/lidarr:latest,auto_update
-                      [sonarr]=ghcr.io/linuxserver/sonarr:preview,auto_update
-                      [radarr]=ghcr.io/linuxserver/radarr:latest,auto_update
-                      [readarr]=ghcr.io/linuxserver/readarr:nightly,auto_update
-                      [prowlarr]=ghcr.io/linuxserver/prowlarr:nightly,auto_update
-                      [kavita]=ghcr.io/kizaing/kavita:latest:latest,auto_update
-                      [tautulli]=ghcr.io/linuxserver/tautulli:latest,auto_update
-                      [sabnzbd]=ghcr.io/linuxserver/sabnzbd:latest,auto_update
-                      [ombi]=ghcr.io/linuxserver/ombi:development,auto_update
-                      [caddy]=ghcr.io/library/caddy:alpine,auto_update
-                      [traefik]=ghcr.io/library/traefik:latest,auto_update
-                      [plex]=ghcr.io/plexinc/pms-docker:plexpass,auto_update
+declare -A SERVICES=( [lidarr]=lscr.io/linuxserver/lidarr:latest,auto_update
+                      [sonarr]=lscr.io/linuxserver/sonarr:preview,auto_update
+                      [radarr]=lscr.io/linuxserver/radarr:latest,auto_update
+                      [readarr]=lscr.io/linuxserver/readarr:nightly,auto_update
+                      [prowlarr]=lscr.io/linuxserver/prowlarr:nightly,auto_update
+                      [kavita]=lscr.io/kizaing/kavita:latest:latest,auto_update
+                      [tautulli]=lscr.io/linuxserver/tautulli:latest,auto_update
+                      [sabnzbd]=lscr.io/linuxserver/sabnzbd:latest,auto_update
+                      [ombi]=lscr.io/linuxserver/ombi:development,auto_update
+                      [caddy]=docker.io/library/caddy:alpine,auto_update
+                      [traefik]=docker.io/library/traefik:latest,auto_update
+                      [plex]=docker.io/plexinc/pms-docker:plexpass,auto_update
                     )
 declare -A BACKUPS=(  [lidarr]=/opt/lidarr/Backups/scheduled
                       [sonarr]=/opt/sonarr/Backups/scheduled
