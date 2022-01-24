@@ -59,7 +59,7 @@ job "lidarr" {
       }
 
       config {
-        image = "ghcr.io/linuxserver/lidarr:${RELEASE}"
+        image = "lscr.io/linuxserver/lidarr:${RELEASE}"
 
         mount {
           type    = "bind"

@@ -60,7 +60,7 @@ job "tautulli" {
       }
 
       config {
-        image         = "ghcr.io/linuxserver/tautulli:${RELEASE}"
+        image         = "lscr.io/linuxserver/tautulli:${RELEASE}"
 
         mount {
           type    = "bind"

@@ -59,7 +59,7 @@ job "plex" {
       }
 
       config {
-        image         = "ghcr.io/plexinc/pms-docker:${RELEASE}"
+        image         = "docker.io/plexinc/pms-docker:${RELEASE}"
 
         network_mode  = "host"
 

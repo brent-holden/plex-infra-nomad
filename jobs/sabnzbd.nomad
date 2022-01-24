@@ -59,7 +59,7 @@ job "sabnzbd" {
       }
 
       config {
-        image   = "ghcr.io/linuxserver/sabnzbd:${RELEASE}"
+        image   = "lscr.io/linuxserver/sabnzbd:${RELEASE}"
 
         mount {
           type    = "bind"

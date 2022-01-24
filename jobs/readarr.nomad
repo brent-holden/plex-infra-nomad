@@ -59,7 +59,7 @@ job "readarr" {
       }
 
       config {
-        image   = "ghcr.io/linuxserver/readarr:${RELEASE}"
+        image   = "lscr.io/linuxserver/readarr:${RELEASE}"
         mount {
           type    = "bind"
           target  = "/config"

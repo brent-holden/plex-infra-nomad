@@ -62,7 +62,7 @@ job "ombi" {
       }
 
       config {
-        image       = "ghcr.io/linuxserver/ombi:${RELEASE}"
+        image       = "lscr.io/linuxserver/ombi:${RELEASE}"
 
         mount {
           type      = "bind"

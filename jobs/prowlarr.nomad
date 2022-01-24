@@ -59,7 +59,7 @@ job "prowlarr" {
       }
 
       config {
-        image   = "ghcr.io/linuxserver/prowlarr:${RELEASE}"
+        image   = "lscr.io/linuxserver/prowlarr:${RELEASE}"
         mount {
           type    = "bind"
           target  = "/config"

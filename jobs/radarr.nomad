@@ -59,7 +59,7 @@ job "radarr" {
       }
 
       config {
-        image   = "ghcr.io/linuxserver/radarr:${RELEASE}"
+        image   = "lscr.io/linuxserver/radarr:${RELEASE}"
 
         mount {
           type      = "bind"
