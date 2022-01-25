@@ -19,6 +19,7 @@ function setup_media_host() {
   source ${BASH_SOURCE%/*}/setup_services.sh
   source ${BASH_SOURCE%/*}/setup_kavita.sh
   source ${BASH_SOURCE%/*}/setup_backup.sh
+  source ${BASH_SOURCE%/*}/setup_plex.sh
   source ${BASH_SOURCE%/*}/update_containers_consul_notify.sh
   source ${BASH_SOURCE%/*}/update_plex_consul_notify.sh
   source ${BASH_SOURCE%/*}/start_services.sh
@@ -36,6 +37,7 @@ function setup_allinone() {
   source ${BASH_SOURCE%/*}/setup_services.sh
   source ${BASH_SOURCE%/*}/setup_kavita.sh
   source ${BASH_SOURCE%/*}/setup_backup.sh
+  source ${BASH_SOURCE%/*}/setup_plex.sh
   source ${BASH_SOURCE%/*}/update_containers_consul_notify.sh
   source ${BASH_SOURCE%/*}/update_plex_consul_notify.sh
   source ${BASH_SOURCE%/*}/start_services.sh
