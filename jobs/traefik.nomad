@@ -91,7 +91,7 @@ job "traefik" {
                     "--providers.consulcatalog.exposedbydefault=false",
                     "--providers.consulcatalog.endpoint.address=consul.service.consul:8500",
                     "--providers.consulcatalog.endpoint.scheme=http",
-                    "--pilot.token=d72363d9-f20e-4ed4-ba9d-cf53c8a614c2",
+                    "--pilot.token=${PILOT_TOKEN}",
                   ]
 
         mount {
@@ -122,6 +122,7 @@ job "traefik" {
           RELEASE={{ keyOrDefault "traefik/config/release" "latest" }}
           ACME_EMAIL={{ key "traefik/config/acme_email" }}
           ACME_HOST={{ key "traefik/config/acme_host" }}
+          PILOT_TOKEN={{ key "traefik/config/pilot_token" }}
           EOH
         destination   = "env_info"
         env           = true
