@@ -10,13 +10,6 @@ yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.
 yum install -y nomad
 cp ${BASH_SOURCE%/*}/../config/nomad/server.hcl /etc/nomad.d/nomad.hcl
 
-mkdir -p ${NOMAD_PLUGIN_DIR}
-mkdir -p ~/Code && cd $_
-git clone https://github.com/Roblox/nomad-driver-containerd.git nomad-driver-containerd && cd $_
-make
-cp containerd-driver ${NOMAD_PLUGIN_DIR}
-chown -R nomad.nomad ${NOMAD_PLUGIN_DIR}
-
 # Enable systemd
 echo "Enabling and starting Nomad"
 systemctl enable --now nomad
