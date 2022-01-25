@@ -4,7 +4,7 @@ SERVICE="kavita"
 HOSTNAME=$(hostname)
 
 read -e -p "Enter the externally accessible hostname for Kavita (Default: ${HOSTNAME}: " EH
-ACME_HOST="${EH:-$HOSTNAME}"
+KAVITA_HOST="${EH:-$HOSTNAME}"
 
 echo "${KAVITA_HOST}"
 
