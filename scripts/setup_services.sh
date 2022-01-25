@@ -12,7 +12,7 @@ do
 
   # Pull defined image into containerd. This must be run as root or under sudo to work
   echo "Pulling ${IMAGE}:${RELEASE}"
-  ctr image pull ${IMAGE}:${RELEASE}
+  docker pull ${IMAGE}:${RELEASE}
 
   # Get image SHA256 Digest
   DIGEST=$(ctr image ls | grep "${IMAGE}:${RELEASE}" | awk -F ' ' '{print $3}')
