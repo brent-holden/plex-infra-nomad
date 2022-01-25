@@ -82,6 +82,8 @@ do
   esac
 done
 
+exit 0
+
 if [ -z "$CHOICE" ]; then
   CHOICE=$(whiptail --title "Installation" --menu "Which host do you want to do? Setup the infra host first" 20 118 10 \
     "infra" "Select this to bootstrap the host used for hosting infrastructure (Nomad and Consul servers)" \

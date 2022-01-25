@@ -19,7 +19,7 @@ function upgrade_available () {
 }
 
 function update_rclone () {
-  yum install -y ${TMP_DIR}/${RCLONE_RPM}
+  yum install -y ${RCLONE_URL}/${RCLONE_RPM}
   systemctl restart rclone-media-drive
   systemctl restart rclone-backup-drive
 }
