@@ -10,7 +10,7 @@ do
   UPDATE=$(echo ${IMG_AND_RELEASE} | awk -F ':' '{ print $2 }' | awk -F ',' '{print $2}')
 
 
-  # Pull defined image into containerd. This must be run as root or under sudo to work
+  # Pull defined image into docker. This must be run as root or under sudo to work
   echo "Pulling ${IMAGE}:${RELEASE}"
   sudo docker pull ${IMAGE}:${RELEASE}
 
