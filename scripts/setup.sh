@@ -2,7 +2,7 @@
 
 function setup_infra_host() {
   source ${BASH_SOURCE%/*}/prep_infra_host.sh
-  source ${BASH_SOURCE%/*}/setup_containerd.sh
+  source ${BASH_SOURCE%/*}/setup_docker.sh
   source ${BASH_SOURCE%/*}/setup_consul_server.sh
   source ${BASH_SOURCE%/*}/setup_nomad_server.sh
 }
@@ -12,7 +12,7 @@ function setup_media_host() {
   source ${BASH_SOURCE%/*}/setup_consul_agent.sh
   source ${BASH_SOURCE%/*}/setup_consul_template.sh
   source ${BASH_SOURCE%/*}/setup_nomad_client.sh
-  source ${BASH_SOURCE%/*}/setup_containerd.sh
+  source ${BASH_SOURCE%/*}/setup_docker.sh
   source ${BASH_SOURCE%/*}/setup_rclone.sh
   source ${BASH_SOURCE%/*}/setup_caddy.sh
   source ${BASH_SOURCE%/*}/setup_traefik.sh
@@ -28,7 +28,7 @@ function setup_allinone() {
   source ${BASH_SOURCE%/*}/setup_consul_server.sh
   source ${BASH_SOURCE%/*}/setup_consul_template.sh
   source ${BASH_SOURCE%/*}/setup_nomad_allinone.sh
-  source ${BASH_SOURCE%/*}/setup_containerd.sh
+  source ${BASH_SOURCE%/*}/setup_docker.sh
   source ${BASH_SOURCE%/*}/setup_rclone.sh
   source ${BASH_SOURCE%/*}/setup_caddy.sh
   source ${BASH_SOURCE%/*}/setup_traefik.sh
