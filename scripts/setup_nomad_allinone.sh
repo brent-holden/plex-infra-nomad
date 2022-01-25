@@ -12,21 +12,14 @@ yum install -y nomad
 
 cp ${BASH_SOURCE%/*}/../config/nomad/allinone.hcl /etc/nomad.d/nomad.hcl
 
-mkdir -p ${NOMAD_PLUGIN_DIR}
-mkdir -p ~/Code && cd $_
-git clone https://github.com/Roblox/nomad-driver-containerd.git nomad-driver-containerd && cd $_
-make
-cp containerd-driver ${NOMAD_PLUGIN_DIR}
-chown -R nomad.nomad ${NOMAD_PLUGIN_DIR}
-
 # Enable Nomad
 echo "Enabling and starting Nomad"
 systemctl enable --now nomad
 
 # Setup cronjob
-echo "Copying containerd cleaning configuration to /etc/cron.d"
-cp ${BASH_SOURCE%/*}/../cron/clean-containerd ${CRON_DIR}
-sed -i "s~%%SCRIPT_REPO%%~${REPO_DIR}~" ${CRON_DIR}/clean-containerd
+echo "Copying docker cleaning configuration to /etc/cron.d"
+cp ${BASH_SOURCE%/*}/../cron/clean-docker ${CRON_DIR}
+sed -i "s~%%SCRIPT_REPO%%~${REPO_DIR}~" ${CRON_DIR}/clean-docker
 systemctl restart crond
 
 echo "Done setting up Nomad client and server"
