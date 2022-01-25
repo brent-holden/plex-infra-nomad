@@ -12,10 +12,10 @@ do
 
   # Pull defined image into containerd. This must be run as root or under sudo to work
   echo "Pulling ${IMAGE}:${RELEASE}"
-  docker pull ${IMAGE}:${RELEASE}
+  sudo docker pull ${IMAGE}:${RELEASE}
 
   # Get image SHA256 Digest
-  DIGEST=$(ctr image ls | grep "${IMAGE}:${RELEASE}" | awk -F ' ' '{print $3}')
+  DIGEST=$(sudo docker image ls | grep "${IMAGE}:${RELEASE}" | awk -F ' ' '{print $3}')
 
   # Set initial Consul key values
   echo "Setting initial key for ${SERVICE}/config/image as ${IMAGE}"
