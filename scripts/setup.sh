@@ -58,9 +58,10 @@ Options:
 
       Sets the host type that you want to install. Useful for automation scripts.
 
-      host_type can be one of two options:
-        * media
-        * infra
+      host_type can be one of these options:
+      * media  (installs the services specific to a media host)
+      * infra  (installs the services specific to the cluster head nodes)
+      * allinone  (installs all services on a single host)
 
   -h
       Prints this useful help dialog
