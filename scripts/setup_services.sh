@@ -9,12 +9,11 @@ do
   RELEASE=$(echo ${IMG_AND_RELEASE} | awk -F ':' '{ print $2 }' | awk -F ',' '{print $1}')
   UPDATE=$(echo ${IMG_AND_RELEASE} | awk -F ':' '{ print $2 }' | awk -F ',' '{print $2}')
 
-  # Pull defined image into docker. This must be run as root or under sudo to work
   echo "Pulling ${IMAGE}:${RELEASE}"
-  sudo docker pull ${IMAGE}:${RELEASE}
+  docker pull ${IMAGE}:${RELEASE}
 
   # Get image SHA256 Digest
-  DIGEST=$(sudo docker image ls | grep "${IMAGE}:${RELEASE}" | awk -F ' ' '{print $3}')
+  DIGEST=$(docker image ls | grep "${IMAGE}:${RELEASE}" | awk -F ' ' '{print $3}')
 
   # Set initial Consul key values
   echo "Setting initial key for ${SERVICE}/config/image as ${IMAGE}"
@@ -35,7 +34,7 @@ do
   fi
 
   # Create directory for application data on media node
-  sudo mkdir ${OPT_DIR}/${SERVICE}
-  sudo chown -R ${PLEX_USER}.${PLEX_GROUP} ${OPT_DIR}/${SERVICE}
+  mkdir ${OPT_DIR}/${SERVICE}
+  chown -R ${PLEX_USER}.${PLEX_GROUP} ${OPT_DIR}/${SERVICE}
 
 done
