@@ -5,7 +5,8 @@ declare -A SERVICES=( [lidarr]=lscr.io/linuxserver/lidarr:latest,auto_update
                       [radarr]=lscr.io/linuxserver/radarr:latest,auto_update
                       [readarr]=lscr.io/linuxserver/readarr:nightly,auto_update
                       [prowlarr]=lscr.io/linuxserver/prowlarr:nightly,auto_update
-                      [kavita]=lscr.io/kizaing/kavita:latest:latest,auto_update
+                      [kavita]=docker.io/kizaing/kavita:latest:latest,auto_update
+                      [ubooquity]=lscr.io/linuxserver/ubooquity:latest:latest,auto_update
                       [tautulli]=lscr.io/linuxserver/tautulli:latest,auto_update
                       [sabnzbd]=lscr.io/linuxserver/sabnzbd:latest,auto_update
                       [ombi]=lscr.io/linuxserver/ombi:latest,auto_update
@@ -19,6 +20,7 @@ declare -A BACKUPS=(  [lidarr]=/opt/lidarr/Backups/scheduled
                       [readarr]=/opt/readarr/Backups/scheduled
                       [prowlarr]=/opt/prowlarr/Backups/scheduled
                       [kavita]=/opt/kavita/
+                      [ubooquity]=/opt/ubooquity/
                       [tautulli]=/opt/tautulli/backups
                       [sabnzbd]=/opt/sabnzbd/
                       [ombi]=/opt/ombi/
