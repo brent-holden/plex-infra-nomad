@@ -53,7 +53,7 @@ job "caddy" {
       }
 
       config {
-        image         = "docker.io/library/caddy:${RELEASE}"
+        image         = "${IMAGE}:${RELEASE}"
         command       = "caddy"
         args          = [
                           "run",
@@ -95,6 +95,7 @@ job "caddy" {
 
       template {
         data          = <<-EOH
+          IMAGE={{ key "caddy/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "caddy/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "caddy/config/release" "latest" }}
           ACME_HOST={{ key "traefik/config/acme_host" }}

@@ -60,7 +60,7 @@ job "tautulli" {
       }
 
       config {
-        image         = "lscr.io/linuxserver/tautulli:${RELEASE}"
+        image         = "${IMAGE}:${RELEASE}"
 
         mount {
           type    = "bind"
@@ -86,6 +86,7 @@ job "tautulli" {
 
       template {
         data          = <<-EOH
+          IMAGE={{ key "tautulli/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "tautulli/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "tautulli/config/release" "latest" }}
           ACME_HOST={{ key "traefik/config/acme_host" }}

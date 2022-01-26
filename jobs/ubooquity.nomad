@@ -60,7 +60,7 @@ job "ubooquity" {
       }
 
       config {
-        image   = "lscr.io/linuxserver/ubooquity:${RELEASE}"
+        image   = "${IMAGE}:${RELEASE}"
         ports = ["ubooquity","ubooquity-admin"]
 
         mount {
@@ -86,6 +86,7 @@ job "ubooquity" {
 
       template {
         data          = <<-EOH
+          IMAGE={{ key "ubooquity/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "ubooquity/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "ubooquity/config/release" "latest" }}
           ACME_HOST={{ key "traefik/config/acme_host" }}

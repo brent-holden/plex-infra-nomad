@@ -59,7 +59,7 @@ job "prowlarr" {
       }
 
       config {
-        image   = "lscr.io/linuxserver/prowlarr:${RELEASE}"
+        image   = "${IMAGE}:${RELEASE}"
         mount {
           type    = "bind"
           target  = "/config"
@@ -84,6 +84,7 @@ job "prowlarr" {
 
       template {
         data          = <<-EOH
+          IMAGE={{ key "prowlarr/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "prowlarr/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "prowlarr/config/release" "nightly" }}
           ACME_HOST={{ key "traefik/config/acme_host" }}

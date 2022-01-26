@@ -62,7 +62,7 @@ job "ombi" {
       }
 
       config {
-        image       = "lscr.io/linuxserver/ombi:${RELEASE}"
+        image       = "${IMAGE}:${RELEASE}"
 
         mount {
           type      = "bind"
@@ -78,6 +78,7 @@ job "ombi" {
 
       template {
         data          = <<-EOH
+          IMAGE={{ key "ombi/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "ombi/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "ombi/config/release" "latest" }}
           ACME_HOST={{ key "traefik/config/acme_host" }}

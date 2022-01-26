@@ -59,7 +59,7 @@ job "lidarr" {
       }
 
       config {
-        image = "lscr.io/linuxserver/lidarr:${RELEASE}"
+        image = "${IMAGE}:${RELEASE}"
 
         mount {
           type    = "bind"
@@ -95,6 +95,7 @@ job "lidarr" {
 
       template {
         data          = <<-EOH
+          IMAGE={{ key "lidarr/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "lidarr/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "lidarr/config/release" "latest" }}
           ACME_HOST={{ key "traefik/config/acme_host" }}

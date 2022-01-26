@@ -59,7 +59,7 @@ job "sabnzbd" {
       }
 
       config {
-        image   = "lscr.io/linuxserver/sabnzbd:${RELEASE}"
+        image   = "${IMAGE}:${RELEASE}"
 
         mount {
           type    = "bind"
@@ -85,6 +85,7 @@ job "sabnzbd" {
 
       template {
         data          = <<-EOH
+          IMAGE={{ key "sabnzbd/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "sabnzbd/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "sabnzbd/config/release" "latest" }}
           ACME_HOST={{ key "traefik/config/acme_host" }}

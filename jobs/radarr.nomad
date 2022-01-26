@@ -59,7 +59,7 @@ job "radarr" {
       }
 
       config {
-        image   = "lscr.io/linuxserver/radarr:${RELEASE}"
+        image   = "${IMAGE}:${RELEASE}"
 
         mount {
           type      = "bind"
@@ -95,6 +95,7 @@ job "radarr" {
 
       template {
         data          = <<-EOH
+          IMAGE={{ key "radarr/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "radarr/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "radarr/config/release" "latest" }}
           ACME_HOST={{ key "traefik/config/acme_host" }}

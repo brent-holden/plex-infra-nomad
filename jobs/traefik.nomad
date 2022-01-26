@@ -62,7 +62,7 @@ job "traefik" {
       }
 
       config {
-        image         = "docker.io/library/traefik:${RELEASE}"
+        image         = "${IMAGE}:${RELEASE}"
         command       = "traefik"
 
         args    = [
@@ -118,6 +118,7 @@ job "traefik" {
 
       template {
         data          = <<-EOH
+          IMAGE={{ key "traefik/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "traefik/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "traefik/config/release" "latest" }}
           ACME_EMAIL={{ key "traefik/config/acme_email" }}
