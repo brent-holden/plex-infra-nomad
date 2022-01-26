@@ -15,16 +15,16 @@ fi
 # Loop over services defined
 for SERVICE in "${!SERVICES[@]}"; do
 
-  BACKUPDIR=${RCLONE_BACKUP_DIR}/${SERVICE}
-  if [ ! -d "${BACKUPDIR}" ]; then
+  BACKUP_DIR=${RCLONE_BACKUP_DIR}/${SERVICE}
+  if [ ! -d "${BACKUP_DIR}" ]; then
     # Create backup directory
-    echo "Directory ${BACKUPDIR} not found. Creating."
-    mkdir -p ${BACKUPDIR}
+    echo "Directory ${BACKUP_DIR} not found. Creating."
+    mkdir -p ${BACKUP_DIR}
   fi
 
   # Change directory permissions
-  echo "Changing ${BACKUPDIR} permissions to: ${PLEX_USER}.${PLEX_GROUP}"
-  chown -R ${PLEX_USER}.${PLEX_GROUP} ${BACKUPDIR}
+  echo "Changing ${BACKUP_DIR} permissions to: ${PLEX_USER}.${PLEX_GROUP}"
+  chown -R ${PLEX_USER}.${PLEX_GROUP} ${BACKUP_DIR}
 
 done
 
