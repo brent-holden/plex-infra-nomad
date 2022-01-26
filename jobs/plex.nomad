@@ -60,34 +60,33 @@ job "plex" {
 
       config {
         image         = "${IMAGE}:${RELEASE}"
-
         network_mode  = "host"
 
         mount {
-          type    = "bind"
-          target  = "/config"
-          source  = "/opt/plex"
-          readonly = false
+          type      = "bind"
+          target    = "/config"
+          sourc     = "/opt/plex"
+          readonly  = false
           bind_options {
             propagation = "rshared"
           }
         }
 
         mount {
-          type    = "bind"
-          target  = "/media"
-          source  = "/mnt/rclone/media"
-          readonly = true
+          type      = "bind"
+          target    = "/media"
+          source    = "/mnt/rclone/media"
+          readonly  = true
           bind_options {
             propagation = "rshared"
           }
         }
 
         mount {
-          type    = "bind"
-          target  = "/transcode"
-          source  = "/mnt/transcode"
-          readonly = false
+          type      = "bind"
+          target    = "/transcode"
+          source    = "/mnt/transcode"
+          readonly  = false
           bind_options {
             propagation = "rshared"
           }

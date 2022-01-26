@@ -27,6 +27,7 @@ job "sabnzbd" {
       service {
         name = "sabnzbd"
         port = "sabnzbd"
+
         tags = [
           "traefik.enable=true",
           "traefik.http.routers.sabnzbd.rule=Host(`${ACME_HOST}`) && PathPrefix(`/sabnzbd`)",
@@ -60,22 +61,23 @@ job "sabnzbd" {
 
       config {
         image   = "${IMAGE}:${RELEASE}"
+        ports   = [ "sabnzbd" ]
 
         mount {
-          type    = "bind"
-          target  = "/config"
-          source  = "/opt/sabnzbd"
-          readonly = false
+          type      = "bind"
+          target    = "/config"
+          source    = "/opt/sabnzbd"
+          readonly  = false
           bind_options {
             propagation = "rshared"
           }
         }
 
         mount {
-          type    = "bind"
-          target  = "/downloads"
-          source  = "/mnt/downloads"
-          readonly = false
+          type      = "bind"
+          target    = "/downloads"
+          source    = "/mnt/downloads"
+          readonly  = false
           bind_options {
             propagation = "rshared"
           }
@@ -84,7 +86,7 @@ job "sabnzbd" {
       }
 
       template {
-        data          = <<-EOH
+        data = <<-EOH
           IMAGE={{ key "sabnzbd/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "sabnzbd/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "sabnzbd/config/release" "latest" }}
@@ -95,7 +97,7 @@ job "sabnzbd" {
       }
 
       resources {
-        cpu    = 4000
+        cpu    = 4800
         memory = 16384
       }
 

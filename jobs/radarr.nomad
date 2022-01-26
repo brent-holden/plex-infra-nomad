@@ -16,19 +16,30 @@ job "radarr" {
     }
 
     update {
-      max_parallel  = 0
+      max_parallel  = 1
+      canary        = 1
       health_check  = "checks"
       auto_revert   = true
+      auto_promote  = true
+      min_healthy_time  = "10s"
+      healthy_deadline  = "5m"
+      progress_deadline = "10m"
     }
 
     task "radarr" {
       driver = "docker"
+
       service {
         name = "radarr"
         port = "radarr"
+
         tags = [
           "traefik.enable=true",
           "traefik.http.routers.radarr.rule=Host(`${ACME_HOST}`) && PathPrefix(`/radarr`)",
+        ]
+
+        canary_tags = [
+          "traefik.enable=false",
         ]
 
         check {
@@ -60,6 +71,7 @@ job "radarr" {
 
       config {
         image   = "${IMAGE}:${RELEASE}"
+        ports   = [ "radarr" ]
 
         mount {
           type      = "bind"
@@ -105,8 +117,8 @@ job "radarr" {
       }
 
       resources {
-        cpu    = 500
-        memory = 2048
+        cpu    = 300
+        memory = 1024
       }
 
       kill_timeout = "20s"

@@ -16,9 +16,14 @@ job "ombi" {
     }
 
     update {
-      max_parallel  = 0
+      max_parallel  = 1
+      canary        = 1
       health_check  = "checks"
       auto_revert   = true
+      auto_promote  = true
+      min_healthy_time  = "10s"
+      healthy_deadline  = "5m"
+      progress_deadline = "10m"
     }
 
     task "ombi" {
@@ -27,11 +32,16 @@ job "ombi" {
       service {
         name = "ombi"
         port = "ombi"
+
         tags = [
           "traefik.enable=true",
           "traefik.http.routers.ombi.rule=Host(`${ACME_HOST}`) && PathPrefix(`/ombi`)",
           "traefik.frontend.redirect.regex=^https:\\\\/\\\\/([^\\\\/]+)\\\\/?$$",
           "traefik.frontend.redirect.replacement=https://$$1/ombi/",
+        ]
+
+        canary_tags = [
+          "traefik.enable=false",
         ]
 
         check {
@@ -62,7 +72,8 @@ job "ombi" {
       }
 
       config {
-        image       = "${IMAGE}:${RELEASE}"
+        image = "${IMAGE}:${RELEASE}"
+        ports = [ "ombi" ]
 
         mount {
           type      = "bind"
@@ -88,8 +99,8 @@ job "ombi" {
       }
 
       resources {
-        cpu    = 100
-        memory = 2048
+        cpu    = 200
+        memory = 1024
       }
 
       kill_timeout = "20s"

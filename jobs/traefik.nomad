@@ -64,6 +64,11 @@ job "traefik" {
       config {
         image         = "${IMAGE}:${RELEASE}"
         command       = "traefik"
+        ports         = [
+                          "web",
+                          "web-secure",
+                          "traefik"
+                        ]
 
         args    = [
                     "--api",
@@ -95,20 +100,20 @@ job "traefik" {
                   ]
 
         mount {
-          type    = "bind"
-          target  = "/etc/traefik"
-          source  = "/opt/traefik/config"
-          readonly = false
+          type      = "bind"
+          target    = "/etc/traefik"
+          source    = "/opt/traefik/config"
+          readonly  = false
           bind_options {
             propagation = "rshared"
           }
         }
 
         mount {
-          type    = "bind"
-          target  = "/logs"
-          source  = "/opt/traefik/logs"
-          readonly = false
+          type      = "bind"
+          target    = "/logs"
+          source    = "/opt/traefik/logs"
+          readonly  = false
           bind_options {
             propagation = "rshared"
           }

@@ -16,9 +16,14 @@ job "lidarr" {
     }
 
     update {
-      max_parallel  = 0
+      max_parallel  = 1
+      canary        = 1
       health_check  = "checks"
       auto_revert   = true
+      auto_promote  = true
+      min_healthy_time  = "10s"
+      healthy_deadline  = "5m"
+      progress_deadline = "10m"
     }
 
     task "lidarr" {
@@ -27,9 +32,14 @@ job "lidarr" {
       service {
         name = "lidarr"
         port = "lidarr"
+
         tags = [
           "traefik.enable=true",
           "traefik.http.routers.lidarr.rule=Host(`${ACME_HOST}`) && PathPrefix(`/lidarr`)",
+        ]
+
+        canary_tags = [
+          "traefik.enable=false",
         ]
 
         check {
@@ -60,32 +70,33 @@ job "lidarr" {
 
       config {
         image = "${IMAGE}:${RELEASE}"
+        ports = [ "lidarr" ]
 
         mount {
-          type    = "bind"
-          target  = "/config"
-          source  = "/opt/lidarr"
-          readonly = false
+          type      = "bind"
+          target    = "/config"
+          source    = "/opt/lidarr"
+          readonly  = false
           bind_options {
             propagation = "rshared"
           }
         }
 
         mount {
-          type    = "bind"
-          target  = "/downloads"
-          source  = "/mnt/downloads"
-          readonly = false
+          type      = "bind"
+          target    = "/downloads"
+          source    = "/mnt/downloads"
+          readonly  = false
           bind_options {
             propagation = "rshared"
           }
         }
 
         mount {
-          type    = "bind"
-          target  = "/music"
-          source  = "/mnt/rclone/media/Music"
-          readonly = false
+          type      = "bind"
+          target    = "/music"
+          source    = "/mnt/rclone/media/Music"
+          readonly  = false
           bind_options {
             propagation = "rshared"
           }
@@ -105,8 +116,8 @@ job "lidarr" {
       }
 
       resources {
-        cpu    = 500
-        memory = 2048
+        cpu    = 350
+        memory = 1024
       }
 
       kill_timeout = "20s"

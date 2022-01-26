@@ -16,9 +16,14 @@ job "caddy" {
     }
 
     update {
-      max_parallel  = 0
+      max_parallel  = 1
+      canary        = 1
       health_check  = "checks"
       auto_revert   = true
+      auto_promote  = true
+      min_healthy_time  = "10s"
+      healthy_deadline  = "5m"
+      progress_deadline = "10m"
     }
 
     task "caddy" {
@@ -27,9 +32,14 @@ job "caddy" {
       service {
         name = "caddy"
         port = "caddy"
+
         tags = [
           "traefik.enable=true",
           "traefik.http.routers.caddy.rule=Host(`${ACME_HOST}`) && PathPrefix(`/downloads`)",
+        ]
+
+        canary_tags = [
+          "traefik.enable=false",
         ]
 
         check {
@@ -53,13 +63,15 @@ job "caddy" {
       }
 
       config {
-        image         = "${IMAGE}:${RELEASE}"
-        command       = "caddy"
-        args          = [
-                          "run",
-                          "--config",
-                          "/local/Caddyfile"
-                        ]
+        image   = "${IMAGE}:${RELEASE}"
+        command = "caddy"
+        ports   = [ "caddy" ]
+
+        args    = [
+                    "run",
+                    "--config",
+                    "/local/Caddyfile"
+                  ]
 
         mount {
           type      = "bind"

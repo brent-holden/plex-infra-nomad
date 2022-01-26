@@ -16,9 +16,14 @@ job "readarr" {
     }
 
     update {
-      max_parallel  = 0
+      max_parallel  = 1
+      canary        = 1
       health_check  = "checks"
       auto_revert   = true
+      auto_promote  = true
+      min_healthy_time  = "10s"
+      healthy_deadline  = "5m"
+      progress_deadline = "10m"
     }
 
     task "readarr" {
@@ -27,9 +32,14 @@ job "readarr" {
       service {
         name = "readarr"
         port = "readarr"
+
         tags = [
           "traefik.enable=true",
           "traefik.http.routers.readarr.rule=Host(`${ACME_HOST}`) && PathPrefix(`/readarr`)",
+        ]
+
+        canary_tags = [
+          "traefik.enable=false",
         ]
 
         check {
@@ -60,31 +70,33 @@ job "readarr" {
 
       config {
         image   = "${IMAGE}:${RELEASE}"
+        ports   = [ "readarr" ]
+
         mount {
-          type    = "bind"
-          target  = "/config"
-          source  = "/opt/readarr"
-          readonly = false
+          type      = "bind"
+          target    = "/config"
+          source    = "/opt/readarr"
+          readonly  = false
           bind_options {
             propagation = "rshared"
           }
         }
 
         mount {
-          type    = "bind"
-          target  = "/downloads"
-          source  = "/mnt/downloads"
-          readonly = false
+          type      = "bind"
+          target    = "/downloads"
+          source    = "/mnt/downloads"
+          readonly  = false
           bind_options {
             propagation = "rshared"
           }
         }
 
         mount {
-          type    = "bind"
-          target  = "/books"
-          source  = "/mnt/rclone/media/Books"
-          readonly = false
+          type      = "bind"
+          target    = "/books"
+          source    = "/mnt/rclone/media/Books"
+          readonly  = false
           bind_options {
             propagation = "rshared"
           }
@@ -92,7 +104,7 @@ job "readarr" {
       }
 
       template {
-        data          = <<-EOH
+        data = <<-EOH
           IMAGE={{ key "readarr/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "readarr/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "readarr/config/release" "nightly" }}
@@ -103,8 +115,8 @@ job "readarr" {
       }
 
       resources {
-        cpu    = 500
-        memory = 2048
+        cpu    = 350
+        memory = 1024
       }
 
       kill_timeout = "20s"

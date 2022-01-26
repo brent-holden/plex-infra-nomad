@@ -16,9 +16,14 @@ job "kavita" {
     }
 
     update {
-      max_parallel  = 0
+      max_parallel  = 1
+      canary        = 1
       health_check  = "checks"
       auto_revert   = true
+      auto_promote  = true
+      min_healthy_time  = "10s"
+      healthy_deadline  = "5m"
+      progress_deadline = "10m"
     }
 
     task "kavita" {
@@ -27,11 +32,16 @@ job "kavita" {
       service {
         name = "kavita"
         port = "kavita"
+
         tags = [
           "traefik.enable=true",
           "traefik.http.routers.kavita.rule=Host(`${KAVITA_HOST}`)",
           "traefik.http.routers.kavita.tls=true",
           "traefik.http.routers.kavita.tls.certresolver=letsencrypt",
+        ]
+
+        canary_tags = [
+          "traefik.enable=false",
         ]
 
         check {
@@ -62,22 +72,23 @@ job "kavita" {
 
       config {
         image = "${IMAGE}:${RELEASE}"
+        ports = [ "kavita" ]
 
         mount {
-          type    = "bind"
-          target  = "/books"
-          source  = "/mnt/rclone/media/Books"
-          readonly = false
+          type      = "bind"
+          target    = "/books"
+          source    = "/mnt/rclone/media/Books"
+          readonly  = false
           bind_options {
             propagation = "rshared"
           }
         }
 
         mount {
-          type    = "bind"
-          target  = "/kavita/config"
-          source  = "/opt/kavita"
-          readonly = false
+          type      = "bind"
+          target    = "/kavita/config"
+          source    = "/opt/kavita"
+          readonly  = false
           bind_options {
             propagation = "rshared"
           }
@@ -96,7 +107,7 @@ job "kavita" {
       }
 
       resources {
-        cpu    = 100
+        cpu    = 200
         memory = 512
       }
 

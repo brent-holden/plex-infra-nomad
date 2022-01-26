@@ -16,9 +16,14 @@ job "sonarr" {
     }
 
     update {
-      max_parallel  = 0
+      max_parallel  = 1
+      canary        = 1
       health_check  = "checks"
       auto_revert   = true
+      auto_promote  = true
+      min_healthy_time  = "10s"
+      healthy_deadline  = "5m"
+      progress_deadline = "10m"
     }
 
     task "sonarr" {
@@ -30,6 +35,10 @@ job "sonarr" {
         tags = [
           "traefik.enable=true",
           "traefik.http.routers.sonarr.rule=Host(`${ACME_HOST}`) && PathPrefix(`/sonarr`)",
+        ]
+
+        canary_tags = [
+          "traefik.enable=false",
         ]
 
         check {
@@ -105,8 +114,8 @@ job "sonarr" {
       }
 
       resources {
-        cpu    = 500
-        memory = 2048
+        cpu    = 350
+        memory = 1024
       }
 
       kill_timeout = "20s"

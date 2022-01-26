@@ -16,9 +16,14 @@ job "tautulli" {
     }
 
     update {
-      max_parallel  = 0
+      max_parallel  = 1
+      canary        = 1
       health_check  = "checks"
       auto_revert   = true
+      auto_promote  = true
+      min_healthy_time  = "10s"
+      healthy_deadline  = "5m"
+      progress_deadline = "10m"
     }
 
     task "tautulli" {
@@ -27,17 +32,22 @@ job "tautulli" {
       service {
         name = "tautulli"
         port = "tautulli"
+
         tags = [
           "traefik.enable=true",
           "traefik.http.routers.tautulli.rule=Host(`${ACME_HOST}`) && PathPrefix(`/tautulli`)",
         ]
 
+        canary_tags = [
+          "traefik.enable=false",
+        ]
+
         check {
-          type     = "http"
-          port     = "tautulli"
+          type      = "http"
+          port      = "tautulli"
           path      = "/tautulli/auth/login"
-          interval = "63s"
-          timeout  = "2s"
+          interval  = "63s"
+          timeout   = "2s"
 
           check_restart {
             limit = 2
@@ -60,23 +70,24 @@ job "tautulli" {
       }
 
       config {
-        image         = "${IMAGE}:${RELEASE}"
+        image = "${IMAGE}:${RELEASE}"
+        ports = [ "tautulli" ]
 
         mount {
-          type    = "bind"
-          target  = "/config"
-          source  = "/opt/tautulli"
-          readonly = false
+          type      = "bind"
+          target    = "/config"
+          source    = "/opt/tautulli"
+          readonly  = false
           bind_options {
             propagation = "rshared"
           }
         }
 
         mount {
-          type    = "bind"
-          target  = "/plex_logs"
-          source  = "/opt/plex/Library/Application Support/Plex Media Server/Logs"
-          readonly = true
+          type      = "bind"
+          target    = "/plex_logs"
+          source    = "/opt/plex/Library/Application Support/Plex Media Server/Logs"
+          readonly  = true
           bind_options {
             propagation = "rshared"
           }
