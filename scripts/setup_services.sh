@@ -9,7 +9,6 @@ do
   RELEASE=$(echo ${IMG_AND_RELEASE} | awk -F ':' '{ print $2 }' | awk -F ',' '{print $1}')
   UPDATE=$(echo ${IMG_AND_RELEASE} | awk -F ':' '{ print $2 }' | awk -F ',' '{print $2}')
 
-
   # Pull defined image into docker. This must be run as root or under sudo to work
   echo "Pulling ${IMAGE}:${RELEASE}"
   sudo docker pull ${IMAGE}:${RELEASE}
@@ -34,5 +33,9 @@ do
     echo "Setting auto_update key set to false. Key was ${UPDATE}"
     consul kv put ${SERVICE}/config/auto_update false
   fi
+
+  # Create directory for application data on media node
+  sudo mkdir ${OPT_DIR}/${SERVICE}
+  sudo chown -R ${PLEX_USER}.${PLEX_GROUP} ${OPT_DIR}/${SERVICE}
 
 done
