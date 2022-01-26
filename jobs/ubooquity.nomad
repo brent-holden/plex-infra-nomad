@@ -71,7 +71,10 @@ job "ubooquity" {
 
       config {
         image   = "${IMAGE}:${RELEASE}"
-        ports = ["ubooquity","ubooquity-admin"]
+        ports = [
+                  "ubooquity",
+                  "ubooquity-admin"
+                ]
 
         mount {
           type    = "bind"
