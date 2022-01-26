@@ -11,6 +11,8 @@ echo "Enabling and starting docker.."
 systemctl enable --now docker
 systemctl enable --now containerd
 
+cp ../config/sysctl/50-cni.conf /etc/sysctl.d/
+
 echo "Copying docker cleaning configuration to /etc/cron.d"
 cp ${BASH_SOURCE%/*}/../cron/clean-docker ${CRON_DIR}
 sed -i "s~%%SCRIPT_REPO%%~${REPO_DIR}~" ${CRON_DIR}/clean-docker
