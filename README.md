@@ -1,4 +1,4 @@
-# plex-scripts
+# Running Plex and media services on Nomad
 This is a collection of nomad job files, scripts, crontabs, and systemd configurations I used to setup Plex and associated services which has been tested on CentOS 8 Stream. It should work fine on CentOS 9 Streami once they release docker-ce for the OS.
 
 You'll need the following before you get started:
