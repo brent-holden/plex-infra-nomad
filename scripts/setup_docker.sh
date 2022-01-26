@@ -9,6 +9,7 @@ yum install -y docker-ce docker-ce-cli containerd.io
 # Enable docker
 echo "Enabling and starting docker.."
 systemctl enable --now docker
+systemctl enable --now containerd
 
 echo "Copying docker cleaning configuration to /etc/cron.d"
 cp ${BASH_SOURCE%/*}/../cron/clean-docker ${CRON_DIR}
