@@ -41,23 +41,12 @@ In my home lab, I have one server I use as a cluster manager and where I install
 
 My Google drive has two directories in /, Media and Backups. The rclone-media-drive mounts /Media, and rclone-backup-drive mounts /Backups
 
-Here's what my /mnt directory looks like once setup.sh is run:
+This is the directory structure that will need to be in place before we start. The setup scripts will create all of the services-related directories for you.
 ```console
 mnt/
 ├── downloads
 └── rclone
     ├── backup
-    │   ├── caddy
-    │   ├── kavita
-    │   ├── lidarr
-    │   ├── ombi
-    │   ├── plex
-    │   ├── prowlarr
-    │   ├── radarr
-    │   ├── readarr
-    │   ├── sabnzbd
-    │   ├── sonarr
-    │   └── tautulli
     ├── cache
     │   ├── backup
     │   └── media
@@ -66,27 +55,9 @@ mnt/
         ├── Movies
         ├── Music
         └── TV
-```
-
-
-Here's what /opt looks like:
-
-```console
 opt/
-├── caddy
-├── kavita
-├── lidarr
-├── ombi
-├── plex
-├── prowlarr
-├── radarr
-├── readarr
-├── rclone
-├── sabnzbd
-├── sonarr
-├── tautulli
-└── traefik
 ```
+
 
 If you have backups in the appropriate folders, the restore_services script will look for backup_latest.tar.gz and untar it into the appropriate directory in /opt. If you don't have any backups, it will fail during the untar but will continue and setup all of the systemd service files for you.
 
