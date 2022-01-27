@@ -12,7 +12,42 @@ job "kavita" {
 
     network {
       mode = "bridge"
-      port "kavita" { to = 5000 }
+      port "kavita" { to = -1 }
+    }
+  
+    service {
+      name = "kavita"
+      port = 5000
+
+      connect {
+        sidecar_service {}
+      } 
+
+      tags = [
+        "traefik.enable=true",
+        "traefik.http.routers.kavita.rule=Host(`KAVITA_DOMAIN_NAME`) && PathPrefix(`/`)",
+        "traefik.http.routers.kavita.tls=true",
+        "traefik.http.routers.kavita.tls.certresolver=letsencrypt",
+      ]
+
+      canary_tags = [
+        "traefik.enable=false",
+      ]
+
+      check {
+        name      = "kavita"
+        type      = "http"
+        port      = "kavita"
+        path      = "/"
+        interval  = "30s"
+        timeout   = "2s"
+        expose    = true
+
+        check_restart {
+          limit = 2
+          grace = "30s"
+        }
+      }
     }
 
     update {
@@ -28,35 +63,6 @@ job "kavita" {
 
     task "kavita" {
       driver = "docker"
-
-      service {
-        name = "kavita"
-        port = "kavita"
-
-        tags = [
-          "traefik.enable=true",
-          "traefik.http.routers.kavita.rule=Host(`${KAVITA_HOST}`)",
-          "traefik.http.routers.kavita.tls=true",
-          "traefik.http.routers.kavita.tls.certresolver=letsencrypt",
-        ]
-
-        canary_tags = [
-          "traefik.enable=false",
-        ]
-
-        check {
-          type      = "http"
-          port      = "kavita"
-          path      = "/"
-          interval  = "30s"
-          timeout   = "2s"
-
-          check_restart {
-            limit = 2
-            grace = "10s"
-          }
-        }
-      }
 
       restart {
         interval  = "12h"
