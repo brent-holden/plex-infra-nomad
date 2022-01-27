@@ -32,7 +32,7 @@ job "prowlarr" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.prowlarr.rule=PathPrefix(`/${NOMAD_GROUP_NAME}`)",
+        "traefik.http.routers.prowlarr.rule=PathPrefix(`/prowlarr`)",
       ]
 
       canary_tags = [
@@ -43,7 +43,7 @@ job "prowlarr" {
         name      = "prowlarr"
         type      = "http"
         port      = "prowlarr"
-        path      = "/${NOMAD_GROUP_NAME}/login"
+        path      = "/prowlarr/login"
         interval  = "30s"
         timeout   = "2s"
         expose    = true
