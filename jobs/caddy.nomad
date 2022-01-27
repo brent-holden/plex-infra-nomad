@@ -12,48 +12,30 @@ job "caddy" {
 
     network {
       mode  = "bridge"
-      port "caddy" { to = 2020 }
+      port "caddy" { to = -1 }
     }
 
-    update {
-      max_parallel  = 1
-      canary        = 1
-      health_check  = "checks"
-      auto_revert   = true
-      auto_promote  = true
-      min_healthy_time  = "10s"
-      healthy_deadline  = "5m"
-      progress_deadline = "10m"
+    service {
+      name = "caddy"
+      port = 2020
+
+      connect {
+        sidecar_service {}
+      }
+
+      tags = [
+        "traefik.enable=true",
+        "traefik.http.routers.caddy.rule=PathPrefix(`/downloads`)",
+      ]
+
+      canary_tags = [
+        "traefik.enable=false",
+      ]
+
     }
 
     task "caddy" {
       driver = "docker"
-
-      service {
-        name = "caddy"
-        port = "caddy"
-
-        tags = [
-          "traefik.enable=true",
-          "traefik.http.routers.caddy.rule=Host(`${ACME_HOST}`) && PathPrefix(`/downloads`)",
-        ]
-
-        canary_tags = [
-          "traefik.enable=false",
-        ]
-
-        check {
-          type     = "tcp"
-          port     = "caddy"
-          interval = "30s"
-          timeout  = "2s"
-
-          check_restart {
-            limit = 2
-            grace = "10s"
-          }
-        }
-      }
 
       restart {
         interval  = "12h"
