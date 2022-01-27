@@ -12,6 +12,7 @@ systemctl enable --now docker
 systemctl enable --now containerd
 
 cp ../config/sysctl/50-cni.conf /etc/sysctl.d/
+sysctl -p /etc/sysctl.d/50-cni.conf
 
 echo "Copying docker cleaning configuration to /etc/cron.d"
 cp ${BASH_SOURCE%/*}/../cron/clean-docker ${CRON_DIR}
