@@ -25,7 +25,7 @@ job "tautulli" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.tautulli.rule=PathPrefix(`/${NOMAD_GROUP_NAME}`)",
+        "traefik.http.routers.tautulli.rule=PathPrefix(`/tautulli`)",
       ]
 
       canary_tags = [
@@ -36,7 +36,7 @@ job "tautulli" {
         name      = "tautulli"
         type      = "http"
         port      = "tautulli"
-        path      = "/${NOMAD_GROUP_NAME}/auth/login"
+        path      = "/tautulli/auth/login"
         interval  = "60s"
         timeout   = "2s"
         expose    = true

@@ -25,9 +25,9 @@ job "ombi" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.ombi.rule=PathPrefix(`/${NOMAD_GROUP_NAME}`)",
+        "traefik.http.routers.ombi.rule=PathPrefix(`/ombi`)",
         "traefik.frontend.redirect.regex=^https:\\\\/\\\\/([^\\\\/]+)\\\\/?$$",
-        "traefik.frontend.redirect.replacement=https://$$1/${NOMAD_GROUP_NAME}/",
+        "traefik.frontend.redirect.replacement=https://$$1/ombi/",
       ]
 
       canary_tags = [

@@ -25,14 +25,14 @@ job "sabnzbd" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.sabnzbd.rule=PathPrefix(`/${NOMAD_GROUP_NAME}`)",
+        "traefik.http.routers.sabnzbd.rule=PathPrefix(`/sabnzbd`)",
       ]
 
       check {
         name      = "sabnzbd"
         type      = "http"
         port      = "sabnzbd"
-        path      = "/${NOMAD_GROUP_NAME}/login/"
+        path      = "/sabnzbd/login/"
         interval  = "30s"
         timeout   = "2s"
         expose    = true
