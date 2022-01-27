@@ -12,7 +12,36 @@ job "sabnzbd" {
 
     network {
       mode = "bridge"
-      port "sabnzbd" { static = 8080 }
+      port "sabnzbd" { to = -1 }
+    }
+
+    service {
+      name = "sabnzbd"
+      port = 8080
+
+      connect {
+        sidecar_service {}
+      }
+
+      tags = [
+        "traefik.enable=true",
+        "traefik.http.routers.sabnzbd.rule=PathPrefix(`/${NOMAD_GROUP_NAME}`)",
+      ]
+
+      check {
+        name      = "sabnzbd"
+        type      = "http"
+        port      = "sabnzbd"
+        path      = "/${NOMAD_GROUP_NAME}/login/"
+        interval  = "30s"
+        timeout   = "2s"
+        expose    = true
+
+        check_restart {
+          limit = 2
+          grace = "30s"
+        }
+      }
     }
 
     update {
@@ -23,29 +52,6 @@ job "sabnzbd" {
 
     task "sabnzbd" {
       driver = "docker"
-
-      service {
-        name = "sabnzbd"
-        port = "sabnzbd"
-
-        tags = [
-          "traefik.enable=true",
-          "traefik.http.routers.sabnzbd.rule=Host(`${ACME_HOST}`) && PathPrefix(`/sabnzbd`)",
-        ]
-
-        check {
-          type      = "http"
-          port      = "sabnzbd"
-          path      = "/sabnzbd/login/"
-          interval  = "30s"
-          timeout   = "2s"
-
-          check_restart {
-            limit = 2
-            grace = "10s"
-          }
-        }
-      }
 
       restart {
         interval  = "12h"

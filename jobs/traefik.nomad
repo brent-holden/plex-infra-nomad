@@ -1,6 +1,7 @@
 job "traefik" {
   datacenters = ["lab"]
   type        = "service"
+  priority    = 10
 
   constraint {
     attribute = "${meta.media_node}"
@@ -16,6 +17,39 @@ job "traefik" {
       port "traefik" { static = 8081 }
     }
 
+    service {
+      name = "traefik"
+      port = "web-secure"
+
+      connect {
+        native = true
+      }
+
+      tags = [
+        "traefik.enable=true",
+        "traefik.http.routers.traefik.rule=Path(`/`)",
+        "traefik.http.routers.traefik.tls=true",
+        "traefik.http.routers.traefik.tls.certresolver=letsencrypt",
+        "traefik.http.routers.traefik.middlewares=redirect-root-ombi",
+        "traefik.http.middlewares.redirect-root-ombi.redirectregex.regex=.*",
+        "traefik.http.middlewares.redirect-root-ombi.redirectregex.replacement=/ombi",
+        "traefik.http.middlewares.redirect-root-ombi.redirectregex.permanent=true",
+      ]
+
+      check {
+        name     = "alive"
+        type     = "tcp"
+        port     = "web-secure"
+        interval = "10s"
+        timeout  = "2s"
+
+        check_restart {
+          limit = 2
+          grace = "10s"
+        }
+      }
+    }
+
     update {
       max_parallel  = 0
       health_check  = "checks"
@@ -25,34 +59,6 @@ job "traefik" {
     task "traefik" {
       driver = "docker"
 
-      service {
-        name = "traefik"
-        port = "web-secure"
-
-        tags = [
-          "traefik.enable=true",
-          "traefik.http.routers.traefik.rule=Host(`${ACME_HOST}`)",
-          "traefik.http.routers.traefik.tls=true",
-          "traefik.http.routers.traefik.tls.certresolver=letsencrypt",
-          "traefik.http.routers.traefik.middlewares=redirect-root-ombi",
-          "traefik.http.middlewares.redirect-root-ombi.redirectregex.regex=.*",
-          "traefik.http.middlewares.redirect-root-ombi.redirectregex.replacement=/ombi",
-          "traefik.http.middlewares.redirect-root-ombi.redirectregex.permanent=true",
-        ]
-
-        check {
-          name     = "alive"
-          type     = "tcp"
-          port     = "web-secure"
-          interval = "10s"
-          timeout  = "2s"
-
-          check_restart {
-            limit = 2
-            grace = "10s"
-          }
-        }
-      }
 
       restart {
         interval  = "12h"
@@ -92,7 +98,10 @@ job "traefik" {
                     "--certificatesresolvers.letsencrypt.acme.httpchallenge=true",
                     "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web",
                     "--providers.consulcatalog=true",
+                    "--providers.consulcatalog.servicename=traefik",
                     "--providers.consulcatalog.prefix=traefik",
+                    "--providers.consulcatalog.connectaware=true",
+                    "--providers.consulcatalog.connectbydefault=true",
                     "--providers.consulcatalog.exposedbydefault=false",
                     "--providers.consulcatalog.endpoint.address=consul.service.consul:8500",
                     "--providers.consulcatalog.endpoint.scheme=http",

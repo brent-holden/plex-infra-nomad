@@ -15,6 +15,30 @@ job "plex" {
       port "plex" { static = 32400 }
     }
 
+    service {
+      name = "plex"
+      port = 32400
+
+      connect{
+        native = true
+      }
+
+      tags = ["media"]
+
+      check {
+        type     = "http"
+        port     = "plex"
+        path     = "/web/index.html"
+        interval = "5m"
+        timeout  = "5s"
+
+        check_restart {
+          limit = 2
+          grace = "60s"
+        }
+      }
+    }
+
     update {
       max_parallel  = 0
       health_check  = "checks"
@@ -23,25 +47,6 @@ job "plex" {
 
     task "plex" {
       driver = "docker"
-
-      service {
-        name = "plex"
-        port = "plex"
-        tags = ["media"]
-
-        check {
-          type     = "http"
-          port     = "plex"
-          path     = "/web/index.html"
-          interval = "5m"
-          timeout  = "5s"
-
-          check_restart {
-            limit = 2
-            grace = "60s"
-          }
-        }
-      }
     
       restart {
         interval  = "12h"
@@ -65,7 +70,7 @@ job "plex" {
         mount {
           type      = "bind"
           target    = "/config"
-          sourc     = "/opt/plex"
+          source    = "/opt/plex"
           readonly  = false
           bind_options {
             propagation = "rshared"

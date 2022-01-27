@@ -12,7 +12,47 @@ job "prowlarr" {
 
     network {
       mode = "bridge"
-      port "prowlarr" { to = 9696 }
+      port "prowlarr" { to = -1 }
+    }
+
+    service {
+      name = "prowlarr"
+      port = 9696
+
+      connect {
+        sidecar_service {
+          proxy {
+            upstreams {
+              destination_name = "sabnzbd"
+              local_bind_port  = 8080
+            }
+          }
+        }
+      }   
+
+      tags = [
+        "traefik.enable=true",
+        "traefik.http.routers.prowlarr.rule=PathPrefix(`/${NOMAD_GROUP_NAME}`)",
+      ]
+
+      canary_tags = [
+        "traefik.enable=false",
+      ]
+
+      check {
+        name      = "prowlarr"
+        type      = "http"
+        port      = "prowlarr"
+        path      = "/${NOMAD_GROUP_NAME}/login"
+        interval  = "30s"
+        timeout   = "2s"
+        expose    = true
+
+        check_restart {
+          limit = 2
+          grace = "10s"
+        }
+      }
     }
 
     update {
@@ -28,33 +68,6 @@ job "prowlarr" {
 
     task "prowlarr" {
       driver = "docker"
-
-      service {
-        name = "prowlarr"
-        port = "prowlarr"
-
-        tags = [
-          "traefik.enable=true",
-          "traefik.http.routers.prowlarr.rule=Host(`${ACME_HOST}`) && PathPrefix(`/prowlarr`)",
-        ]
-
-        canary_tags = [
-          "traefik.enable=false",
-        ]
-
-        check {
-          type      = "http"
-          port      = "prowlarr"
-          path      = "/prowlarr/login"
-          interval  = "30s"
-          timeout   = "2s"
-
-          check_restart {
-            limit = 2
-            grace = "10s"
-          }
-        }
-      }
 
       restart {
         interval  = "12h"

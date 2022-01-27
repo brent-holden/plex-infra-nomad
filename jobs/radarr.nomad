@@ -12,7 +12,47 @@ job "radarr" {
 
     network {
       mode  = "bridge"
-      port "radarr" { to = 7878 }
+      port "radarr" { to = -1 }
+    }
+
+    service {
+      name = "radarr"
+      port = 7878
+
+      connect {
+        sidecar_service {
+          proxy {
+            upstreams {
+              destination_name = "sabnzbd"
+              local_bind_port  = 8080
+            }
+          }
+        }
+      }   
+
+      tags = [
+        "traefik.enable=true",
+        "traefik.http.routers.radarr.rule=PathPrefix(`/radarr`)",
+      ]
+
+      canary_tags = [
+        "traefik.enable=false",
+      ]
+
+      check {
+        name      = "radarr"
+        type      = "http"
+        port      = "radarr"
+        path      = "/radarr/login"
+        interval  = "30s"
+        timeout   = "2s"
+        expose    = true
+
+        check_restart {
+          limit = 2
+          grace = "30s"
+        }
+      }
     }
 
     update {
@@ -28,33 +68,6 @@ job "radarr" {
 
     task "radarr" {
       driver = "docker"
-
-      service {
-        name = "radarr"
-        port = "radarr"
-
-        tags = [
-          "traefik.enable=true",
-          "traefik.http.routers.radarr.rule=Host(`${ACME_HOST}`) && PathPrefix(`/radarr`)",
-        ]
-
-        canary_tags = [
-          "traefik.enable=false",
-        ]
-
-        check {
-          type      = "http"
-          port      = "radarr"
-          path      = "/radarr/login"
-          interval  = "30s"
-          timeout   = "2s"
-
-          check_restart {
-            limit = 2
-            grace = "10s"
-          }
-        }
-      }
 
       restart {
         interval  = "12h"

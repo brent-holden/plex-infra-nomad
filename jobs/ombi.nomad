@@ -12,7 +12,42 @@ job "ombi" {
 
     network {
       mode = "bridge"
-      port "ombi" { to = 3579 }
+      port "ombi" { to = -1 }
+    }
+
+    service {
+      name = "ombi"
+      port = 3579
+
+      connect {
+        sidecar_service {}
+      }
+
+      tags = [
+        "traefik.enable=true",
+        "traefik.http.routers.ombi.rule=PathPrefix(`/${NOMAD_GROUP_NAME}`)",
+        "traefik.frontend.redirect.regex=^https:\\\\/\\\\/([^\\\\/]+)\\\\/?$$",
+        "traefik.frontend.redirect.replacement=https://$$1/${NOMAD_GROUP_NAME}/",
+      ]
+
+      canary_tags = [
+        "traefik.enable=false",
+      ]
+
+      check {
+        name      = "ombi"
+        type      = "http"
+        port      = "ombi"
+        path      = "/"
+        interval  = "30s"
+        timeout   = "2s"
+        expose    = true
+
+        check_restart {
+          limit = 2
+          grace = "10s"
+        }
+      }
     }
 
     update {
@@ -28,35 +63,6 @@ job "ombi" {
 
     task "ombi" {
       driver = "docker"
-
-      service {
-        name = "ombi"
-        port = "ombi"
-
-        tags = [
-          "traefik.enable=true",
-          "traefik.http.routers.ombi.rule=Host(`${ACME_HOST}`) && PathPrefix(`/ombi`)",
-          "traefik.frontend.redirect.regex=^https:\\\\/\\\\/([^\\\\/]+)\\\\/?$$",
-          "traefik.frontend.redirect.replacement=https://$$1/ombi/",
-        ]
-
-        canary_tags = [
-          "traefik.enable=false",
-        ]
-
-        check {
-          type      = "http"
-          port      = "ombi"
-          path      = "/"
-          interval  = "30s"
-          timeout   = "2s"
-
-          check_restart {
-            limit = 2
-            grace = "10s"
-          }
-        }
-      }
 
       restart {
         interval  = "12h"
@@ -100,7 +106,7 @@ job "ombi" {
 
       resources {
         cpu    = 200
-        memory = 1024
+        memory = 512
       }
 
       kill_timeout = "20s"

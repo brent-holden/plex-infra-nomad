@@ -12,7 +12,40 @@ job "tautulli" {
 
     network {
       mode  = "bridge"
-      port "tautulli" { to = 8181 }
+      port "tautulli" { to = -1 }
+    }
+
+    service {
+      name = "tautulli"
+      port = 8181
+
+      connect {
+        sidecar_service {}
+      }
+
+      tags = [
+        "traefik.enable=true",
+        "traefik.http.routers.tautulli.rule=PathPrefix(`/${NOMAD_GROUP_NAME}`)",
+      ]
+
+      canary_tags = [
+        "traefik.enable=false",
+      ]
+
+      check {
+        name      = "tautulli"
+        type      = "http"
+        port      = "tautulli"
+        path      = "/${NOMAD_GROUP_NAME}/auth/login"
+        interval  = "60s"
+        timeout   = "2s"
+        expose    = true
+
+        check_restart {
+          limit = 2
+          grace = "10s"
+        }
+      }
     }
 
     update {
@@ -29,33 +62,6 @@ job "tautulli" {
     task "tautulli" {
       driver = "docker"
 
-      service {
-        name = "tautulli"
-        port = "tautulli"
-
-        tags = [
-          "traefik.enable=true",
-          "traefik.http.routers.tautulli.rule=Host(`${ACME_HOST}`) && PathPrefix(`/tautulli`)",
-        ]
-
-        canary_tags = [
-          "traefik.enable=false",
-        ]
-
-        check {
-          type      = "http"
-          port      = "tautulli"
-          path      = "/tautulli/auth/login"
-          interval  = "63s"
-          timeout   = "2s"
-
-          check_restart {
-            limit = 2
-            grace = "10s"
-          }
-        }
-      }
-
       restart {
         interval  = "12h"
         attempts  = 720
@@ -71,7 +77,7 @@ job "tautulli" {
 
       config {
         image = "${IMAGE}:${RELEASE}"
-        ports = [ "tautulli" ]
+#        ports = [ "tautulli" ]
 
         mount {
           type      = "bind"
@@ -107,7 +113,7 @@ job "tautulli" {
       }
 
       resources {
-        cpu    = 300
+        cpu    = 150
         memory = 512
       }
 

@@ -11,8 +11,48 @@ job "sonarr" {
     count = 1
 
     network {
-      mode  = "bridge"
-      port "sonarr" { to = 8989 }
+      mode = "bridge"
+      port "sonarr" { to = -1 }
+    }
+
+    service {
+      name = "sonarr"
+      port = 8989
+
+      connect {
+        sidecar_service {
+          proxy {
+            upstreams {
+              destination_name = "sabnzbd"
+              local_bind_port  = 8080
+            }
+          }  
+        }
+      }
+
+      tags = [
+        "traefik.enable=true",
+        "traefik.http.routers.sonarr.rule=PathPrefix(`/sonarr`)",
+      ]
+
+      canary_tags = [
+        "traefik.enable=false",
+      ]
+
+      check {
+        name      = "sonarr"
+        type      = "http"
+        port      = "sonarr"
+        path      = "/sonarr/login"
+        interval  = "30s"
+        timeout   = "2s"
+        expose    = true
+
+        check_restart {
+          limit = 2
+          grace = "30s"
+        }
+      }
     }
 
     update {
@@ -28,32 +68,6 @@ job "sonarr" {
 
     task "sonarr" {
       driver = "docker"
-
-      service {
-        name = "sonarr"
-        port = "sonarr"
-        tags = [
-          "traefik.enable=true",
-          "traefik.http.routers.sonarr.rule=Host(`${ACME_HOST}`) && PathPrefix(`/sonarr`)",
-        ]
-
-        canary_tags = [
-          "traefik.enable=false",
-        ]
-
-        check {
-          type      = "http"
-          port      = "sonarr"
-          path      = "/sonarr/login/"
-          interval  = "30s"
-          timeout   = "2s"
-
-          check_restart {
-            limit = 2
-            grace = "10s"
-          }
-        }
-      }
 
       restart {
         interval  = "12h"

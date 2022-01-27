@@ -12,7 +12,47 @@ job "lidarr" {
 
     network {
       mode  = "bridge"
-      port "lidarr" { to = 8686 }
+      port "lidarr" { to = -1 }
+    }
+
+    service {
+      name = "lidarr"
+      port = 8686
+
+      connect {
+        sidecar_service {
+          proxy {
+            upstreams {
+              destination_name = "sabnzbd"
+              local_bind_port  = 8080
+            }
+          }
+        }
+      }
+
+      tags = [
+        "traefik.enable=true",
+        "traefik.http.routers.lidarr.rule=PathPrefix(`/lidarr`)",
+      ]
+
+      canary_tags = [
+        "traefik.enable=false",
+      ]
+
+      check {
+        name      = "lidarr"
+        type      = "http"
+        port      = "lidarr"
+        path      = "/lidarr/login"
+        interval  = "30s"
+        timeout   = "2s"
+        expose    = true
+
+        check_restart {
+          limit = 2
+          grace = "30s"
+        }
+      }
     }
 
     update {
@@ -28,33 +68,6 @@ job "lidarr" {
 
     task "lidarr" {
       driver = "docker"
-
-      service {
-        name = "lidarr"
-        port = "lidarr"
-
-        tags = [
-          "traefik.enable=true",
-          "traefik.http.routers.lidarr.rule=Host(`${ACME_HOST}`) && PathPrefix(`/lidarr`)",
-        ]
-
-        canary_tags = [
-          "traefik.enable=false",
-        ]
-
-        check {
-          type      = "http"
-          port      = "lidarr"
-          path      = "/lidarr/login/"
-          interval  = "30s"
-          timeout   = "2s"
-
-          check_restart {
-            limit = 2
-            grace = "10s"
-          }
-        }
-      }
 
       restart {
         interval  = "12h"
