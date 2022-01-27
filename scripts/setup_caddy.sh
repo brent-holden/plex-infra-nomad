@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
+source ${BASH_SOURCE%/*}/variables.sh
+
 SERVICE="caddy"
-CADDY_IMAGE="ghcr.io/library/caddy:alpine"
+
+CADDY_IMAGE=$(echo ${SERVICES[caddy]} | awk -F ',' '{print $1}')
 
 echo -e "\nLet's protect your /downloads directory from uninvited guests."
 
@@ -14,10 +17,9 @@ while [[ -z "${EXTERNAL_PASSWORD}" ]]; do
 done
 
 echo -e "\n\nPulling caddy container to generate our bcrypt password"
-HASHED_PASSWORD=$(podman run --rm ${CADDY_IMAGE} caddy hash-password --plaintext ${EXTERNAL_PASSWORD} && podman rmi ${CADDY_IMAGE})
-echo "Hashed password has been generated"
+HASHED_PASSWORD=$(podman run --rm ${CADDY_IMAGE} caddy hash-password --plaintext ${EXTERNAL_PASSWORD})
 
-consul kv put ${SERVICE}/config/external_hostname ${EXTERNAL_HOST}
+# Write the hashed password to the consul KV
 consul kv put ${SERVICE}/config/basicauth_users/${EXTERNAL_USER} ${HASHED_PASSWORD}
 
 echo -e "\nCaddy config is done."

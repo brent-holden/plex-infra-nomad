@@ -25,7 +25,7 @@ SYSTEMD_DIR=/usr/lib/systemd/system
 PLEX_USER=plex
 PLEX_GROUP=plex
 PLEX_UID=1100
-PACKAGES="fuse rsync vim git"
+PACKAGES="fuse rsync vim git podman"
 OPT_DIR=/opt
 
 declare -A SERVICES=( [caddy]=docker.io/library/caddy:alpine,auto_update
