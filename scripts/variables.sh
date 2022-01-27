@@ -1,5 +1,27 @@
 #!/usr/bin/env bash
 
+declare -A SERVICES=( [lidarr]=ghcr.io/linuxserver/lidarr:latest,auto_update
+                      [sonarr]=ghcr.io/linuxserver/sonarr:preview,auto_update
+                      [radarr]=ghcr.io/linuxserver/radarr:latest,auto_update
+                      [tautulli]=ghcr.io/linuxserver/tautulli:latest,auto_update
+                      [hydra2]=ghcr.io/linuxserver/nzbhydra2:latest,auto_update
+                      [sabnzbd]=ghcr.io/linuxserver/sabnzbd:latest,auto_update
+                      [ombi]=ghcr.io/linuxserver/ombi:development,auto_update
+                      [caddy]=ghcr.io/library/caddy:alpine,auto_update
+                      [traefik]=ghcr.io/library/traefik:latest,auto_update
+                      [plex]=ghcr.io/plexinc/pms-docker:plexpass,auto_update
+                    )
+declare -A BACKUPS=(  [lidarr]=/opt/lidarr/Backups/scheduled
+                      [sonarr]=/opt/sonarr/Backups/scheduled
+                      [radarr]=/opt/radarr/Backups/scheduled
+                      [tautulli]=/opt/tautulli/backups
+                      [hydra2]=/opt/hydra2/backup
+                      [sabnzbd]=/opt/sabnzbd/
+                      [ombi]=/opt/ombi/
+                      [caddy]=/opt/caddy/
+                      [traefik]=/opt/traefik/config/
+                      [plex]=/opt/plex/Backups
+                    )
 DOWNLOADABLES=(movies tv music other)
 DATE=`date +%d-%m-%Y`
 CRON_DIR=/etc/cron.d
@@ -26,31 +48,5 @@ SYSTEMD_DIR=/usr/lib/systemd/system
 PLEX_USER=plex
 PLEX_GROUP=plex
 PLEX_UID=1100
-PACKAGES="fuse rsync vim git"
-
-declare -A SERVICES=( [caddy]=docker.io/library/caddy:alpine,auto_update
-                      [kavita]=docker.io/kizaing/kavita:latest:latest,auto_update
-                      [lidarr]=lscr.io/linuxserver/lidarr:latest,auto_update
-                      [ombi]=lscr.io/linuxserver/ombi:latest,auto_update
-                      [plex]=docker.io/plexinc/pms-docker:plexpass,auto_update
-                      [prowlarr]=lscr.io/linuxserver/prowlarr:nightly,auto_update
-                      [radarr]=lscr.io/linuxserver/radarr:latest,auto_update
-                      [readarr]=lscr.io/linuxserver/readarr:nightly,auto_update
-                      [sabnzbd]=lscr.io/linuxserver/sabnzbd:latest,auto_update
-                      [sonarr]=lscr.io/linuxserver/sonarr:latest,auto_update
-                      [tautulli]=lscr.io/linuxserver/tautulli:latest,auto_update
-                      [traefik]=docker.io/library/traefik:latest,auto_update
-                    )
-declare -A BACKUPS=(  [caddy]=${OPT_DIR}/caddy/
-                      [kavita]=${OPT_DIR}/kavita/
-                      [lidarr]=${OPT_DIR}/lidarr/Backups/scheduled
-                      [ombi]=${OPT_DIR}/ombi/
-                      [plex]=${OPT_DIR}/plex/Backups
-                      [prowlarr]=${OPT_DIR}/prowlarr/Backups/scheduled
-                      [radarr]=${OPT_DIR}/radarr/Backups/scheduled
-                      [readarr]=${OPT_DIR}/readarr/Backups/scheduled
-                      [sabnzbd]=${OPT_DIR}/sabnzbd/
-                      [sonarr]=${OPT_DIR}/sonarr/Backups/scheduled
-                      [tautulli]=${OPT_DIR}/tautulli/backups
-                      [traefik]=${OPT_DIR}/traefik/config/
-                    )
+PACKAGES="fuse rsync vim git podman"
+NOMAD_PLUGIN_DIR=/opt/nomad/plugins
