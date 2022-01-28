@@ -25,7 +25,7 @@ job "kavita" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.kavita.rule=Host(`kavita.eventide.network`) && PathPrefix(`/`)",
+        "traefik.http.routers.kavita.rule=Host(`kavita.DOMAIN.NAME`) && PathPrefix(`/`)",
         "traefik.http.routers.kavita.tls.certresolver=letsencrypt",
         "traefik.http.routers.kavita.entrypoints=web-secure",
       ]
