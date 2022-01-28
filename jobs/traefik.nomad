@@ -15,6 +15,7 @@ job "traefik" {
       port "web" { static = 80 }
       port "web-secure" { static = 443 }
       port "traefik" { static = 8081 }
+      port "metrics" { static = 8082 }
     }
 
     service {
@@ -27,9 +28,10 @@ job "traefik" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.traefik.rule=Path(`/`)",
+        "traefik.http.routers.traefik.rule=Host(`plex-request.eventide.network`) && PathPrefix(`/`)",
         "traefik.http.routers.traefik.tls=true",
         "traefik.http.routers.traefik.tls.certresolver=letsencrypt",
+        "traefik.http.routers.traefik.entrypoints=web-secure",
         "traefik.http.routers.traefik.middlewares=redirect-root-ombi",
         "traefik.http.middlewares.redirect-root-ombi.redirectregex.regex=.*",
         "traefik.http.middlewares.redirect-root-ombi.redirectregex.replacement=/ombi",
@@ -59,7 +61,6 @@ job "traefik" {
     task "traefik" {
       driver = "docker"
 
-
       restart {
         interval  = "12h"
         attempts  = 720
@@ -73,30 +74,25 @@ job "traefik" {
         ports         = [
                           "web",
                           "web-secure",
-                          "traefik"
+                          "traefik",
+                          "metrics",
                         ]
 
         args    = [
                     "--api",
                     "--api.dashboard",
                     "--api.insecure",
-                    "--log",
                     "--log.level=INFO",
                     "--accesslog",
                     "--accesslog.filepath=logs/access.log",
-                    "--entrypoints.traefik.address=:8081",
                     "--entrypoints.web.address=:80",
-                    "--entrypoints.web.forwardedheaders.insecure=true",
-                    "--entrypoints.web.http.redirections.entryPoint.to=web-secure",
-                    "--entrypoints.web.http.redirections.entryPoint.scheme=https",
-                    "--entrypoints.web.http.redirections.entrypoint.permanent=true",
+                    "--entrypoints.web.http.redirections.entrypoint.to=web-secure",
                     "--entrypoints.web-secure.address=:443",
                     "--entrypoints.web-secure.http.tls.certresolver=letsencrypt",
                     "--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL}",
                     "--certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/acme.json",
                     "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-v02.api.letsencrypt.org/directory",
-                    "--certificatesresolvers.letsencrypt.acme.httpchallenge=true",
-                    "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web",
+                    "--certificatesresolvers.letsencrypt.acme.tlschallenge=true",
                     "--providers.consulcatalog=true",
                     "--providers.consulcatalog.servicename=traefik",
                     "--providers.consulcatalog.prefix=traefik",
@@ -105,6 +101,14 @@ job "traefik" {
                     "--providers.consulcatalog.exposedbydefault=false",
                     "--providers.consulcatalog.endpoint.address=consul.service.consul:8500",
                     "--providers.consulcatalog.endpoint.scheme=http",
+                    "--entrypoints.traefik.address=:8081",
+                    "--metrics.prometheus=true",
+                    "--entrypoints.metrics.address=:8082",
+                    "--metrics.prometheus.entrypoint=metrics",
+                    "--metrics.prometheus.buckets=0.100000, 0.300000, 1.200000, 5.000000",
+                    "--metrics.prometheus.addentrypointslabels=true",
+                    "--metrics.prometheus.addrouterslabels=true",
+                    "--metrics.prometheus.addserviceslabels=true",
                     "--pilot.token=${PILOT_TOKEN}",
                   ]
 
