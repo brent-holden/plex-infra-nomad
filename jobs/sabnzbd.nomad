@@ -12,7 +12,7 @@ job "sabnzbd" {
 
     network {
       mode = "bridge"
-      port "sabnzbd" { to = -1 }
+      port "sabnzbd" {}
     }
 
     service {
@@ -25,7 +25,9 @@ job "sabnzbd" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.sabnzbd.rule=PathPrefix(`/sabnzbd`)",
+        "traefik.http.routers.sabnzbd.rule=Host(`HOST.DOMAIN.NAME`) && PathPrefix(`/sabnzbd`)",
+        "traefik.http.routers.sabnzbd.tls.certresolver=letsencrypt",
+        "traefik.http.routers.sabnzbd.entrypoints=web-secure",
       ]
 
       check {

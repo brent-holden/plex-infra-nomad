@@ -12,7 +12,7 @@ job "lidarr" {
 
     network {
       mode  = "bridge"
-      port "lidarr" { to = -1 }
+      port "lidarr" {}
     }
 
     service {
@@ -32,7 +32,9 @@ job "lidarr" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.lidarr.rule=PathPrefix(`/lidarr`)",
+        "traefik.http.routers.lidarr.rule=Host(`HOST.DOMAIN.NAME`) && PathPrefix(`/lidarr`)",
+        "traefik.http.routers.lidarr.tls.certresolver=letsencrypt",
+        "traefik.http.routers.lidarr.entrypoints=web-secure",
       ]
 
       canary_tags = [

@@ -12,7 +12,7 @@ job "readarr" {
 
     network {
       mode = "bridge"
-      port "readarr" { to = -1 }
+      port "readarr" {}
     }
 
     service {
@@ -32,7 +32,9 @@ job "readarr" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.readarr.rule=PathPrefix(`/readarr`)",
+        "traefik.http.routers.readarr.rule=Host(`HOST.DOMAIN.NAME`) && PathPrefix(`/readarr`)",
+        "traefik.http.routers.readarr.tls.certresolver=letsencrypt",
+        "traefik.http.routers.readarr.entrypoints=web-secure",
       ]
 
       canary_tags = [

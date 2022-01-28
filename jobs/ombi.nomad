@@ -12,7 +12,7 @@ job "ombi" {
 
     network {
       mode = "bridge"
-      port "ombi" { to = -1 }
+      port "ombi" {}
     }
 
     service {
@@ -20,14 +20,29 @@ job "ombi" {
       port = 3579
 
       connect {
-        sidecar_service {}
+        sidecar_service {
+          proxy {
+            upstreams {
+              destination_name = "lidarr"
+              local_bind_port  = 8686
+            }
+            upstreams {
+              destination_name = "radarr"
+              local_bind_port  = 7878
+            }
+            upstreams {
+              destination_name = "sonarr"
+              local_bind_port  = 8989
+            }
+          }
+        }
       }
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.ombi.rule=PathPrefix(`/ombi`)",
-        "traefik.frontend.redirect.regex=^https:\\\\/\\\\/([^\\\\/]+)\\\\/?$$",
-        "traefik.frontend.redirect.replacement=https://$$1/ombi/",
+        "traefik.http.routers.ombi.rule=Host(`HOST.DOMAIN.NAME`) && PathPrefix(`/ombi`)",
+        "traefik.http.routers.ombi.tls.certresolver=letsencrypt",
+        "traefik.http.routers.ombi.entrypoints=web-secure",
       ]
 
       canary_tags = [

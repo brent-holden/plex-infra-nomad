@@ -12,7 +12,7 @@ job "prowlarr" {
 
     network {
       mode = "bridge"
-      port "prowlarr" { to = -1 }
+      port "prowlarr" {}
     }
 
     service {
@@ -32,7 +32,9 @@ job "prowlarr" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.prowlarr.rule=PathPrefix(`/prowlarr`)",
+        "traefik.http.routers.prowlarr.rule=Host(`HOST.DOMAIN.NAME`) && PathPrefix(`/prowlarr`)",
+        "traefik.http.routers.prowlarr.tls.certresolver=letsencrypt",
+        "traefik.http.routers.prowlarr.entrypoints=web-secure",
       ]
 
       canary_tags = [

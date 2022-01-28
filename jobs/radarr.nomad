@@ -12,7 +12,7 @@ job "radarr" {
 
     network {
       mode  = "bridge"
-      port "radarr" { to = -1 }
+      port "radarr" {}
     }
 
     service {
@@ -32,7 +32,9 @@ job "radarr" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.radarr.rule=PathPrefix(`/radarr`)",
+        "traefik.http.routers.radarr.rule=Host(`HOST.DOMAIN.NAME`) && PathPrefix(`/radarr`)",
+        "traefik.http.routers.radarr.tls.certresolver=letsencrypt",
+        "traefik.http.routers.radarr.entrypoints=web-secure",
       ]
 
       canary_tags = [

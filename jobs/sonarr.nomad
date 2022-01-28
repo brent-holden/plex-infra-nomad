@@ -12,7 +12,7 @@ job "sonarr" {
 
     network {
       mode = "bridge"
-      port "sonarr" { to = -1 }
+      port "sonarr" {}
     }
 
     service {
@@ -32,7 +32,9 @@ job "sonarr" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.sonarr.rule=PathPrefix(`/sonarr`)",
+        "traefik.http.routers.sonarr.rule=Host(`HOST.DOMAIN.NAME`) && PathPrefix(`/sonarr`)",
+        "traefik.http.routers.sonarr.tls.certresolver=letsencrypt",
+        "traefik.http.routers.sonarr.entrypoints=web-secure",
       ]
 
       canary_tags = [

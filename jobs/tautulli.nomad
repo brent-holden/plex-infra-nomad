@@ -12,7 +12,7 @@ job "tautulli" {
 
     network {
       mode  = "bridge"
-      port "tautulli" { to = -1 }
+      port "tautulli" {}
     }
 
     service {
@@ -25,7 +25,9 @@ job "tautulli" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.tautulli.rule=PathPrefix(`/tautulli`)",
+        "traefik.http.routers.tautulli.rule=Host(`HOST.DOMAIN.NAME`) && PathPrefix(`/tautulli`)",
+        "traefik.http.routers.tautulli.tls.certresolver=letsencrypt",
+        "traefik.http.routers.tautulli.entrypoints=web-secure",
       ]
 
       canary_tags = [
@@ -77,7 +79,7 @@ job "tautulli" {
 
       config {
         image = "${IMAGE}:${RELEASE}"
-#        ports = [ "tautulli" ]
+        ports = [ "tautulli" ]
 
         mount {
           type      = "bind"

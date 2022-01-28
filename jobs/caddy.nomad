@@ -12,7 +12,7 @@ job "caddy" {
 
     network {
       mode  = "bridge"
-      port "caddy" { to = -1 }
+      port "caddy" {}
     }
 
     service {
@@ -25,13 +25,16 @@ job "caddy" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.caddy.rule=PathPrefix(`/downloads`)",
+        "traefik.http.routers.caddy.rule=Host(`HOST.DOMAIN.NAME`) && PathPrefix(`/downloads`)",
+        "traefik.http.routers.caddy.tls.certresolver=letsencrypt",
+        "traefik.http.routers.caddy.entrypoints=web-secure",
       ]
+    }
 
-      canary_tags = [
-        "traefik.enable=false",
-      ]
-
+    update {
+      max_parallel  = 0
+      health_check  = "checks"
+      auto_revert   = true
     }
 
     task "caddy" {
