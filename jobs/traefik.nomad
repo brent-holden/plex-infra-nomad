@@ -28,8 +28,7 @@ job "traefik" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.traefik.rule=Host(`plex-request.eventide.network`) && PathPrefix(`/`)",
-        "traefik.http.routers.traefik.tls=true",
+        "traefik.http.routers.traefik.rule=Host(`HOST.DOMAIN.NAME`)",
         "traefik.http.routers.traefik.tls.certresolver=letsencrypt",
         "traefik.http.routers.traefik.entrypoints=web-secure",
         "traefik.http.routers.traefik.middlewares=redirect-root-ombi",
@@ -79,7 +78,6 @@ job "traefik" {
                         ]
 
         args    = [
-                    "--api",
                     "--api.dashboard",
                     "--api.insecure",
                     "--log.level=INFO",
@@ -87,14 +85,15 @@ job "traefik" {
                     "--accesslog.filepath=logs/access.log",
                     "--entrypoints.web.address=:80",
                     "--entrypoints.web.http.redirections.entrypoint.to=web-secure",
+                    "--entrypoints.web.http.redirections.entrypoint.scheme=https",
                     "--entrypoints.web-secure.address=:443",
                     "--entrypoints.web-secure.http.tls.certresolver=letsencrypt",
+                    "--entrypoints.web-secure.http.tls.domains[0].main=${ACME_HOST}",
                     "--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL}",
                     "--certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/acme.json",
                     "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-v02.api.letsencrypt.org/directory",
                     "--certificatesresolvers.letsencrypt.acme.tlschallenge=true",
                     "--providers.consulcatalog=true",
-                    "--providers.consulcatalog.servicename=traefik",
                     "--providers.consulcatalog.prefix=traefik",
                     "--providers.consulcatalog.connectaware=true",
                     "--providers.consulcatalog.connectbydefault=true",
