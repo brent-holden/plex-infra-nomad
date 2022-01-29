@@ -12,21 +12,15 @@ client {
   enabled = true
   servers = ["127.0.0.1:4647"]
 
-  options = {
-    "driver.denylist" = "docker,java"
-  }
-
   host_network "default" {
     cidr = "192.168.0.0/23"
   }
 }
 
-plugin_dir = "/opt/nomad/plugins"
-
-plugin "containerd-driver" {
+plugin "docker" {
   config {
-    enabled = true
-    containerd_runtime = "io.containerd.runc.v2"
-    stats_interval = "5s"
+    volumes {
+      enabled = true
+    }
   }
 }
