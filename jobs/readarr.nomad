@@ -26,6 +26,10 @@ job "readarr" {
               destination_name = "sabnzbd"
               local_bind_port  = 8080
             }
+            upstreams {
+              destination_name = "prowlarr"
+              local_bind_port  = 9696
+            }
           }
         }
       }

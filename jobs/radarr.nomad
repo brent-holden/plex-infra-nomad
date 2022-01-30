@@ -26,13 +26,17 @@ job "radarr" {
               destination_name = "sabnzbd"
               local_bind_port  = 8080
             }
+            upstreams {
+              destination_name = "prowlarr"
+              local_bind_port  = 9696
+            }
           }
         }
       }   
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.radarr.rule=Host(`HOST.DOMAIN.NAME`) && PathPrefix(`/radarr`)",
+        "traefik.http.routers.radarr.rule=Host(`plex-request.domain.name`) && PathPrefix(`/radarr`)",
         "traefik.http.routers.radarr.tls.certresolver=letsencrypt",
         "traefik.http.routers.radarr.entrypoints=web-secure",
       ]
