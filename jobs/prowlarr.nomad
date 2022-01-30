@@ -26,13 +26,29 @@ job "prowlarr" {
               destination_name = "sabnzbd"
               local_bind_port  = 8080
             }
+            upstreams {
+              destination_name = "lidarr"
+              local_bind_port  = 8686
+            }
+            upstreams {
+              destination_name = "radarr"
+              local_bind_port  = 7878
+            }
+            upstreams {
+              destination_name = "sonarr"
+              local_bind_port  = 8989
+            }
+            upstreams {
+              destination_name = "readarr"
+              local_bind_port  = 8787
+            }
           }
         }
       }
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.prowlarr.rule=Host(`plex-request.domain.name`) && PathPrefix(`/prowlarr`)",
+        "traefik.http.routers.prowlarr.rule=Host(`plex-request.eventide.network`) && PathPrefix(`/prowlarr`)",
         "traefik.http.routers.prowlarr.tls.certresolver=letsencrypt",
         "traefik.http.routers.prowlarr.entrypoints=web-secure",
       ]
@@ -52,7 +68,7 @@ job "prowlarr" {
 
         check_restart {
           limit = 2
-          grace = "10s"
+          grace = "30s"
         }
       }
     }
