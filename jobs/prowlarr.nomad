@@ -48,7 +48,7 @@ job "prowlarr" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.prowlarr.rule=Host(`plex-request.eventide.network`) && PathPrefix(`/prowlarr`)",
+        "traefik.http.routers.prowlarr.rule=Host(`plex-request.domain.name`) && PathPrefix(`/prowlarr`)",
         "traefik.http.routers.prowlarr.tls.certresolver=letsencrypt",
         "traefik.http.routers.prowlarr.entrypoints=web-secure",
       ]
