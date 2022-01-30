@@ -1,9 +1,9 @@
 job "kavita" {
   datacenters = ["lab"]
-  type = "service"
+  type        = "service"
 
   constraint {
-    attribute = "${meta.media_node}"
+    attribute = meta.media_node
     value     = "true"
   }
 
@@ -14,14 +14,14 @@ job "kavita" {
       mode = "bridge"
       port "kavita" {}
     }
-  
+
     service {
       name = "kavita"
       port = 5000
 
       connect {
         sidecar_service {}
-      } 
+      }
 
       tags = [
         "traefik.enable=true",
@@ -35,13 +35,13 @@ job "kavita" {
       ]
 
       check {
-        name      = "kavita"
-        type      = "http"
-        port      = "kavita"
-        path      = "/"
-        interval  = "30s"
-        timeout   = "2s"
-        expose    = true
+        name     = "kavita"
+        type     = "http"
+        port     = "kavita"
+        path     = "/"
+        interval = "30s"
+        timeout  = "2s"
+        expose   = true
 
         check_restart {
           limit = 2
@@ -51,11 +51,11 @@ job "kavita" {
     }
 
     update {
-      max_parallel  = 1
-      canary        = 1
-      health_check  = "checks"
-      auto_revert   = true
-      auto_promote  = true
+      max_parallel      = 1
+      canary            = 1
+      health_check      = "checks"
+      auto_revert       = true
+      auto_promote      = true
       min_healthy_time  = "10s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
@@ -65,36 +65,36 @@ job "kavita" {
       driver = "docker"
 
       restart {
-        interval  = "12h"
-        attempts  = 720
-        delay     = "60s"
-        mode      = "delay"
+        interval = "12h"
+        attempts = 720
+        delay    = "60s"
+        mode     = "delay"
       }
 
       env {
         PGID = "1100"
-        PUID = "1100" 
+        PUID = "1100"
       }
 
       config {
         image = "${IMAGE}:${RELEASE}"
-        ports = [ "kavita" ]
+        ports = ["kavita"]
 
         mount {
-          type      = "bind"
-          target    = "/books"
-          source    = "/mnt/rclone/media/Books"
-          readonly  = false
+          type     = "bind"
+          target   = "/books"
+          source   = "/mnt/rclone/media/Books"
+          readonly = false
           bind_options {
             propagation = "rshared"
           }
         }
 
         mount {
-          type      = "bind"
-          target    = "/kavita/config"
-          source    = "/opt/kavita"
-          readonly  = false
+          type     = "bind"
+          target   = "/kavita/config"
+          source   = "/opt/kavita"
+          readonly = false
           bind_options {
             propagation = "rshared"
           }
@@ -102,14 +102,14 @@ job "kavita" {
       }
 
       template {
-        data          = <<-EOH
+        data        = <<-EOH
           IMAGE={{ key "kavita/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "kavita/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "kavita/config/release" "latest" }}
           KAVITA_HOST={{ key "kavita/config/kavita_host" }}
           EOH
-        destination   = "env_info"
-        env           = true
+        destination = "env_info"
+        env         = true
       }
 
       resources {

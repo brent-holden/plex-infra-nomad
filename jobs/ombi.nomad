@@ -1,9 +1,9 @@
 job "ombi" {
   datacenters = ["lab"]
-  type = "service"
+  type        = "service"
 
   constraint {
-    attribute = "${meta.media_node}"
+    attribute = meta.media_node
     value     = "true"
   }
 
@@ -40,7 +40,7 @@ job "ombi" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.ombi.rule=Host(`plex-request.domain.name`) && PathPrefix(`/ombi`)",
+        "traefik.http.routers.ombi.rule=Host(`plex-request.eventide.network`) && PathPrefix(`/ombi`)",
         "traefik.http.routers.ombi.tls.certresolver=letsencrypt",
         "traefik.http.routers.ombi.entrypoints=web-secure",
       ]
@@ -50,13 +50,13 @@ job "ombi" {
       ]
 
       check {
-        name      = "ombi"
-        type      = "http"
-        port      = "ombi"
-        path      = "/"
-        interval  = "30s"
-        timeout   = "2s"
-        expose    = true
+        name     = "ombi"
+        type     = "http"
+        port     = "ombi"
+        path     = "/"
+        interval = "30s"
+        timeout  = "2s"
+        expose   = true
 
         check_restart {
           limit = 2
@@ -66,11 +66,11 @@ job "ombi" {
     }
 
     update {
-      max_parallel  = 1
-      canary        = 1
-      health_check  = "checks"
-      auto_revert   = true
-      auto_promote  = true
+      max_parallel      = 1
+      canary            = 1
+      health_check      = "checks"
+      auto_revert       = true
+      auto_promote      = true
       min_healthy_time  = "10s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
@@ -80,27 +80,27 @@ job "ombi" {
       driver = "docker"
 
       restart {
-        interval  = "12h"
-        attempts  = 720
-        delay     = "60s"
-        mode      = "delay"
+        interval = "12h"
+        attempts = 720
+        delay    = "60s"
+        mode     = "delay"
       }
 
       env {
-       PGID = "1100"
-       PUID = "1100"
-       TZ   = "America/New_York"
+        PGID = "1100"
+        PUID = "1100"
+        TZ   = "America/New_York"
       }
 
       config {
         image = "${IMAGE}:${RELEASE}"
-        ports = [ "ombi" ]
+        ports = ["ombi"]
 
         mount {
-          type      = "bind"
-          target    = "/config"
-          source    = "/opt/ombi"
-          readonly  = false
+          type     = "bind"
+          target   = "/config"
+          source   = "/opt/ombi"
+          readonly = false
           bind_options {
             propagation = "rshared"
           }
@@ -109,14 +109,14 @@ job "ombi" {
       }
 
       template {
-        data          = <<-EOH
+        data        = <<-EOH
           IMAGE={{ key "ombi/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "ombi/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "ombi/config/release" "latest" }}
           ACME_HOST={{ key "traefik/config/acme_host" }}
           EOH
-        destination   = "env_info"
-        env           = true
+        destination = "env_info"
+        env         = true
       }
 
       resources {

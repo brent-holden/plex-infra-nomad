@@ -1,9 +1,9 @@
 job "sabnzbd" {
   datacenters = ["lab"]
-  type = "service"
+  type        = "service"
 
   constraint {
-    attribute = "${meta.media_node}"
+    attribute = meta.media_node
     value     = "true"
   }
 
@@ -25,19 +25,19 @@ job "sabnzbd" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.sabnzbd.rule=Host(`plex-request.domain.name`) && PathPrefix(`/sabnzbd`)",
+        "traefik.http.routers.sabnzbd.rule=Host(`plex-request.eventide.network`) && PathPrefix(`/sabnzbd`)",
         "traefik.http.routers.sabnzbd.tls.certresolver=letsencrypt",
         "traefik.http.routers.sabnzbd.entrypoints=web-secure",
       ]
 
       check {
-        name      = "sabnzbd"
-        type      = "http"
-        port      = "sabnzbd"
-        path      = "/sabnzbd/login/"
-        interval  = "30s"
-        timeout   = "2s"
-        expose    = true
+        name     = "sabnzbd"
+        type     = "http"
+        port     = "sabnzbd"
+        path     = "/sabnzbd/login/"
+        interval = "30s"
+        timeout  = "2s"
+        expose   = true
 
         check_restart {
           limit = 2
@@ -47,45 +47,45 @@ job "sabnzbd" {
     }
 
     update {
-      max_parallel  = 0
-      health_check  = "checks"
-      auto_revert   = true
+      max_parallel = 0
+      health_check = "checks"
+      auto_revert  = true
     }
 
     task "sabnzbd" {
       driver = "docker"
 
       restart {
-        interval  = "12h"
-        attempts  = 720
-        delay     = "60s"
-        mode      = "delay"
+        interval = "12h"
+        attempts = 720
+        delay    = "60s"
+        mode     = "delay"
       }
 
       env {
         PGID = "1100"
-        PUID = "1100" 
+        PUID = "1100"
       }
 
       config {
-        image   = "${IMAGE}:${RELEASE}"
-        ports   = [ "sabnzbd" ]
+        image = "${IMAGE}:${RELEASE}"
+        ports = ["sabnzbd"]
 
         mount {
-          type      = "bind"
-          target    = "/config"
-          source    = "/opt/sabnzbd"
-          readonly  = false
+          type     = "bind"
+          target   = "/config"
+          source   = "/opt/sabnzbd"
+          readonly = false
           bind_options {
             propagation = "rshared"
           }
         }
 
         mount {
-          type      = "bind"
-          target    = "/downloads"
-          source    = "/mnt/downloads"
-          readonly  = false
+          type     = "bind"
+          target   = "/downloads"
+          source   = "/mnt/downloads"
+          readonly = false
           bind_options {
             propagation = "rshared"
           }
@@ -94,14 +94,14 @@ job "sabnzbd" {
       }
 
       template {
-        data = <<-EOH
+        data        = <<-EOH
           IMAGE={{ key "sabnzbd/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "sabnzbd/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "sabnzbd/config/release" "latest" }}
           ACME_HOST={{ key "traefik/config/acme_host" }}
           EOH
-        destination   = "env_info"
-        env           = true
+        destination = "env_info"
+        env         = true
       }
 
       resources {

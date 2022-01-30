@@ -1,9 +1,9 @@
 job "sonarr" {
   datacenters = ["lab"]
-  type = "service"
+  type        = "service"
 
   constraint {
-    attribute = "${meta.media_node}"
+    attribute = meta.media_node
     value     = "true"
   }
 
@@ -31,13 +31,13 @@ job "sonarr" {
               local_bind_port  = 9696
             }
 
-          }  
+          }
         }
       }
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.sonarr.rule=Host(`plex-request.domain.name`) && PathPrefix(`/sonarr`)",
+        "traefik.http.routers.sonarr.rule=Host(`plex-request.eventide.network`) && PathPrefix(`/sonarr`)",
         "traefik.http.routers.sonarr.tls.certresolver=letsencrypt",
         "traefik.http.routers.sonarr.entrypoints=web-secure",
       ]
@@ -47,13 +47,13 @@ job "sonarr" {
       ]
 
       check {
-        name      = "sonarr"
-        type      = "http"
-        port      = "sonarr"
-        path      = "/sonarr/login"
-        interval  = "30s"
-        timeout   = "2s"
-        expose    = true
+        name     = "sonarr"
+        type     = "http"
+        port     = "sonarr"
+        path     = "/sonarr/login"
+        interval = "30s"
+        timeout  = "2s"
+        expose   = true
 
         check_restart {
           limit = 2
@@ -63,11 +63,11 @@ job "sonarr" {
     }
 
     update {
-      max_parallel  = 1
-      canary        = 1
-      health_check  = "checks"
-      auto_revert   = true
-      auto_promote  = true
+      max_parallel      = 1
+      canary            = 1
+      health_check      = "checks"
+      auto_revert       = true
+      auto_promote      = true
       min_healthy_time  = "10s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
@@ -77,45 +77,45 @@ job "sonarr" {
       driver = "docker"
 
       restart {
-        interval  = "12h"
-        attempts  = 720
-        delay     = "60s"
-        mode      = "delay"
+        interval = "12h"
+        attempts = 720
+        delay    = "60s"
+        mode     = "delay"
       }
 
       env {
         PGID = "1100"
-        PUID = "1100" 
+        PUID = "1100"
       }
 
       config {
-        image       = "${IMAGE}:${RELEASE}"
+        image = "${IMAGE}:${RELEASE}"
 
         mount {
-          type      = "bind"
-          target    = "/config"
-          source    = "/opt/sonarr"
-          readonly  = false
+          type     = "bind"
+          target   = "/config"
+          source   = "/opt/sonarr"
+          readonly = false
           bind_options {
             propagation = "rshared"
           }
         }
 
         mount {
-          type      = "bind"
-          target    = "/downloads"
-          source    = "/mnt/downloads"
-          readonly  = false
+          type     = "bind"
+          target   = "/downloads"
+          source   = "/mnt/downloads"
+          readonly = false
           bind_options {
             propagation = "rshared"
           }
         }
 
         mount {
-          type      = "bind"
-          target    = "/tv"
-          source    = "/mnt/rclone/media/TV"
-          readonly  = false
+          type     = "bind"
+          target   = "/tv"
+          source   = "/mnt/rclone/media/TV"
+          readonly = false
           bind_options {
             propagation = "rshared"
           }
@@ -124,14 +124,14 @@ job "sonarr" {
       }
 
       template {
-        data          = <<-EOH
+        data        = <<-EOH
           IMAGE={{ key "sonarr/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "sonarr/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "sonarr/config/release" "latest" }}
           ACME_HOST={{ key "traefik/config/acme_host" }}
           EOH
-        destination   = "env_info"
-        env           = true
+        destination = "env_info"
+        env         = true
       }
 
       resources {

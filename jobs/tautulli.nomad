@@ -1,9 +1,9 @@
 job "tautulli" {
   datacenters = ["lab"]
-  type = "service"
+  type        = "service"
 
   constraint {
-    attribute = "${meta.media_node}"
+    attribute = meta.media_node
     value     = "true"
   }
 
@@ -11,7 +11,7 @@ job "tautulli" {
     count = 1
 
     network {
-      mode  = "bridge"
+      mode = "bridge"
       port "tautulli" {}
     }
 
@@ -25,7 +25,7 @@ job "tautulli" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.tautulli.rule=Host(`plex-request.domain.name`) && PathPrefix(`/tautulli`)",
+        "traefik.http.routers.tautulli.rule=Host(`plex-request.eventide.network`) && PathPrefix(`/tautulli`)",
         "traefik.http.routers.tautulli.tls.certresolver=letsencrypt",
         "traefik.http.routers.tautulli.entrypoints=web-secure",
       ]
@@ -35,13 +35,13 @@ job "tautulli" {
       ]
 
       check {
-        name      = "tautulli"
-        type      = "http"
-        port      = "tautulli"
-        path      = "/tautulli/auth/login"
-        interval  = "60s"
-        timeout   = "2s"
-        expose    = true
+        name     = "tautulli"
+        type     = "http"
+        port     = "tautulli"
+        path     = "/tautulli/auth/login"
+        interval = "60s"
+        timeout  = "2s"
+        expose   = true
 
         check_restart {
           limit = 2
@@ -51,11 +51,11 @@ job "tautulli" {
     }
 
     update {
-      max_parallel  = 1
-      canary        = 1
-      health_check  = "checks"
-      auto_revert   = true
-      auto_promote  = true
+      max_parallel      = 1
+      canary            = 1
+      health_check      = "checks"
+      auto_revert       = true
+      auto_promote      = true
       min_healthy_time  = "10s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
@@ -65,37 +65,37 @@ job "tautulli" {
       driver = "docker"
 
       restart {
-        interval  = "12h"
-        attempts  = 720
-        delay     = "60s"
-        mode      = "delay"
+        interval = "12h"
+        attempts = 720
+        delay    = "60s"
+        mode     = "delay"
       }
 
       env {
-        PGID  = "1100"
-        PUID  = "1100"
-        TZ    = "America/New_York"
+        PGID = "1100"
+        PUID = "1100"
+        TZ   = "America/New_York"
       }
 
       config {
         image = "${IMAGE}:${RELEASE}"
-        ports = [ "tautulli" ]
+        ports = ["tautulli"]
 
         mount {
-          type      = "bind"
-          target    = "/config"
-          source    = "/opt/tautulli"
-          readonly  = false
+          type     = "bind"
+          target   = "/config"
+          source   = "/opt/tautulli"
+          readonly = false
           bind_options {
             propagation = "rshared"
           }
         }
 
         mount {
-          type      = "bind"
-          target    = "/plex_logs"
-          source    = "/opt/plex/Library/Application Support/Plex Media Server/Logs"
-          readonly  = true
+          type     = "bind"
+          target   = "/plex_logs"
+          source   = "/opt/plex/Library/Application Support/Plex Media Server/Logs"
+          readonly = true
           bind_options {
             propagation = "rshared"
           }
@@ -104,14 +104,14 @@ job "tautulli" {
       }
 
       template {
-        data          = <<-EOH
+        data        = <<-EOH
           IMAGE={{ key "tautulli/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "tautulli/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "tautulli/config/release" "latest" }}
           ACME_HOST={{ key "traefik/config/acme_host" }}
           EOH
-        destination   = "env_info"
-        env           = true
+        destination = "env_info"
+        env         = true
       }
 
       resources {

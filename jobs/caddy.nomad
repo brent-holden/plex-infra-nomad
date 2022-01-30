@@ -1,9 +1,9 @@
 job "caddy" {
   datacenters = ["lab"]
-  type = "service"
+  type        = "service"
 
   constraint {
-    attribute = "${meta.media_node}"
+    attribute = meta.media_node
     value     = "true"
   }
 
@@ -11,7 +11,7 @@ job "caddy" {
     count = 1
 
     network {
-      mode  = "bridge"
+      mode = "bridge"
       port "caddy" {}
     }
 
@@ -25,64 +25,64 @@ job "caddy" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.caddy.rule=Host(`plex-request.domain.name`) && PathPrefix(`/downloads`)",
+        "traefik.http.routers.caddy.rule=Host(`plex-request.eventide.network`) && PathPrefix(`/downloads`)",
         "traefik.http.routers.caddy.tls.certresolver=letsencrypt",
         "traefik.http.routers.caddy.entrypoints=web-secure",
       ]
     }
 
     update {
-      max_parallel  = 0
-      health_check  = "checks"
-      auto_revert   = true
+      max_parallel = 0
+      health_check = "checks"
+      auto_revert  = true
     }
 
     task "caddy" {
       driver = "docker"
 
       restart {
-        interval  = "12h"
-        attempts  = 720
-        delay     = "60s"
-        mode      = "delay"
+        interval = "12h"
+        attempts = 720
+        delay    = "60s"
+        mode     = "delay"
       }
 
       config {
         image   = "${IMAGE}:${RELEASE}"
         command = "caddy"
-        ports   = [ "caddy" ]
+        ports   = ["caddy"]
 
-        args    = [
-                    "run",
-                    "--config",
-                    "/local/Caddyfile"
-                  ]
+        args = [
+          "run",
+          "--config",
+          "/local/Caddyfile"
+        ]
 
         mount {
-          type      = "bind"
-          target    = "/config"
-          source    = "/opt/caddy/config"
-          readonly  = false
+          type     = "bind"
+          target   = "/config"
+          source   = "/opt/caddy/config"
+          readonly = false
           bind_options {
             propagation = "rshared"
           }
         }
 
         mount {
-          type      = "bind"
-          target    = "/downloads"
-          source    = "/mnt/downloads/complete"
-          readonly  = false
+          type     = "bind"
+          target   = "/downloads"
+          source   = "/mnt/downloads/complete"
+          readonly = false
           bind_options {
             propagation = "rshared"
           }
         }
 
         mount {
-          type      = "bind"
-          target    = "/data"
-          source    = "/opt/caddy/data"
-          readonly  = false
+          type     = "bind"
+          target   = "/data"
+          source   = "/opt/caddy/data"
+          readonly = false
           bind_options {
             propagation = "rshared"
           }
@@ -91,14 +91,14 @@ job "caddy" {
       }
 
       template {
-        data          = <<-EOH
+        data        = <<-EOH
           IMAGE={{ key "caddy/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "caddy/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "caddy/config/release" "latest" }}
           ACME_HOST={{ key "traefik/config/acme_host" }}
           EOH
-        destination   = "env_info"
-        env           = true
+        destination = "env_info"
+        env         = true
       }
 
       template {
@@ -125,7 +125,7 @@ job "caddy" {
 
       resources {
         cpu    = 200
-        memory = 512 
+        memory = 512
       }
 
       kill_timeout = "20s"

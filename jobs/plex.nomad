@@ -4,7 +4,7 @@ job "plex" {
   priority    = 20
 
   constraint {
-    attribute = "${meta.media_node}"
+    attribute = meta.media_node
     value     = "true"
   }
 
@@ -19,7 +19,7 @@ job "plex" {
       name = "plex"
       port = 32400
 
-      connect{
+      connect {
         native = true
       }
 
@@ -40,58 +40,58 @@ job "plex" {
     }
 
     update {
-      max_parallel  = 0
-      health_check  = "checks"
-      auto_revert   = true
+      max_parallel = 0
+      health_check = "checks"
+      auto_revert  = true
     }
 
     task "plex" {
       driver = "docker"
-    
+
       restart {
-        interval  = "12h"
-        attempts  = 720
-        delay     = "60s"
-        mode      = "delay"
+        interval = "12h"
+        attempts = 720
+        delay    = "60s"
+        mode     = "delay"
       }
 
       env {
-        PLEX_GID    = "1100"
-        PLEX_UID    = "1100" 
-        VERSION     = "docker"
-        TZ          = "America/New_York"
-        PLEX_CLAIM  = "${PLEX_CLAIM}"
+        PLEX_GID   = "1100"
+        PLEX_UID   = "1100"
+        VERSION    = "docker"
+        TZ         = "America/New_York"
+        PLEX_CLAIM = PLEX_CLAIM
       }
 
       config {
-        image         = "${IMAGE}:${RELEASE}"
-        network_mode  = "host"
+        image        = "${IMAGE}:${RELEASE}"
+        network_mode = "host"
 
         mount {
-          type      = "bind"
-          target    = "/config"
-          source    = "/opt/plex"
-          readonly  = false
+          type     = "bind"
+          target   = "/config"
+          source   = "/opt/plex"
+          readonly = false
           bind_options {
             propagation = "rshared"
           }
         }
 
         mount {
-          type      = "bind"
-          target    = "/media"
-          source    = "/mnt/rclone/media"
-          readonly  = true
+          type     = "bind"
+          target   = "/media"
+          source   = "/mnt/rclone/media"
+          readonly = true
           bind_options {
             propagation = "rshared"
           }
         }
 
         mount {
-          type      = "bind"
-          target    = "/transcode"
-          source    = "/mnt/transcode"
-          readonly  = false
+          type     = "bind"
+          target   = "/transcode"
+          source   = "/mnt/transcode"
+          readonly = false
           bind_options {
             propagation = "rshared"
           }
@@ -100,15 +100,15 @@ job "plex" {
       }
 
       template {
-        data          = <<-EOH
+        data        = <<-EOH
           IMAGE={{ key "plex/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "plex/config/image_digest" "1" }}
           VERSION={{ keyOrDefault "plex/config/version" "1.0" }}
           RELEASE={{ keyOrDefault "plex/config/release" "plexpass" }}
           PLEX_CLAIM={{ keyOrDefault "plex/config/claim_token" "claim-XXXXX" }}
           EOH
-        destination   = "env_info"
-        env           = true
+        destination = "env_info"
+        env         = true
       }
 
       resources {

@@ -1,9 +1,9 @@
 job "radarr" {
   datacenters = ["lab"]
-  type = "service"
+  type        = "service"
 
   constraint {
-    attribute = "${meta.media_node}"
+    attribute = meta.media_node
     value     = "true"
   }
 
@@ -11,7 +11,7 @@ job "radarr" {
     count = 1
 
     network {
-      mode  = "bridge"
+      mode = "bridge"
       port "radarr" {}
     }
 
@@ -32,11 +32,11 @@ job "radarr" {
             }
           }
         }
-      }   
+      }
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.radarr.rule=Host(`plex-request.domain.name`) && PathPrefix(`/radarr`)",
+        "traefik.http.routers.radarr.rule=Host(`plex-request.eventide.network`) && PathPrefix(`/radarr`)",
         "traefik.http.routers.radarr.tls.certresolver=letsencrypt",
         "traefik.http.routers.radarr.entrypoints=web-secure",
       ]
@@ -46,13 +46,13 @@ job "radarr" {
       ]
 
       check {
-        name      = "radarr"
-        type      = "http"
-        port      = "radarr"
-        path      = "/radarr/login"
-        interval  = "30s"
-        timeout   = "2s"
-        expose    = true
+        name     = "radarr"
+        type     = "http"
+        port     = "radarr"
+        path     = "/radarr/login"
+        interval = "30s"
+        timeout  = "2s"
+        expose   = true
 
         check_restart {
           limit = 2
@@ -62,11 +62,11 @@ job "radarr" {
     }
 
     update {
-      max_parallel  = 1
-      canary        = 1
-      health_check  = "checks"
-      auto_revert   = true
-      auto_promote  = true
+      max_parallel      = 1
+      canary            = 1
+      health_check      = "checks"
+      auto_revert       = true
+      auto_promote      = true
       min_healthy_time  = "10s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
@@ -76,47 +76,47 @@ job "radarr" {
       driver = "docker"
 
       restart {
-        interval  = "12h"
-        attempts  = 720
-        delay     = "60s"
-        mode      = "delay"
+        interval = "12h"
+        attempts = 720
+        delay    = "60s"
+        mode     = "delay"
       }
 
       env {
-        PGID  = "1100"
-        PUID  = "1100" 
-        TZ    = "America/New_York"
+        PGID = "1100"
+        PUID = "1100"
+        TZ   = "America/New_York"
       }
 
       config {
-        image   = "${IMAGE}:${RELEASE}"
-        ports   = [ "radarr" ]
+        image = "${IMAGE}:${RELEASE}"
+        ports = ["radarr"]
 
         mount {
-          type      = "bind"
-          target    = "/config"
-          source    = "/opt/radarr"
-          readonly  = false
+          type     = "bind"
+          target   = "/config"
+          source   = "/opt/radarr"
+          readonly = false
           bind_options {
             propagation = "rshared"
           }
         }
 
         mount {
-          type      = "bind"
-          target    = "/downloads"
-          source    = "/mnt/downloads"
-          readonly  = false
+          type     = "bind"
+          target   = "/downloads"
+          source   = "/mnt/downloads"
+          readonly = false
           bind_options {
             propagation = "rshared"
           }
         }
 
         mount {
-          type      = "bind"
-          target    = "/media/movies"
-          source    = "/mnt/rclone/media/Movies"
-          readonly  = false
+          type     = "bind"
+          target   = "/media/movies"
+          source   = "/mnt/rclone/media/Movies"
+          readonly = false
           bind_options {
             propagation = "rshared"
           }
@@ -125,14 +125,14 @@ job "radarr" {
       }
 
       template {
-        data          = <<-EOH
+        data        = <<-EOH
           IMAGE={{ key "radarr/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "radarr/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "radarr/config/release" "latest" }}
           ACME_HOST={{ key "traefik/config/acme_host" }}
           EOH
-        destination   = "env_info"
-        env           = true
+        destination = "env_info"
+        env         = true
       }
 
       resources {
