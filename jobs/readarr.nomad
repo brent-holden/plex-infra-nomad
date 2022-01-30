@@ -36,7 +36,7 @@ job "readarr" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.readarr.rule=Host(`plex-request.eventide.network`) && PathPrefix(`/readarr`)",
+        "traefik.http.routers.readarr.rule=Host(`plex-request.domain.name`) && PathPrefix(`/readarr`)",
         "traefik.http.routers.readarr.tls.certresolver=letsencrypt",
         "traefik.http.routers.readarr.entrypoints=web-secure",
       ]

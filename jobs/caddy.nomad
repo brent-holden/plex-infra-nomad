@@ -25,7 +25,7 @@ job "caddy" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.caddy.rule=Host(`plex-request.eventide.network`) && PathPrefix(`/downloads`)",
+        "traefik.http.routers.caddy.rule=Host(`plex-request.domain.name`) && PathPrefix(`/downloads`)",
         "traefik.http.routers.caddy.tls.certresolver=letsencrypt",
         "traefik.http.routers.caddy.entrypoints=web-secure",
       ]

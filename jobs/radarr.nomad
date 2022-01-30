@@ -36,7 +36,7 @@ job "radarr" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.radarr.rule=Host(`plex-request.eventide.network`) && PathPrefix(`/radarr`)",
+        "traefik.http.routers.radarr.rule=Host(`plex-request.domain.name`) && PathPrefix(`/radarr`)",
         "traefik.http.routers.radarr.tls.certresolver=letsencrypt",
         "traefik.http.routers.radarr.entrypoints=web-secure",
       ]

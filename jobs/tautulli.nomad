@@ -25,7 +25,7 @@ job "tautulli" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.tautulli.rule=Host(`plex-request.eventide.network`) && PathPrefix(`/tautulli`)",
+        "traefik.http.routers.tautulli.rule=Host(`plex-request.domain.name`) && PathPrefix(`/tautulli`)",
         "traefik.http.routers.tautulli.tls.certresolver=letsencrypt",
         "traefik.http.routers.tautulli.entrypoints=web-secure",
       ]

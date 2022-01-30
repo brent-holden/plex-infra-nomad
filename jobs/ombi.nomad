@@ -40,7 +40,7 @@ job "ombi" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.ombi.rule=Host(`plex-request.eventide.network`) && PathPrefix(`/ombi`)",
+        "traefik.http.routers.ombi.rule=Host(`plex-request.domain.name`) && PathPrefix(`/ombi`)",
         "traefik.http.routers.ombi.tls.certresolver=letsencrypt",
         "traefik.http.routers.ombi.entrypoints=web-secure",
       ]
