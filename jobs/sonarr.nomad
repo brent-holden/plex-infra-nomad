@@ -37,7 +37,7 @@ job "sonarr" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.sonarr.rule=Host(`HOST.DOMAIN.NAME`) && PathPrefix(`/sonarr`)",
+        "traefik.http.routers.sonarr.rule=Host(`plex-request.domain.name`) && PathPrefix(`/sonarr`)",
         "traefik.http.routers.sonarr.tls.certresolver=letsencrypt",
         "traefik.http.routers.sonarr.entrypoints=web-secure",
       ]

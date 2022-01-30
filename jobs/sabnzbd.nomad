@@ -25,7 +25,7 @@ job "sabnzbd" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.sabnzbd.rule=Host(`HOST.DOMAIN.NAME`) && PathPrefix(`/sabnzbd`)",
+        "traefik.http.routers.sabnzbd.rule=Host(`plex-request.domain.name`) && PathPrefix(`/sabnzbd`)",
         "traefik.http.routers.sabnzbd.tls.certresolver=letsencrypt",
         "traefik.http.routers.sabnzbd.entrypoints=web-secure",
       ]

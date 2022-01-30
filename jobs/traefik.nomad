@@ -28,7 +28,7 @@ job "traefik" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.traefik.rule=Host(`HOST.DOMAIN.NAME`)",
+        "traefik.http.routers.traefik.rule=Host(`plex-request.domain.name`)",
         "traefik.http.routers.traefik.tls.certresolver=letsencrypt",
         "traefik.http.routers.traefik.entrypoints=web-secure",
         "traefik.http.routers.traefik.middlewares=redirect-root-ombi",

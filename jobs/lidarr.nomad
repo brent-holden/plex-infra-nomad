@@ -36,7 +36,7 @@ job "lidarr" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.lidarr.rule=Host(`HOST.DOMAIN.NAME`) && PathPrefix(`/lidarr`)",
+        "traefik.http.routers.lidarr.rule=Host(`plex-request.domain.name`) && PathPrefix(`/lidarr`)",
         "traefik.http.routers.lidarr.tls.certresolver=letsencrypt",
         "traefik.http.routers.lidarr.entrypoints=web-secure",
       ]
