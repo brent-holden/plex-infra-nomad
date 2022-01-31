@@ -3,6 +3,18 @@ datacenter = "lab"
 data_dir = "/opt/nomad/data"
 bind_addr = "0.0.0.0"
 
+consul {
+  address = "consul.service.consul:8500"
+}
+
+telemetry {
+  collection_interval = "1s"
+  disable_hostname = true
+  prometheus_metrics = true
+  publish_allocation_metrics = true
+  publish_node_metrics = true
+}
+
 server {
   enabled = true
   bootstrap_expect = 1
@@ -23,7 +35,21 @@ client {
   meta = {
     storage = "hdd"
     network_node = "true"
-    media_node = "true"
+  }
+
+  host_volume "netbootxyz-config" {
+    path = "/opt/netbootxyz/config"
+    read_only = false
+  }
+
+  host_volume "netbootxyz-assets" {
+    path = "/opt/netbootxyz/assets"
+    read_only = false
+  }
+
+  host_volume "grafana-config" {
+    path = "/opt/grafana"
+    read_only = false
   }
 }
 
