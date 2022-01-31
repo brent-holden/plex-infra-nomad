@@ -3,10 +3,6 @@ job "traefik" {
   type        = "service"
   priority    = 10
 
-  constraint {
-    attribute = meta.media_node
-    value     = "true"
-  }
   group "traefik" {
     count = 1
 
@@ -51,6 +47,12 @@ job "traefik" {
       }
     }
 
+    ephemeral_disk {
+        size = 300
+        sticky = true
+        migrate = true
+    }
+
     update {
       max_parallel = 0
       health_check = "checks"
@@ -59,13 +61,6 @@ job "traefik" {
 
     task "traefik" {
       driver = "docker"
-
-      restart {
-        interval = "12h"
-        attempts = 720
-        delay    = "60s"
-        mode     = "delay"
-      }
 
       config {
         image   = "${IMAGE}:${RELEASE}"
@@ -90,7 +85,7 @@ job "traefik" {
           "--entrypoints.web-secure.http.tls.certresolver=letsencrypt",
           "--entrypoints.web-secure.http.tls.domains[0].main=${ACME_HOST}",
           "--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL}",
-          "--certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/acme.json",
+          "--certificatesresolvers.letsencrypt.acme.storage=local/acme.json",
           "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-v02.api.letsencrypt.org/directory",
           "--certificatesresolvers.letsencrypt.acme.tlschallenge=true",
           "--providers.consulcatalog=true",
@@ -111,26 +106,6 @@ job "traefik" {
           "--pilot.token=${PILOT_TOKEN}",
         ]
 
-        mount {
-          type     = "bind"
-          target   = "/etc/traefik"
-          source   = "/opt/traefik/config"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
-
-        mount {
-          type     = "bind"
-          target   = "/logs"
-          source   = "/opt/traefik/logs"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
-
       }
 
       template {
@@ -149,6 +124,13 @@ job "traefik" {
       resources {
         cpu    = 100
         memory = 256
+      }
+
+      restart {
+        interval = "12h"
+        attempts = 720
+        delay    = "60s"
+        mode     = "delay"
       }
     }
   }

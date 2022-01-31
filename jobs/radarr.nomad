@@ -2,11 +2,6 @@ job "radarr" {
   datacenters = ["lab"]
   type        = "service"
 
-  constraint {
-    attribute = meta.media_node
-    value     = "true"
-  }
-
   group "radarr" {
     count = 1
 
@@ -61,6 +56,21 @@ job "radarr" {
       }
     }
 
+    volume "config" {
+      type  = "host"
+      source = "radarr-config"
+    }
+
+    volume "downloads" {
+      type  = "host"
+      source = "downloads"
+    }
+
+    volume "movies" {
+      type  = "host"
+      source = "media-movies"
+    }
+
     update {
       max_parallel      = 1
       canary            = 1
@@ -75,53 +85,30 @@ job "radarr" {
     task "radarr" {
       driver = "docker"
 
-      restart {
-        interval = "12h"
-        attempts = 720
-        delay    = "60s"
-        mode     = "delay"
-      }
-
       env {
         PGID = "1100"
         PUID = "1100"
         TZ   = "America/New_York"
       }
 
+      volume_mount {
+        volume = "config"
+        destination = "/config"
+      }
+
+      volume_mount {
+        volume = "downloads"
+        destination = "/downloads"
+      }
+
+      volume_mount {
+        volume = "movies"
+        destination = "/media/movies"
+      }
+
       config {
         image = "${IMAGE}:${RELEASE}"
         ports = ["radarr"]
-
-        mount {
-          type     = "bind"
-          target   = "/config"
-          source   = "/opt/radarr"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
-
-        mount {
-          type     = "bind"
-          target   = "/downloads"
-          source   = "/mnt/downloads"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
-
-        mount {
-          type     = "bind"
-          target   = "/media/movies"
-          source   = "/mnt/rclone/media/Movies"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
-
       }
 
       template {
@@ -138,6 +125,13 @@ job "radarr" {
       resources {
         cpu    = 300
         memory = 1024
+      }
+
+      restart {
+        interval = "12h"
+        attempts = 720
+        delay    = "60s"
+        mode     = "delay"
       }
 
       kill_timeout = "20s"

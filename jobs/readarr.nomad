@@ -2,11 +2,6 @@ job "readarr" {
   datacenters = ["lab"]
   type        = "service"
 
-  constraint {
-    attribute = meta.media_node
-    value     = "true"
-  }
-
   group "readarr" {
     count = 1
 
@@ -61,6 +56,21 @@ job "readarr" {
       }
     }
 
+    volume "config" {
+      type  = "host"
+      source = "readarr-config"
+    }
+
+    volume "downloads" {
+      type  = "host"
+      source = "downloads"
+    }
+
+    volume "books" {
+      type  = "host"
+      source = "media-books"
+    }
+
     update {
       max_parallel      = 1
       canary            = 1
@@ -75,11 +85,19 @@ job "readarr" {
     task "readarr" {
       driver = "docker"
 
-      restart {
-        interval = "12h"
-        attempts = 720
-        delay    = "60s"
-        mode     = "delay"
+      volume_mount {
+        volume = "config"
+        destination = "/config"
+      }
+
+      volume_mount {
+        volume = "downloads"
+        destination = "/downloads"
+      }
+
+      volume_mount {
+        volume = "books"
+        destination = "/books"
       }
 
       env {
@@ -90,36 +108,6 @@ job "readarr" {
       config {
         image = "${IMAGE}:${RELEASE}"
         ports = ["readarr"]
-
-        mount {
-          type     = "bind"
-          target   = "/config"
-          source   = "/opt/readarr"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
-
-        mount {
-          type     = "bind"
-          target   = "/downloads"
-          source   = "/mnt/downloads"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
-
-        mount {
-          type     = "bind"
-          target   = "/books"
-          source   = "/mnt/rclone/media/Books"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
       }
 
       template {
@@ -136,6 +124,13 @@ job "readarr" {
       resources {
         cpu    = 350
         memory = 1024
+      }
+
+      restart {
+        interval = "12h"
+        attempts = 720
+        delay    = "60s"
+        mode     = "delay"
       }
 
       kill_timeout = "20s"

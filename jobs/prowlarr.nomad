@@ -1,11 +1,7 @@
 job "prowlarr" {
   datacenters = ["lab"]
   type        = "service"
-
-  constraint {
-    attribute = meta.media_node
-    value     = "true"
-  }
+  priority    = 5
 
   group "prowlarr" {
     count = 1
@@ -73,6 +69,11 @@ job "prowlarr" {
       }
     }
 
+    volume "config" {
+      type  = "host"
+      source = "prowlarr-config"
+    }
+
     update {
       max_parallel      = 1
       canary            = 1
@@ -87,11 +88,9 @@ job "prowlarr" {
     task "prowlarr" {
       driver = "docker"
 
-      restart {
-        interval = "12h"
-        attempts = 720
-        delay    = "60s"
-        mode     = "delay"
+      volume_mount {
+        volume = "config"
+        destination = "/config"
       }
 
       env {
@@ -102,27 +101,6 @@ job "prowlarr" {
       config {
         image = "${IMAGE}:${RELEASE}"
         ports = ["prowlarr"]
-
-        mount {
-          type     = "bind"
-          target   = "/config"
-          source   = "/opt/prowlarr"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
-
-        mount {
-          type     = "bind"
-          target   = "/downloads"
-          source   = "/mnt/downloads"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
-
       }
 
       template {
@@ -139,6 +117,13 @@ job "prowlarr" {
       resources {
         cpu    = 350
         memory = 1024
+      }
+
+      restart {
+        interval = "12h"
+        attempts = 720
+        delay    = "60s"
+        mode     = "delay"
       }
 
       kill_timeout = "20s"

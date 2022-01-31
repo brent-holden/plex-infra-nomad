@@ -3,11 +3,6 @@ job "plex" {
   type        = "service"
   priority    = 20
 
-  constraint {
-    attribute = meta.media_node
-    value     = "true"
-  }
-
   group "plex" {
     count = 1
 
@@ -39,6 +34,22 @@ job "plex" {
       }
     }
 
+    volume "config" {
+      type  = "host"
+      source = "plex-config"
+    }
+
+    volume "transcode" {
+      type  = "host"
+      source = "plex-transcoder"
+    }
+
+    volume "media" {
+      type  = "host"
+      source = "media-base"
+      read_only = true
+    }
+
     update {
       max_parallel = 0
       health_check = "checks"
@@ -48,13 +59,6 @@ job "plex" {
     task "plex" {
       driver = "docker"
 
-      restart {
-        interval = "12h"
-        attempts = 720
-        delay    = "60s"
-        mode     = "delay"
-      }
-
       env {
         PLEX_GID   = "1100"
         PLEX_UID   = "1100"
@@ -63,40 +67,25 @@ job "plex" {
         PLEX_CLAIM = PLEX_CLAIM
       }
 
+      volume_mount {
+        volume = "config"
+        destination = "/config"
+      }
+
+      volume_mount {
+        volume = "transcode"
+        destination = "/transcode"
+      }
+
+      volume_mount {
+        volume = "media"
+        destination = "/media"
+        read_only = true
+      }
+
       config {
         image        = "${IMAGE}:${RELEASE}"
         network_mode = "host"
-
-        mount {
-          type     = "bind"
-          target   = "/config"
-          source   = "/opt/plex"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
-
-        mount {
-          type     = "bind"
-          target   = "/media"
-          source   = "/mnt/rclone/media"
-          readonly = true
-          bind_options {
-            propagation = "rshared"
-          }
-        }
-
-        mount {
-          type     = "bind"
-          target   = "/transcode"
-          source   = "/mnt/transcode"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
-
       }
 
       template {
@@ -114,6 +103,13 @@ job "plex" {
       resources {
         cpu    = 8000
         memory = 32768
+      }
+
+      restart {
+        interval = "12h"
+        attempts = 720
+        delay    = "60s"
+        mode     = "delay"
       }
 
       kill_timeout = "30s"

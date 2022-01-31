@@ -2,11 +2,6 @@ job "lidarr" {
   datacenters = ["lab"]
   type        = "service"
 
-  constraint {
-    attribute = meta.media_node
-    value     = "true"
-  }
-
   group "lidarr" {
     count = 1
 
@@ -61,6 +56,21 @@ job "lidarr" {
       }
     }
 
+    volume "config" {
+      type  = "host"
+      source = "lidarr-config"
+    }
+
+    volume "downloads" {
+      type  = "host"
+      source = "downloads"
+    }
+
+    volume "music" {
+      type  = "host"
+      source = "media-music"
+    }
+
     update {
       max_parallel      = 1
       canary            = 1
@@ -75,52 +85,29 @@ job "lidarr" {
     task "lidarr" {
       driver = "docker"
 
-      restart {
-        interval = "12h"
-        attempts = 720
-        delay    = "60s"
-        mode     = "delay"
-      }
-
       env {
         PGID = "1100"
         PUID = "1100"
       }
 
+      volume_mount {
+        volume = "config"
+        destination = "/config"
+      }
+
+      volume_mount {
+        volume = "downloads"
+        destination = "/downloads"
+      }
+
+      volume_mount {
+        volume = "music"
+        destination = "/music"
+      }
+
       config {
         image = "${IMAGE}:${RELEASE}"
         ports = ["lidarr"]
-
-        mount {
-          type     = "bind"
-          target   = "/config"
-          source   = "/opt/lidarr"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
-
-        mount {
-          type     = "bind"
-          target   = "/downloads"
-          source   = "/mnt/downloads"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
-
-        mount {
-          type     = "bind"
-          target   = "/music"
-          source   = "/mnt/rclone/media/Music"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
-
       }
 
       template {
@@ -137,6 +124,13 @@ job "lidarr" {
       resources {
         cpu    = 350
         memory = 1024
+      }
+
+      restart {
+        interval = "12h"
+        attempts = 720
+        delay    = "60s"
+        mode     = "delay"
       }
 
       kill_timeout = "20s"

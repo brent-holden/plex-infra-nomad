@@ -2,11 +2,6 @@ job "caddy" {
   datacenters = ["lab"]
   type        = "service"
 
-  constraint {
-    attribute = meta.media_node
-    value     = "true"
-  }
-
   group "caddy" {
     count = 1
 
@@ -31,6 +26,12 @@ job "caddy" {
       ]
     }
 
+    volume "downloads" {
+      type  = "host"
+      source = "downloads"
+      read_only = true
+    }
+
     update {
       max_parallel = 0
       health_check = "checks"
@@ -40,11 +41,9 @@ job "caddy" {
     task "caddy" {
       driver = "docker"
 
-      restart {
-        interval = "12h"
-        attempts = 720
-        delay    = "60s"
-        mode     = "delay"
+      volume_mount {
+        volume = "downloads"
+        destination = "/downloads"
       }
 
       config {
@@ -58,36 +57,13 @@ job "caddy" {
           "/local/Caddyfile"
         ]
 
-        mount {
-          type     = "bind"
-          target   = "/config"
-          source   = "/opt/caddy/config"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
+      }
 
-        mount {
-          type     = "bind"
-          target   = "/downloads"
-          source   = "/mnt/downloads/complete"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
-
-        mount {
-          type     = "bind"
-          target   = "/data"
-          source   = "/opt/caddy/data"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
-
+      restart {
+        interval = "12h"
+        attempts = 720
+        delay    = "60s"
+        mode     = "delay"
       }
 
       template {

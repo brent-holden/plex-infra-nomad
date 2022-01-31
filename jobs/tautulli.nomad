@@ -2,11 +2,6 @@ job "tautulli" {
   datacenters = ["lab"]
   type        = "service"
 
-  constraint {
-    attribute = meta.media_node
-    value     = "true"
-  }
-
   group "tautulli" {
     count = 1
 
@@ -45,9 +40,14 @@ job "tautulli" {
 
         check_restart {
           limit = 2
-          grace = "10s"
+          grace = "30s"
         }
       }
+    }
+
+    volume "config" {
+      type  = "host"
+      source = "tautulli-config"
     }
 
     update {
@@ -64,11 +64,9 @@ job "tautulli" {
     task "tautulli" {
       driver = "docker"
 
-      restart {
-        interval = "12h"
-        attempts = 720
-        delay    = "60s"
-        mode     = "delay"
+      volume_mount {
+        volume = "config"
+        destination = "/config"
       }
 
       env {
@@ -80,26 +78,6 @@ job "tautulli" {
       config {
         image = "${IMAGE}:${RELEASE}"
         ports = ["tautulli"]
-
-        mount {
-          type     = "bind"
-          target   = "/config"
-          source   = "/opt/tautulli"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
-
-        mount {
-          type     = "bind"
-          target   = "/plex_logs"
-          source   = "/opt/plex/Library/Application Support/Plex Media Server/Logs"
-          readonly = true
-          bind_options {
-            propagation = "rshared"
-          }
-        }
 
       }
 
@@ -117,6 +95,13 @@ job "tautulli" {
       resources {
         cpu    = 150
         memory = 512
+      }
+
+      restart {
+        interval = "12h"
+        attempts = 720
+        delay    = "60s"
+        mode     = "delay"
       }
 
       kill_timeout = "20s"

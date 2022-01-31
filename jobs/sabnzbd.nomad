@@ -1,11 +1,7 @@
 job "sabnzbd" {
   datacenters = ["lab"]
   type        = "service"
-
-  constraint {
-    attribute = meta.media_node
-    value     = "true"
-  }
+  priority    = 5
 
   group "sabnzbd" {
     count = 1
@@ -46,6 +42,16 @@ job "sabnzbd" {
       }
     }
 
+    volume "config" {
+      type  = "host"
+      source = "sabnzbd-config"
+    }
+
+    volume "downloads" {
+      type  = "host"
+      source = "downloads"
+    }
+
     update {
       max_parallel = 0
       health_check = "checks"
@@ -55,11 +61,14 @@ job "sabnzbd" {
     task "sabnzbd" {
       driver = "docker"
 
-      restart {
-        interval = "12h"
-        attempts = 720
-        delay    = "60s"
-        mode     = "delay"
+      volume_mount {
+        volume = "config"
+        destination = "/config"
+      }
+
+      volume_mount {
+        volume = "downloads"
+        destination = "/downloads"
       }
 
       env {
@@ -70,27 +79,6 @@ job "sabnzbd" {
       config {
         image = "${IMAGE}:${RELEASE}"
         ports = ["sabnzbd"]
-
-        mount {
-          type     = "bind"
-          target   = "/config"
-          source   = "/opt/sabnzbd"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
-
-        mount {
-          type     = "bind"
-          target   = "/downloads"
-          source   = "/mnt/downloads"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
-
       }
 
       template {
@@ -107,6 +95,13 @@ job "sabnzbd" {
       resources {
         cpu    = 2000
         memory = 8192
+      }
+
+      restart {
+        interval = "12h"
+        attempts = 720
+        delay    = "60s"
+        mode     = "delay"
       }
 
       kill_timeout = "20s"

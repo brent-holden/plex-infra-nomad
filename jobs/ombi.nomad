@@ -2,11 +2,6 @@ job "ombi" {
   datacenters = ["lab"]
   type        = "service"
 
-  constraint {
-    attribute = meta.media_node
-    value     = "true"
-  }
-
   group "ombi" {
     count = 1
 
@@ -65,6 +60,11 @@ job "ombi" {
       }
     }
 
+    volume "config" {
+      type  = "host"
+      source = "ombi-config"
+    }
+
     update {
       max_parallel      = 1
       canary            = 1
@@ -79,11 +79,9 @@ job "ombi" {
     task "ombi" {
       driver = "docker"
 
-      restart {
-        interval = "12h"
-        attempts = 720
-        delay    = "60s"
-        mode     = "delay"
+      volume_mount {
+        volume = "config"
+        destination = "/config"
       }
 
       env {
@@ -95,17 +93,6 @@ job "ombi" {
       config {
         image = "${IMAGE}:${RELEASE}"
         ports = ["ombi"]
-
-        mount {
-          type     = "bind"
-          target   = "/config"
-          source   = "/opt/ombi"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
-
       }
 
       template {
@@ -122,6 +109,13 @@ job "ombi" {
       resources {
         cpu    = 200
         memory = 512
+      }
+
+      restart {
+        interval = "12h"
+        attempts = 720
+        delay    = "60s"
+        mode     = "delay"
       }
 
       kill_timeout = "20s"

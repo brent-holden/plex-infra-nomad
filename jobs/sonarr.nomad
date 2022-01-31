@@ -2,11 +2,6 @@ job "sonarr" {
   datacenters = ["lab"]
   type        = "service"
 
-  constraint {
-    attribute = meta.media_node
-    value     = "true"
-  }
-
   group "sonarr" {
     count = 1
 
@@ -62,6 +57,21 @@ job "sonarr" {
       }
     }
 
+    volume "config" {
+      type  = "host"
+      source = "sonarr-config"
+    }
+
+    volume "downloads" {
+      type  = "host"
+      source = "downloads"
+    }
+
+    volume "tv" {
+      type  = "host"
+      source = "media-tv"
+    }
+
     update {
       max_parallel      = 1
       canary            = 1
@@ -76,11 +86,19 @@ job "sonarr" {
     task "sonarr" {
       driver = "docker"
 
-      restart {
-        interval = "12h"
-        attempts = 720
-        delay    = "60s"
-        mode     = "delay"
+      volume_mount {
+        volume = "config"
+        destination = "/config"
+      }
+
+      volume_mount {
+        volume = "downloads"
+        destination = "/downloads"
+      }
+
+      volume_mount {
+        volume = "tv"
+        destination = "/tv"
       }
 
       env {
@@ -90,37 +108,7 @@ job "sonarr" {
 
       config {
         image = "${IMAGE}:${RELEASE}"
-
-        mount {
-          type     = "bind"
-          target   = "/config"
-          source   = "/opt/sonarr"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
-
-        mount {
-          type     = "bind"
-          target   = "/downloads"
-          source   = "/mnt/downloads"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
-
-        mount {
-          type     = "bind"
-          target   = "/tv"
-          source   = "/mnt/rclone/media/TV"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
-
+        ports = ["sonarr"]
       }
 
       template {
@@ -137,6 +125,13 @@ job "sonarr" {
       resources {
         cpu    = 350
         memory = 1024
+      }
+
+      restart {
+        interval = "12h"
+        attempts = 720
+        delay    = "60s"
+        mode     = "delay"
       }
 
       kill_timeout = "20s"

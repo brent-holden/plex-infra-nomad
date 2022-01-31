@@ -2,11 +2,6 @@ job "kavita" {
   datacenters = ["lab"]
   type        = "service"
 
-  constraint {
-    attribute = meta.media_node
-    value     = "true"
-  }
-
   group "kavita" {
     count = 1
 
@@ -25,7 +20,7 @@ job "kavita" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.kavita.rule=Host(`kavita.DOMAIN.NAME`) && PathPrefix(`/`)",
+        "traefik.http.routers.kavita.rule=Host(`kavita.domain.name`) && PathPrefix(`/`)",
         "traefik.http.routers.kavita.tls.certresolver=letsencrypt",
         "traefik.http.routers.kavita.entrypoints=web-secure",
       ]
@@ -50,6 +45,17 @@ job "kavita" {
       }
     }
 
+    volume "config" {
+      type  = "host"
+      source = "kavita-config"
+    }
+
+    volume "books" {
+      type  = "host"
+      source = "media-books"
+      read_only = true
+    }
+
     update {
       max_parallel      = 1
       canary            = 1
@@ -64,41 +70,25 @@ job "kavita" {
     task "kavita" {
       driver = "docker"
 
-      restart {
-        interval = "12h"
-        attempts = 720
-        delay    = "60s"
-        mode     = "delay"
-      }
-
       env {
         PGID = "1100"
         PUID = "1100"
       }
 
+      volume_mount {
+        volume = "config"
+        destination = "/kavita/config"
+      }
+
+      volume_mount {
+        volume = "books"
+        destination = "/books"
+        read_only = true
+      }
+
       config {
         image = "${IMAGE}:${RELEASE}"
         ports = ["kavita"]
-
-        mount {
-          type     = "bind"
-          target   = "/books"
-          source   = "/mnt/rclone/media/Books"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
-
-        mount {
-          type     = "bind"
-          target   = "/kavita/config"
-          source   = "/opt/kavita"
-          readonly = false
-          bind_options {
-            propagation = "rshared"
-          }
-        }
       }
 
       template {
@@ -115,6 +105,13 @@ job "kavita" {
       resources {
         cpu    = 200
         memory = 512
+      }
+
+      restart {
+        interval = "12h"
+        attempts = 720
+        delay    = "60s"
+        mode     = "delay"
       }
 
       kill_timeout = "20s"
