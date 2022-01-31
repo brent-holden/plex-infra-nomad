@@ -27,8 +27,8 @@ job "caddy" {
     }
 
     volume "downloads" {
-      type  = "host"
-      source = "downloads"
+      type      = "host"
+      source    = "downloads"
       read_only = true
     }
 
@@ -42,7 +42,7 @@ job "caddy" {
       driver = "docker"
 
       volume_mount {
-        volume = "downloads"
+        volume      = "downloads"
         destination = "/downloads"
       }
 

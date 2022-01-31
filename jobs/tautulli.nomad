@@ -46,7 +46,7 @@ job "tautulli" {
     }
 
     volume "config" {
-      type  = "host"
+      type   = "host"
       source = "tautulli-config"
     }
 
@@ -65,7 +65,7 @@ job "tautulli" {
       driver = "docker"
 
       volume_mount {
-        volume = "config"
+        volume      = "config"
         destination = "/config"
       }
 

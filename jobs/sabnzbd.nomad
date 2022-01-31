@@ -43,12 +43,12 @@ job "sabnzbd" {
     }
 
     volume "config" {
-      type  = "host"
+      type   = "host"
       source = "sabnzbd-config"
     }
 
     volume "downloads" {
-      type  = "host"
+      type   = "host"
       source = "downloads"
     }
 
@@ -62,12 +62,12 @@ job "sabnzbd" {
       driver = "docker"
 
       volume_mount {
-        volume = "config"
+        volume      = "config"
         destination = "/config"
       }
 
       volume_mount {
-        volume = "downloads"
+        volume      = "downloads"
         destination = "/downloads"
       }
 

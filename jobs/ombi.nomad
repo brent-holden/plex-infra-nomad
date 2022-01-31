@@ -61,7 +61,7 @@ job "ombi" {
     }
 
     volume "config" {
-      type  = "host"
+      type   = "host"
       source = "ombi-config"
     }
 
@@ -80,7 +80,7 @@ job "ombi" {
       driver = "docker"
 
       volume_mount {
-        volume = "config"
+        volume      = "config"
         destination = "/config"
       }
 

@@ -48,9 +48,9 @@ job "traefik" {
     }
 
     ephemeral_disk {
-        size = 300
-        sticky = true
-        migrate = true
+      size    = 300
+      sticky  = true
+      migrate = true
     }
 
     update {

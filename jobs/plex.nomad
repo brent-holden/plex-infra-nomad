@@ -35,18 +35,18 @@ job "plex" {
     }
 
     volume "config" {
-      type  = "host"
+      type   = "host"
       source = "plex-config"
     }
 
     volume "transcode" {
-      type  = "host"
+      type   = "host"
       source = "plex-transcoder"
     }
 
     volume "media" {
-      type  = "host"
-      source = "media-base"
+      type      = "host"
+      source    = "media-base"
       read_only = true
     }
 
@@ -68,19 +68,19 @@ job "plex" {
       }
 
       volume_mount {
-        volume = "config"
+        volume      = "config"
         destination = "/config"
       }
 
       volume_mount {
-        volume = "transcode"
+        volume      = "transcode"
         destination = "/transcode"
       }
 
       volume_mount {
-        volume = "media"
+        volume      = "media"
         destination = "/media"
-        read_only = true
+        read_only   = true
       }
 
       config {

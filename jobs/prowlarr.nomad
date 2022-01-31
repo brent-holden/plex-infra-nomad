@@ -70,7 +70,7 @@ job "prowlarr" {
     }
 
     volume "config" {
-      type  = "host"
+      type   = "host"
       source = "prowlarr-config"
     }
 
@@ -89,7 +89,7 @@ job "prowlarr" {
       driver = "docker"
 
       volume_mount {
-        volume = "config"
+        volume      = "config"
         destination = "/config"
       }
 

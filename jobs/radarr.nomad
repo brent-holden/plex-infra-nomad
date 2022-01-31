@@ -57,17 +57,17 @@ job "radarr" {
     }
 
     volume "config" {
-      type  = "host"
+      type   = "host"
       source = "radarr-config"
     }
 
     volume "downloads" {
-      type  = "host"
+      type   = "host"
       source = "downloads"
     }
 
     volume "movies" {
-      type  = "host"
+      type   = "host"
       source = "media-movies"
     }
 
@@ -92,17 +92,17 @@ job "radarr" {
       }
 
       volume_mount {
-        volume = "config"
+        volume      = "config"
         destination = "/config"
       }
 
       volume_mount {
-        volume = "downloads"
+        volume      = "downloads"
         destination = "/downloads"
       }
 
       volume_mount {
-        volume = "movies"
+        volume      = "movies"
         destination = "/media/movies"
       }
 

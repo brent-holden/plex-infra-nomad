@@ -46,13 +46,13 @@ job "kavita" {
     }
 
     volume "config" {
-      type  = "host"
+      type   = "host"
       source = "kavita-config"
     }
 
     volume "books" {
-      type  = "host"
-      source = "media-books"
+      type      = "host"
+      source    = "media-books"
       read_only = true
     }
 
@@ -76,14 +76,14 @@ job "kavita" {
       }
 
       volume_mount {
-        volume = "config"
+        volume      = "config"
         destination = "/kavita/config"
       }
 
       volume_mount {
-        volume = "books"
+        volume      = "books"
         destination = "/books"
-        read_only = true
+        read_only   = true
       }
 
       config {

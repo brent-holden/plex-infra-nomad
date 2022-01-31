@@ -57,17 +57,17 @@ job "lidarr" {
     }
 
     volume "config" {
-      type  = "host"
+      type   = "host"
       source = "lidarr-config"
     }
 
     volume "downloads" {
-      type  = "host"
+      type   = "host"
       source = "downloads"
     }
 
     volume "music" {
-      type  = "host"
+      type   = "host"
       source = "media-music"
     }
 
@@ -91,17 +91,17 @@ job "lidarr" {
       }
 
       volume_mount {
-        volume = "config"
+        volume      = "config"
         destination = "/config"
       }
 
       volume_mount {
-        volume = "downloads"
+        volume      = "downloads"
         destination = "/downloads"
       }
 
       volume_mount {
-        volume = "music"
+        volume      = "music"
         destination = "/music"
       }
 

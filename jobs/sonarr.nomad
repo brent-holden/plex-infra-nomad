@@ -58,17 +58,17 @@ job "sonarr" {
     }
 
     volume "config" {
-      type  = "host"
+      type   = "host"
       source = "sonarr-config"
     }
 
     volume "downloads" {
-      type  = "host"
+      type   = "host"
       source = "downloads"
     }
 
     volume "tv" {
-      type  = "host"
+      type   = "host"
       source = "media-tv"
     }
 
@@ -87,17 +87,17 @@ job "sonarr" {
       driver = "docker"
 
       volume_mount {
-        volume = "config"
+        volume      = "config"
         destination = "/config"
       }
 
       volume_mount {
-        volume = "downloads"
+        volume      = "downloads"
         destination = "/downloads"
       }
 
       volume_mount {
-        volume = "tv"
+        volume      = "tv"
         destination = "/tv"
       }
 

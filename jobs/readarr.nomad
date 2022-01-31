@@ -57,17 +57,17 @@ job "readarr" {
     }
 
     volume "config" {
-      type  = "host"
+      type   = "host"
       source = "readarr-config"
     }
 
     volume "downloads" {
-      type  = "host"
+      type   = "host"
       source = "downloads"
     }
 
     volume "books" {
-      type  = "host"
+      type   = "host"
       source = "media-books"
     }
 
@@ -86,17 +86,17 @@ job "readarr" {
       driver = "docker"
 
       volume_mount {
-        volume = "config"
+        volume      = "config"
         destination = "/config"
       }
 
       volume_mount {
-        volume = "downloads"
+        volume      = "downloads"
         destination = "/downloads"
       }
 
       volume_mount {
-        volume = "books"
+        volume      = "books"
         destination = "/books"
       }
 
