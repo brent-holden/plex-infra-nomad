@@ -57,17 +57,6 @@ job "metrics" {
       }
     }
 
-    restart {
-      attempts = 2
-      interval = "30m"
-      delay    = "15s"
-      mode     = "fail"
-    }
-
-    ephemeral_disk {
-      size = 300
-    }
-
     service {
       name = "prometheus"
       tags = ["urlprefix-/"]
@@ -80,6 +69,13 @@ job "metrics" {
         interval = "10s"
         timeout  = "2s"
       }
+    }
+
+    restart {
+      attempts = 2
+      interval = "30m"
+      delay    = "15s"
+      mode     = "fail"
     }
 
     task "prometheus" {
@@ -113,7 +109,7 @@ job "metrics" {
           scrape_configs:
             - job_name: 'traefik_metrics'
               static_configs:
-                - targets: ['traefik.service.consul:8082']
+              - targets: ['traefik.service.consul:8082']
 
             - job_name: 'nomad_metrics'
               consul_sd_configs:
