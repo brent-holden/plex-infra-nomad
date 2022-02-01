@@ -8,11 +8,11 @@ echo -e "\n\n### Preparing your server host ###\n\n"
 echo "Installing packages: ${PACKAGES}"
 yum -y install ${PACKAGES}
 
-# Enable cockpit
-echo "Enabling cockpiti for remote web administration. Access via https://<ip>:9090"
-systemctl enable --now cockpit.socket
+# Enable cockpit -- disabling by default for now
+#echo "Enabling cockpiti for remote web administration. Access via https://<ip>:9090"
+#systemctl enable --now cockpit.socket
 
-echo "Disabling FirewallD for containerd"
+echo "Disabling FirewallD"
 systemctl disable --now firewalld
 
 # Disable SELinux because reasons. Sorry Dan
