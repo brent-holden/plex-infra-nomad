@@ -101,7 +101,7 @@ job "plex" {
       }
 
       resources {
-        cpu    = 8000
+        cpu    = 24000
         memory = 32768
       }
 
