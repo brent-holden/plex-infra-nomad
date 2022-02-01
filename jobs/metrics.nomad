@@ -68,8 +68,28 @@ job "metrics" {
       size = 300
     }
 
+    service {
+      name = "prometheus"
+      tags = ["urlprefix-/"]
+      port = "prometheus_ui"
+
+      check {
+        name     = "prometheus_ui port alive"
+        type     = "http"
+        path     = "/-/healthy"
+        interval = "10s"
+        timeout  = "2s"
+      }
+    }
+
     task "prometheus" {
       driver = "docker"
+
+      env {
+        GF_PATHS_DATA = "/var/lib/grafana"
+        GF_AUTH_BASIC_ENABLED = "false"
+        GF_INSTALL_PLUGINS = "grafana-piechart-panel"
+      }
 
       config {
         image = "prom/prometheus:latest"
@@ -78,20 +98,6 @@ job "metrics" {
         volumes = [
           "local/prometheus.yml:/etc/prometheus/prometheus.yml",
         ]
-      }
-
-      service {
-        name = "prometheus"
-        tags = ["urlprefix-/"]
-        port = "prometheus_ui"
-
-        check {
-          name     = "prometheus_ui port alive"
-          type     = "http"
-          path     = "/-/healthy"
-          interval = "10s"
-          timeout  = "2s"
-        }
       }
 
       template {
