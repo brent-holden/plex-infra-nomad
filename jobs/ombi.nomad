@@ -8,15 +8,23 @@ job "ombi" {
     network {
       mode = "bridge"
       port "ombi" {}
+      port "metrics_envoy" { to = 20200 }
     }
 
     service {
       name = "ombi"
       port = 3579
 
+      meta {
+        metrics_port_envoy = "${NOMAD_HOST_PORT_metrics_envoy}"
+      }
+
       connect {
         sidecar_service {
           proxy {
+            config {
+              envoy_prometheus_bind_addr = "0.0.0.0:20200"
+            }
             upstreams {
               destination_name = "lidarr"
               local_bind_port  = 8686
