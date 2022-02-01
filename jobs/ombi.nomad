@@ -115,8 +115,8 @@ job "ombi" {
       }
 
       resources {
-        cpu    = 200
-        memory = 512
+        cpu    = 300
+        memory = 1024
       }
 
       restart {
