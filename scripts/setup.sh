@@ -2,6 +2,7 @@
 
 function setup_infra_host() {
   source ${BASH_SOURCE%/*}/prep_infra_host.sh
+  source ${BASH_SOURCE%/*}/setup_pihole.sh
   source ${BASH_SOURCE%/*}/setup_docker.sh
   source ${BASH_SOURCE%/*}/setup_consul_server.sh
   source ${BASH_SOURCE%/*}/setup_nomad_server.sh
@@ -27,6 +28,7 @@ function setup_media_host() {
 
 function setup_allinone() {
   source ${BASH_SOURCE%/*}/prep_media_host.sh
+  source ${BASH_SOURCE%/*}/setup_pihole.sh
   source ${BASH_SOURCE%/*}/setup_consul_server.sh
   source ${BASH_SOURCE%/*}/setup_consul_template.sh
   source ${BASH_SOURCE%/*}/setup_nomad_allinone.sh
