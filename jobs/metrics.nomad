@@ -3,7 +3,7 @@ job "metrics" {
   type        = "service"
 
   constraint {
-    attribute = "${meta.network_node}"
+    attribute = meta.network_node
     value     = "true"
   }
 
@@ -11,7 +11,7 @@ job "metrics" {
     count = 1
 
     network {
-      mode ="bridge"
+      mode = "bridge"
 
       port "grafana" {
         static = 3001
@@ -25,18 +25,18 @@ job "metrics" {
     }
 
     volume "config" {
-      type  = "host"
+      type      = "host"
       read_only = false
-      source = "grafana-config"
+      source    = "grafana-config"
     }
 
     task "dashboard" {
       driver = "docker"
 
       volume_mount {
-        volume = "config"
+        volume      = "config"
         destination = "/var/lib/grafana"
-        read_only = false
+        read_only   = false
       }
 
       config {
@@ -49,7 +49,7 @@ job "metrics" {
     count = 1
 
     network {
-      mode  = "bridge"
+      mode = "bridge"
 
       port "prometheus_ui" {
         static = 9090
@@ -69,7 +69,7 @@ job "metrics" {
     }
 
     task "prometheus" {
-      driver  = "docker"
+      driver = "docker"
 
       config {
         image = "prom/prometheus:latest"

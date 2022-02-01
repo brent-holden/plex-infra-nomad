@@ -17,7 +17,7 @@ job "prowlarr" {
       port = 9696
 
       meta {
-        metrics_port_envoy = "${NOMAD_HOST_PORT_metrics_envoy}"
+        metrics_port_envoy = NOMAD_HOST_PORT_metrics_envoy
       }
 
       connect {

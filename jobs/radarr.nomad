@@ -16,7 +16,7 @@ job "radarr" {
       port = 7878
 
       meta {
-        metrics_port_envoy = "${NOMAD_HOST_PORT_metrics_envoy}"
+        metrics_port_envoy = NOMAD_HOST_PORT_metrics_envoy
       }
 
       connect {

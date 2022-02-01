@@ -16,7 +16,7 @@ job "tautulli" {
       port = 8181
 
       meta {
-        metrics_port_envoy = "${NOMAD_HOST_PORT_metrics_envoy}"
+        metrics_port_envoy = NOMAD_HOST_PORT_metrics_envoy
       }
 
       connect {

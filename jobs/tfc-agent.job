@@ -4,53 +4,53 @@ job "tfc-agent" {
   priority    = 10
 
   constraint {
-    attribute = "${meta.network_node}"
+    attribute = meta.network_node
     value     = "true"
   }
 
   update {
-    max_parallel  = 0
-    auto_revert   = true
+    max_parallel = 0
+    auto_revert  = true
   }
 
   group "tfc-agent" {
     count = 1
 
     restart {
-      interval  = "12h"
-      attempts  = 720
-      delay     = "60s"
-      mode      = "delay"
+      interval = "12h"
+      attempts = 720
+      delay    = "60s"
+      mode     = "delay"
     }
 
     task "tfc-agent" {
       driver = "docker"
 
       config {
-        image         = "docker.io/hashicorp/tfc-agent:${RELEASE}"
+        image = "docker.io/hashicorp/tfc-agent:${RELEASE}"
       }
-      
+
       env {
-        TFC_AGENT_TOKEN = "${TFC_AGENT_TOKEN}"
-        TFC_AGENT_NAME  = "${TFC_AGENT_NAME}"
+        TFC_AGENT_TOKEN = TFC_AGENT_TOKEN
+        TFC_AGENT_NAME  = TFC_AGENT_NAME
       }
 
       template {
-        data          = <<-EOH
+        data        = <<-EOH
           IMAGE_DIGEST={{ keyOrDefault "tfc-agent/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "tfc-agent/config/release" "latest" }}
           TFC_AGENT_TOKEN={{ key "tfc-agent/config/token" }}
           TFC_AGENT_NAME={{ key "tfc-agent/config/name" }}
           EOH
-        destination   = "env_info"
-        env           = true
+        destination = "env_info"
+        env         = true
       }
 
       resources {
         cpu    = 100
         memory = 128
       }
-      kill_timeout  = "30s"
+      kill_timeout = "30s"
     }
   }
 }

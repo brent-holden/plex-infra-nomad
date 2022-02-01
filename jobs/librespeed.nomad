@@ -3,7 +3,7 @@ job "librespeed" {
   type        = "service"
 
   constraint {
-    attribute = "${meta.network_node}"
+    attribute = meta.network_node
     value     = "true"
   }
 
@@ -11,12 +11,12 @@ job "librespeed" {
     count = 1
 
     network {
-      mode  = "bridge"
+      mode = "bridge"
 
       port "librespeed" {
-        to            = 80
-        static        = 8080
-        host_network  = "default"
+        to           = 80
+        static       = 8080
+        host_network = "default"
       }
     }
 
@@ -28,7 +28,7 @@ job "librespeed" {
     }
 
     task "librespeed" {
-      driver  = "docker"
+      driver = "docker"
 
       config {
         image = "lscr.io/linuxserver/librespeed:latest"
