@@ -40,6 +40,10 @@ declare -A SERVICES=( [caddy]=docker.io/library/caddy:alpine,auto_update
                       [sonarr]=lscr.io/linuxserver/sonarr:latest,auto_update
                       [tautulli]=lscr.io/linuxserver/tautulli:latest,auto_update
                       [traefik]=docker.io/library/traefik:latest,auto_update
+                      [netbootxyz]=docker.io/linuxserver/netbootxyz:latest,auto_update
+                      [prometheus]=docker.io/prom/prometheus:latest,auto_update
+                      [librespeed]=lscr.io/linuxserver/librespeed:latest,auto_update
+                      [tfc-agent]=docker.io/hashicorp/tfc-agent:latest,auto_update
                     )
 
 declare -A BACKUPS=(  [caddy]=${OPT_DIR}/caddy/
@@ -54,4 +58,8 @@ declare -A BACKUPS=(  [caddy]=${OPT_DIR}/caddy/
                       [sonarr]=${OPT_DIR}/sonarr/Backups/scheduled
                       [tautulli]=${OPT_DIR}/tautulli/backups
                       [traefik]=${OPT_DIR}/traefik/config/
+                      [netbootxyz]=/opt/netbootxyz
+                      [prometheus]=/dev/null
+                      [librespeed]=/dev/null
+                      [tfc-agent]=/dev/null
                     )
