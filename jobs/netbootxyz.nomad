@@ -36,7 +36,7 @@ job "netbootxyz" {
 
     service {
       name = "netbootxyz"
-      tags = ["http","provisioning"]
+      tags = ["infra","http","provisioning"]
       port = "netbootxyz"
 
       check {
