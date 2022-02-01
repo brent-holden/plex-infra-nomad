@@ -9,14 +9,25 @@ job "sabnzbd" {
     network {
       mode = "bridge"
       port "sabnzbd" {}
+      port "metrics_envoy" { to = 20200 }
     }
 
     service {
       name = "sabnzbd"
       port = 8080
 
+      meta {
+        metrics_port_envoy = "${NOMAD_HOST_PORT_metrics_envoy}"
+      }
+
       connect {
-        sidecar_service {}
+        sidecar_service {
+          proxy {
+            config {
+              envoy_prometheus_bind_addr = "0.0.0.0:20200"
+            }
+          }
+        }
       }
 
       tags = [

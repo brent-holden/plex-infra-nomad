@@ -8,15 +8,23 @@ job "radarr" {
     network {
       mode = "bridge"
       port "radarr" {}
+      port "metrics_envoy" { to = 20200 }
     }
 
     service {
       name = "radarr"
       port = 7878
 
+      meta {
+        metrics_port_envoy = "${NOMAD_HOST_PORT_metrics_envoy}"
+      }
+
       connect {
         sidecar_service {
           proxy {
+            config {
+              envoy_prometheus_bind_addr = "0.0.0.0:20200"
+            }
             upstreams {
               destination_name = "sabnzbd"
               local_bind_port  = 8080
