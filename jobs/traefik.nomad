@@ -4,7 +4,7 @@ job "traefik" {
   priority    = 10
 
   constraint {
-    attribute = "${meta.media_node}"
+    attribute = "${meta.network_node}"
     value     = "true"
   }
 
@@ -29,7 +29,7 @@ job "traefik" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.traefik.rule=Host(`plex-request.eventide.network`)",
+        "traefik.http.routers.traefik.rule=Host(`plex-request.domain.name`)",
         "traefik.http.routers.traefik.tls.certresolver=letsencrypt",
         "traefik.http.routers.traefik.entrypoints=web-secure",
         "traefik.http.routers.traefik.middlewares=redirect-root-ombi",
@@ -80,7 +80,7 @@ job "traefik" {
         args = [
           "--api.dashboard",
           "--api.insecure",
-          "--log.level=DEBUG",
+          "--log.level=WARN",
           "--accesslog",
           "--accesslog.filepath=logs/access.log",
           "--entrypoints.web.address=:80",
