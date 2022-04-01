@@ -3,6 +3,11 @@ job "traefik" {
   type        = "service"
   priority    = 10
 
+  constraint {
+    attribute = "${meta.media_node}"
+    value     = "true"
+  }
+
   group "traefik" {
     count = 1
 
@@ -24,7 +29,7 @@ job "traefik" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.traefik.rule=Host(`plex-request.domain.name`)",
+        "traefik.http.routers.traefik.rule=Host(`plex-request.eventide.network`)",
         "traefik.http.routers.traefik.tls.certresolver=letsencrypt",
         "traefik.http.routers.traefik.entrypoints=web-secure",
         "traefik.http.routers.traefik.middlewares=redirect-root-ombi",
@@ -75,7 +80,7 @@ job "traefik" {
         args = [
           "--api.dashboard",
           "--api.insecure",
-          "--log.level=INFO",
+          "--log.level=DEBUG",
           "--accesslog",
           "--accesslog.filepath=logs/access.log",
           "--entrypoints.web.address=:80",
