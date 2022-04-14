@@ -9,6 +9,10 @@ ports {
   grpc = 8502
 }
 
+telemetry {
+  prometheus_retention_time = "480h"
+}
+
 connect {
   enabled = true
 }
