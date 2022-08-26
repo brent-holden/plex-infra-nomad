@@ -32,6 +32,7 @@ declare -A SERVICES=( [caddy]=docker.io/library/caddy:alpine,auto_update
                       [kavita]=docker.io/kizaing/kavita:latest:latest,auto_update
                       [lidarr]=lscr.io/linuxserver/lidarr:latest,auto_update
                       [ombi]=lscr.io/linuxserver/ombi:latest,auto_update
+                      [overseerr]=lscr.io/linuxserver/overseerr:latest,auto_update
                       [plex]=docker.io/plexinc/pms-docker:plexpass,auto_update
                       [prowlarr]=lscr.io/linuxserver/prowlarr:nightly,auto_update
                       [radarr]=lscr.io/linuxserver/radarr:latest,auto_update
