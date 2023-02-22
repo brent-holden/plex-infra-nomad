@@ -27,21 +27,13 @@ job "traefik" {
         native = true
       }
 
-      tags = [
-        "traefik.enable=true",
-        "traefik.http.routers.traefik.rule=Host(`plex-request.domain.name`)",
-        "traefik.http.routers.traefik.tls.certresolver=letsencrypt",
-        "traefik.http.routers.traefik.entrypoints=web-secure",
-        "traefik.http.routers.traefik.middlewares=redirect-root-ombi",
-        "traefik.http.middlewares.redirect-root-ombi.redirectregex.regex=.*",
-        "traefik.http.middlewares.redirect-root-ombi.redirectregex.replacement=/ombi",
-        "traefik.http.middlewares.redirect-root-ombi.redirectregex.permanent=true",
-      ]
+      tags =  [
+              ]
 
       check {
         name     = "alive"
         type     = "tcp"
-        port     = "web-secure"
+        port     = "traefik"
         interval = "10s"
         timeout  = "2s"
 
@@ -80,7 +72,7 @@ job "traefik" {
         args = [
           "--api.dashboard",
           "--api.insecure",
-          "--log.level=WARN",
+          "--log.level=DEBUG",
           "--accesslog",
           "--accesslog.filepath=logs/access.log",
           "--entrypoints.web.address=:80",
@@ -88,17 +80,20 @@ job "traefik" {
           "--entrypoints.web.http.redirections.entrypoint.scheme=https",
           "--entrypoints.web-secure.address=:443",
           "--entrypoints.web-secure.http.tls.certresolver=letsencrypt",
-          "--entrypoints.web-secure.http.tls.domains[0].main=${ACME_HOST}",
+          "--entrypoints.web-secure.http.tls.domains[0].main=${ACME_DOMAIN}",
+          "--entrypoints.web-secure.http.tls.domains[0].sans=*.${ACME_DOMAIN}",
           "--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL}",
           "--certificatesresolvers.letsencrypt.acme.storage=local/acme.json",
+#          "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory",
           "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-v02.api.letsencrypt.org/directory",
-          "--certificatesresolvers.letsencrypt.acme.tlschallenge=true",
+          "--certificatesresolvers.letsencrypt.acme.dnschallenge=true",
+          "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare",
           "--providers.consulcatalog=true",
           "--providers.consulcatalog.prefix=traefik",
           "--providers.consulcatalog.connectaware=true",
           "--providers.consulcatalog.connectbydefault=true",
           "--providers.consulcatalog.exposedbydefault=false",
-          "--providers.consulcatalog.endpoint.address=consul.service.consul:8500",
+          "--providers.consulcatalog.endpoint.address=192.168.0.2:8500",
           "--providers.consulcatalog.endpoint.scheme=http",
           "--entrypoints.traefik.address=:8081",
           "--metrics.prometheus=true",
@@ -120,7 +115,10 @@ job "traefik" {
           RELEASE={{ keyOrDefault "traefik/config/release" "latest" }}
           ACME_EMAIL={{ key "traefik/config/acme_email" }}
           ACME_HOST={{ key "traefik/config/acme_host" }}
+          ACME_DOMAIN={{ key "traefik/config/acme_domain" }}
           PILOT_TOKEN={{ key "traefik/config/pilot_token" }}
+          CLOUDFLARE_EMAIL={{ key "traefik/config/acme_email" }}
+          CLOUDFLARE_DNS_API_TOKEN={{ key "traefik/config/dns_api_token" }}
           EOH
         destination = "env_info"
         env         = true
