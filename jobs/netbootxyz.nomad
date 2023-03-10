@@ -1,5 +1,5 @@
 job "netbootxyz" {
-  datacenters = ["[[ .nomad.datacenter ]]"]
+  datacenters = ["lab"]
   type        = "service"
 
   constraint {
@@ -25,15 +25,13 @@ job "netbootxyz" {
 
     network {
       port "netbootxyz" {
-        static = 3001
-        to     = 3000
+        static = 3000
       }
       port "tftp" {
         static = 69
       }
       port "webconsole" {
-        static = 8080
-        to     = 80
+        static = 8000
       }
     }
 
