@@ -1,5 +1,5 @@
 job "netbootxyz" {
-  datacenters = ["lab"]
+  datacenters = ["[[ .nomad.datacenter ]]"]
   type        = "service"
 
   constraint {
