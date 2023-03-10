@@ -1,5 +1,5 @@
 job "metrics" {
-  datacenters = ["[[ .nomad.datacenter ]]"]
+  datacenters = ["lab"]
   type        = "service"
 
   constraint {
@@ -14,7 +14,7 @@ job "metrics" {
       mode = "bridge"
 
       port "grafana" {
-        static = 3000
+        static = 3001
         to     = 3000
       }
     }
@@ -82,9 +82,9 @@ job "metrics" {
       driver = "docker"
 
       env {
-        GF_PATHS_DATA         = "/var/lib/grafana"
+        GF_PATHS_DATA = "/var/lib/grafana"
         GF_AUTH_BASIC_ENABLED = "false"
-        GF_INSTALL_PLUGINS    = "grafana-piechart-panel"
+        GF_INSTALL_PLUGINS = "grafana-piechart-panel"
       }
 
       config {
@@ -109,14 +109,14 @@ job "metrics" {
           scrape_configs:
             - job_name: 'traefik_metrics'
               static_configs:
-              - targets: ['traefik.service.consul:8082']
+              - targets: ['192.168.10.2:8082']
 
             - job_name: 'nomad_metrics'
               consul_sd_configs:
               - server: 'consul.service.consul:8500'
                 services: ['nomad-client', 'nomad']
-              re[[ .nomad.datacenter ]]el_configs:
-              - source_[[ .nomad.datacenter ]]els: ['__meta_consul_tags']
+              relabel_configs:
+              - source_labels: ['__meta_consul_tags']
                 regex: '(.*)http(.*)'
                 action: keep
               scrape_interval: 5s
@@ -124,36 +124,25 @@ job "metrics" {
               params:
                 format: ['prometheus']
 
-            - job_name: consul
-              honor_timestamps: true
-              scrape_interval: 15s
-              scrape_timeout: 10s
-              metrics_path: '/v1/agent/metrics'
-              scheme: http
-              params: 
-                format: ['prometheus']  
-              static_configs:
-              - targets: ['consul.service.consul:8500']
-
             - job_name: 'consul_metrics'
               metrics_path: /metrics
               consul_sd_configs:
-                - server: 'consul.service.consul:8500'
-              re[[ .nomad.datacenter ]]el_configs:
-              - source_[[ .nomad.datacenter ]]els: [__meta_consul_service]
+                - server: '192.168.10.2:8500'
+              relabel_configs:
+              - source_labels: [__meta_consul_service]
                 regex: (.+)-sidecar-proxy
                 action: drop
-              - source_[[ .nomad.datacenter ]]els: [__meta_consul_service]
+              - source_labels: [__meta_consul_service]
                 regex: (.+)
-                target_[[ .nomad.datacenter ]]el: service
-              - source_[[ .nomad.datacenter ]]els: [__meta_consul_service_metadata_metrics_port_envoy]
+                target_label: service
+              - source_labels: [__meta_consul_service_metadata_metrics_port_envoy]
                 regex: (.+)
                 action: keep
-              - source_[[ .nomad.datacenter ]]els: [__address__,__meta_consul_service_metadata_metrics_port_envoy]
+              - source_labels: [__address__,__meta_consul_service_metadata_metrics_port_envoy]
                 regex: (.+)(?::\d+);(\d+)
                 action: replace
                 replacement: $1:$2
-                target_[[ .nomad.datacenter ]]el: __address__
+                target_label: __address__
               scrape_interval: 5s
           EOH
       }
