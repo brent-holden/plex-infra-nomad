@@ -1,5 +1,5 @@
 job "traefik" {
-  datacenters = ["[[ .nomad.datacenter ]]"]
+  datacenters = ["lab"]
   type        = "service"
   priority    = 10
 
