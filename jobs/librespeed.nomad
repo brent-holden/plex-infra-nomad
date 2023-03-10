@@ -1,9 +1,9 @@
 job "librespeed" {
-  datacenters = ["lab"]
+  datacenters = ["[[ .nomad.datacenter ]]"]
   type        = "service"
 
   constraint {
-    attribute = meta.network_node
+    attribute = "${meta.network_node}"
     value     = "true"
   }
 
@@ -15,7 +15,7 @@ job "librespeed" {
 
       port "librespeed" {
         to           = 80
-        static       = 8080
+        static       = 81
         host_network = "default"
       }
     }

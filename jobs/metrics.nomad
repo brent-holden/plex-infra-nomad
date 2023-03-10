@@ -1,9 +1,9 @@
 job "metrics" {
-  datacenters = ["lab"]
+  datacenters = ["[[ .nomad.datacenter ]]"]
   type        = "service"
 
   constraint {
-    attribute = meta.network_node
+    attribute = "${meta.network_node}"
     value     = "true"
   }
 
@@ -14,7 +14,7 @@ job "metrics" {
       mode = "bridge"
 
       port "grafana" {
-        static = 3001
+        static = 3000
         to     = 3000
       }
     }
@@ -82,9 +82,9 @@ job "metrics" {
       driver = "docker"
 
       env {
-        GF_PATHS_DATA = "/var/lib/grafana"
+        GF_PATHS_DATA         = "/var/lib/grafana"
         GF_AUTH_BASIC_ENABLED = "false"
-        GF_INSTALL_PLUGINS = "grafana-piechart-panel"
+        GF_INSTALL_PLUGINS    = "grafana-piechart-panel"
       }
 
       config {
@@ -115,8 +115,8 @@ job "metrics" {
               consul_sd_configs:
               - server: 'consul.service.consul:8500'
                 services: ['nomad-client', 'nomad']
-              relabel_configs:
-              - source_labels: ['__meta_consul_tags']
+              re[[ .nomad.datacenter ]]el_configs:
+              - source_[[ .nomad.datacenter ]]els: ['__meta_consul_tags']
                 regex: '(.*)http(.*)'
                 action: keep
               scrape_interval: 5s
@@ -128,21 +128,21 @@ job "metrics" {
               metrics_path: /metrics
               consul_sd_configs:
                 - server: 'consul.service.consul:8500'
-              relabel_configs:
-              - source_labels: [__meta_consul_service]
+              re[[ .nomad.datacenter ]]el_configs:
+              - source_[[ .nomad.datacenter ]]els: [__meta_consul_service]
                 regex: (.+)-sidecar-proxy
                 action: drop
-              - source_labels: [__meta_consul_service]
+              - source_[[ .nomad.datacenter ]]els: [__meta_consul_service]
                 regex: (.+)
-                target_label: service
-              - source_labels: [__meta_consul_service_metadata_metrics_port_envoy]
+                target_[[ .nomad.datacenter ]]el: service
+              - source_[[ .nomad.datacenter ]]els: [__meta_consul_service_metadata_metrics_port_envoy]
                 regex: (.+)
                 action: keep
-              - source_labels: [__address__,__meta_consul_service_metadata_metrics_port_envoy]
+              - source_[[ .nomad.datacenter ]]els: [__address__,__meta_consul_service_metadata_metrics_port_envoy]
                 regex: (.+)(?::\d+);(\d+)
                 action: replace
                 replacement: $1:$2
-                target_label: __address__
+                target_[[ .nomad.datacenter ]]el: __address__
               scrape_interval: 5s
           EOH
       }

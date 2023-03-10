@@ -1,6 +1,11 @@
 job "radarr" {
-  datacenters = ["lab"]
+  datacenters = ["[[ .nomad.datacenter ]]"]
   type        = "service"
+
+  constraint {
+    attribute = "${meta.download_node}"
+    value     = "true"
+  }
 
   group "radarr" {
     count = 1
@@ -16,7 +21,7 @@ job "radarr" {
       port = 7878
 
       meta {
-        metrics_port_envoy = NOMAD_HOST_PORT_metrics_envoy
+        metrics_port_envoy = "${NOMAD_HOST_PORT_metrics_envoy}"
       }
 
       connect {
@@ -39,9 +44,8 @@ job "radarr" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.radarr.rule=Host(`plex-request.domain.name`) && PathPrefix(`/radarr`)",
-        "traefik.http.routers.radarr.tls.certresolver=letsencrypt",
-        "traefik.http.routers.radarr.entrypoints=web-secure",
+        "traefik.http.routers.radarr.rule=Host(`[[ .app.radarr.traefik.hostname ]].[[ .app.traefik.domain.tld ]]`) && PathPrefix(`[[ .app.radarr.traefik.path ]]`)",
+        "traefik.http.routers.radarr.entrypoints=[[ .app.radarr.traefik.entrypoints  ]]",
       ]
 
       canary_tags = [
@@ -52,7 +56,7 @@ job "radarr" {
         name     = "radarr"
         type     = "http"
         port     = "radarr"
-        path     = "/radarr/login"
+        path     = "/radarr/ping"
         interval = "30s"
         timeout  = "2s"
         expose   = true
@@ -94,8 +98,8 @@ job "radarr" {
       driver = "docker"
 
       env {
-        PGID = "1100"
-        PUID = "1100"
+        PUID = "[[ .common.env.puid ]]"
+        PGID = "[[ .common.env.pgid ]]"
         TZ   = "America/New_York"
       }
 

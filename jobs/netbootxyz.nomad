@@ -1,6 +1,11 @@
 job "netbootxyz" {
-  datacenters = ["lab"]
+  datacenters = ["[[ .nomad.datacenter ]]"]
   type        = "service"
+
+  constraint {
+    attribute = "${meta.network_node}"
+    value     = "true"
+  }
 
   update {
     max_parallel = 0
@@ -20,17 +25,15 @@ job "netbootxyz" {
 
     network {
       port "netbootxyz" {
-        static       = 3000
-        host_network = "lab"
+        static = 3001
+        to     = 3000
       }
       port "tftp" {
-        static       = 69
-        host_network = "lab"
+        static = 69
       }
       port "webconsole" {
-        static       = 8080
-        to           = 80
-        host_network = "lab"
+        static = 8080
+        to     = 80
       }
     }
 

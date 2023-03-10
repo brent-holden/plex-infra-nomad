@@ -1,6 +1,11 @@
 job "kavita" {
-  datacenters = ["lab"]
+  datacenters = ["[[ .nomad.datacenter ]]"]
   type        = "service"
+
+  constraint {
+    attribute = "${meta.download_node}"
+    value     = "true"
+  }
 
   group "kavita" {
     count = 1
@@ -16,7 +21,7 @@ job "kavita" {
       port = 5000
 
       meta {
-        metrics_port_envoy = NOMAD_HOST_PORT_metrics_envoy
+        metrics_port_envoy = "${NOMAD_HOST_PORT_metrics_envoy}"
       }
 
       connect {
@@ -31,9 +36,8 @@ job "kavita" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.kavita.rule=Host(`kavita.domain.name`) && PathPrefix(`/`)",
-        "traefik.http.routers.kavita.tls.certresolver=letsencrypt",
-        "traefik.http.routers.kavita.entrypoints=web-secure",
+        "traefik.http.routers.kavita.rule=Host(`[[ .app.kavita.traefik.hostname ]].[[ .app.traefik.domain.tld ]]`) && PathPrefix(`[[ .app.kavita.traefik.path ]]`)",
+        "traefik.http.routers.kavita.entrypoints=[[ .app.kavita.traefik.entrypoints  ]]",
       ]
 
       canary_tags = [
@@ -44,7 +48,7 @@ job "kavita" {
         name     = "kavita"
         type     = "http"
         port     = "kavita"
-        path     = "/"
+        path     = "/api/health"
         interval = "30s"
         timeout  = "2s"
         expose   = true
@@ -82,8 +86,8 @@ job "kavita" {
       driver = "docker"
 
       env {
-        PGID = "1100"
-        PUID = "1100"
+        PGID = "[[ .common.env.puid ]]"
+        PUID = "[[ .common.env.pgid ]]"
       }
 
       volume_mount {
@@ -107,7 +111,6 @@ job "kavita" {
           IMAGE={{ key "kavita/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "kavita/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "kavita/config/release" "latest" }}
-          KAVITA_HOST={{ key "kavita/config/kavita_host" }}
           EOH
         destination = "env_info"
         env         = true

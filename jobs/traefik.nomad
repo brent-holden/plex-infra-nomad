@@ -1,5 +1,5 @@
 job "traefik" {
-  datacenters = ["lab"]
+  datacenters = ["[[ .nomad.datacenter ]]"]
   type        = "service"
   priority    = 10
 
@@ -14,34 +14,36 @@ job "traefik" {
     network {
       mode = "bridge"
       port "web" { static = 80 }
-      port "web-secure" { static = 443 }
+      port "websecure" { static = 443 }
       port "traefik" { static = 8081 }
       port "metrics" { static = 8082 }
     }
 
     service {
       name = "traefik"
-      port = "web-secure"
+      port = "websecure"
 
       connect {
         native = true
       }
 
-      tags =  [
-              ]
+      tags = [
+      ]
 
       check {
-        name     = "alive"
-        type     = "tcp"
+        name     = "traefik"
+        type     = "http"
         port     = "traefik"
-        interval = "10s"
+        path     = "/ping"
+        interval = "30s"
         timeout  = "2s"
 
         check_restart {
           limit = 2
-          grace = "10s"
+          grace = "30s"
         }
       }
+
     }
 
     ephemeral_disk {
@@ -62,9 +64,8 @@ job "traefik" {
       config {
         image   = "${IMAGE}:${RELEASE}"
         command = "traefik"
-        ports = [
-          "web",
-          "web-secure",
+        ports = ["web",
+          "websecure",
           "traefik",
           "metrics",
         ]
@@ -76,15 +77,15 @@ job "traefik" {
           "--accesslog",
           "--accesslog.filepath=logs/access.log",
           "--entrypoints.web.address=:80",
-          "--entrypoints.web.http.redirections.entrypoint.to=web-secure",
+          "--entrypoints.web.http.redirections.entrypoint.to=websecure",
           "--entrypoints.web.http.redirections.entrypoint.scheme=https",
-          "--entrypoints.web-secure.address=:443",
-          "--entrypoints.web-secure.http.tls.certresolver=letsencrypt",
-          "--entrypoints.web-secure.http.tls.domains[0].main=${ACME_DOMAIN}",
-          "--entrypoints.web-secure.http.tls.domains[0].sans=*.${ACME_DOMAIN}",
+          "--entrypoints.websecure.address=:443",
+          "--entrypoints.websecure.http.tls.certresolver=letsencrypt",
+          "--entrypoints.websecure.http.tls.domains[0].main=${ACME_DOMAIN}",
+          "--entrypoints.websecure.http.tls.domains[0].sans=*.${ACME_DOMAIN}",
           "--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL}",
           "--certificatesresolvers.letsencrypt.acme.storage=local/acme.json",
-#          "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory",
+          #          "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory",
           "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-v02.api.letsencrypt.org/directory",
           "--certificatesresolvers.letsencrypt.acme.dnschallenge=true",
           "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare",
@@ -96,14 +97,14 @@ job "traefik" {
           "--providers.consulcatalog.endpoint.address=192.168.0.2:8500",
           "--providers.consulcatalog.endpoint.scheme=http",
           "--entrypoints.traefik.address=:8081",
+          "--ping=true",
           "--metrics.prometheus=true",
           "--entrypoints.metrics.address=:8082",
           "--metrics.prometheus.entrypoint=metrics",
           "--metrics.prometheus.buckets=0.100000, 0.300000, 1.200000, 5.000000",
-          "--metrics.prometheus.addentrypointslabels=true",
-          "--metrics.prometheus.addrouterslabels=true",
-          "--metrics.prometheus.addserviceslabels=true",
-          "--pilot.token=${PILOT_TOKEN}",
+          "--metrics.prometheus.addentrypoints[[ .nomad.datacenter ]]els=true",
+          "--metrics.prometheus.addrouters[[ .nomad.datacenter ]]els=true",
+          "--metrics.prometheus.addservices[[ .nomad.datacenter ]]els=true",
         ]
 
       }
@@ -114,9 +115,7 @@ job "traefik" {
           IMAGE_DIGEST={{ keyOrDefault "traefik/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "traefik/config/release" "latest" }}
           ACME_EMAIL={{ key "traefik/config/acme_email" }}
-          ACME_HOST={{ key "traefik/config/acme_host" }}
           ACME_DOMAIN={{ key "traefik/config/acme_domain" }}
-          PILOT_TOKEN={{ key "traefik/config/pilot_token" }}
           CLOUDFLARE_EMAIL={{ key "traefik/config/acme_email" }}
           CLOUDFLARE_DNS_API_TOKEN={{ key "traefik/config/dns_api_token" }}
           EOH

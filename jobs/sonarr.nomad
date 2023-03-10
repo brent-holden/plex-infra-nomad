@@ -1,6 +1,11 @@
 job "sonarr" {
-  datacenters = ["lab"]
+  datacenters = ["[[ .nomad.datacenter ]]"]
   type        = "service"
+
+  constraint {
+    attribute = "${meta.download_node}"
+    value     = "true"
+  }
 
   group "sonarr" {
     count = 1
@@ -16,7 +21,7 @@ job "sonarr" {
       port = 8989
 
       meta {
-        metrics_port_envoy = NOMAD_HOST_PORT_metrics_envoy
+        metrics_port_envoy = "${NOMAD_HOST_PORT_metrics_envoy}"
       }
 
       connect {
@@ -39,9 +44,8 @@ job "sonarr" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.sonarr.rule=Host(`plex-request.domain.name`) && PathPrefix(`/sonarr`)",
-        "traefik.http.routers.sonarr.tls.certresolver=letsencrypt",
-        "traefik.http.routers.sonarr.entrypoints=web-secure",
+        "traefik.http.routers.sonarr.rule=Host(`[[ .app.sonarr.traefik.hostname ]].[[ .app.traefik.domain.tld ]]`) && PathPrefix(`[[ .app.sonarr.traefik.path ]]`)",
+        "traefik.http.routers.sonarr.entrypoints=[[ .app.sonarr.traefik.entrypoints  ]]",
       ]
 
       canary_tags = [
@@ -52,7 +56,7 @@ job "sonarr" {
         name     = "sonarr"
         type     = "http"
         port     = "sonarr"
-        path     = "/sonarr/login"
+        path     = "/sonarr/ping"
         interval = "30s"
         timeout  = "2s"
         expose   = true
@@ -109,8 +113,8 @@ job "sonarr" {
       }
 
       env {
-        PGID = "1100"
-        PUID = "1100"
+        PUID = "[[ .common.env.puid ]]"
+        PGID = "[[ .common.env.pgid ]]"
       }
 
       config {

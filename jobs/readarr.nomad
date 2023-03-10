@@ -1,6 +1,11 @@
 job "readarr" {
-  datacenters = ["lab"]
+  datacenters = ["[[ .nomad.datacenter ]]"]
   type        = "service"
+
+  constraint {
+    attribute = "${meta.download_node}"
+    value     = "true"
+  }
 
   group "readarr" {
     count = 1
@@ -16,7 +21,7 @@ job "readarr" {
       port = 8787
 
       meta {
-        metrics_port_envoy = NOMAD_HOST_PORT_metrics_envoy
+        metrics_port_envoy = "${NOMAD_HOST_PORT_metrics_envoy}"
       }
 
       connect {
@@ -39,9 +44,8 @@ job "readarr" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.readarr.rule=Host(`plex-request.domain.name`) && PathPrefix(`/readarr`)",
-        "traefik.http.routers.readarr.tls.certresolver=letsencrypt",
-        "traefik.http.routers.readarr.entrypoints=web-secure",
+        "traefik.http.routers.readarr.rule=Host(`[[ .app.readarr.traefik.hostname ]].[[ .app.traefik.domain.tld ]]`) && PathPrefix(`[[ .app.readarr.traefik.path ]]`)",
+        "traefik.http.routers.readarr.entrypoints=[[ .app.readarr.traefik.entrypoints  ]]",
       ]
 
       canary_tags = [
@@ -52,7 +56,7 @@ job "readarr" {
         name     = "readarr"
         type     = "http"
         port     = "readarr"
-        path     = "/readarr/login"
+        path     = "/readarr/ping"
         interval = "30s"
         timeout  = "2s"
         expose   = true
@@ -109,8 +113,8 @@ job "readarr" {
       }
 
       env {
-        PGID = "1100"
-        PUID = "1100"
+        PUID = "[[ .common.env.puid ]]"
+        PGID = "[[ .common.env.pgid ]]"
       }
 
       config {

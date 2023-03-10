@@ -1,7 +1,12 @@
 job "sabnzbd" {
-  datacenters = ["lab"]
+  datacenters = ["[[ .nomad.datacenter ]]"]
   type        = "service"
   priority    = 5
+
+  constraint {
+    attribute = "${meta.download_node}"
+    value     = "true"
+  }
 
   group "sabnzbd" {
     count = 1
@@ -17,7 +22,7 @@ job "sabnzbd" {
       port = 8080
 
       meta {
-        metrics_port_envoy = NOMAD_HOST_PORT_metrics_envoy
+        metrics_port_envoy = "${NOMAD_HOST_PORT_metrics_envoy}"
       }
 
       connect {
@@ -32,19 +37,24 @@ job "sabnzbd" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.sabnzbd.rule=Host(`plex-request.domain.name`) && PathPrefix(`/sabnzbd`)",
-        "traefik.http.routers.sabnzbd.tls.certresolver=letsencrypt",
-        "traefik.http.routers.sabnzbd.entrypoints=web-secure",
+        "traefik.http.routers.sabnzbd.rule=Host(`[[ .app.sabnzbd.traefik.hostname ]].[[ .app.traefik.domain.tld ]]`) && PathPrefix(`[[ .app.sabnzbd.traefik.path ]]`)",
+        "traefik.http.routers.sabnzbd.entrypoints=[[ .app.sabnzbd.traefik.entrypoints  ]]",
       ]
 
       check {
-        name     = "sabnzbd"
-        type     = "http"
-        port     = "sabnzbd"
+        name = "sabnzbd"
+        type = "http"
+        port = "sabnzbd"
+        #        path     = "/sabnzbd/api"
         path     = "/sabnzbd/login/"
         interval = "30s"
         timeout  = "2s"
         expose   = true
+
+        header {
+          mode = ["version"]
+        }
+
 
         check_restart {
           limit = 2
@@ -83,8 +93,8 @@ job "sabnzbd" {
       }
 
       env {
-        PGID = "1100"
-        PUID = "1100"
+        PUID = "[[ .common.env.puid ]]"
+        PGID = "[[ .common.env.pgid ]]"
       }
 
       config {

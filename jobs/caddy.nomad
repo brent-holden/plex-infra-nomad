@@ -1,6 +1,11 @@
 job "caddy" {
-  datacenters = ["lab"]
+  datacenters = ["[[ .nomad.datacenter ]]"]
   type        = "service"
+
+  constraint {
+    attribute = "${meta.download_node}"
+    value     = "true"
+  }
 
   group "caddy" {
     count = 1
@@ -16,7 +21,7 @@ job "caddy" {
       port = 2020
 
       meta {
-        metrics_port_envoy = NOMAD_HOST_PORT_metrics_envoy
+        metrics_port_envoy = "${NOMAD_HOST_PORT_metrics_envoy}"
       }
 
       connect {
@@ -31,10 +36,26 @@ job "caddy" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.caddy.rule=Host(`plex-request.domain.name`) && PathPrefix(`/downloads`)",
-        "traefik.http.routers.caddy.tls.certresolver=letsencrypt",
-        "traefik.http.routers.caddy.entrypoints=web-secure",
+        "traefik.http.routers.caddy.rule=Host(`[[ .app.caddy.traefik.hostname ]].[[ .app.traefik.domain.tld ]]`) && PathPrefix(`[[ .app.caddy.traefik.path ]]`)",
+        "traefik.http.routers.caddy.entrypoints=[[ .app.caddy.traefik.entrypoints  ]]",
       ]
+
+      /*
+      check {
+        name     = "caddy"
+        type     = "http"
+        port     = "caddy"
+        path     = "/downloads"
+        interval = "30s"
+        timeout  = "2s"
+        expose   = true
+
+        check_restart {
+          limit = 2
+          grace = "30s"
+        }
+      }
+*/
     }
 
     volume "downloads" {

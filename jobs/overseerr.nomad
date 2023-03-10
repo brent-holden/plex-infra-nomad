@@ -1,6 +1,11 @@
 job "overseerr" {
-  datacenters = ["lab"]
+  datacenters = ["[[ .nomad.datacenter ]]"]
   type        = "service"
+
+  constraint {
+    attribute = "${meta.download_node}"
+    value     = "true"
+  }
 
   group "overseerr" {
     count = 1
@@ -16,7 +21,7 @@ job "overseerr" {
       port = 5055
 
       meta {
-        metrics_port_envoy = NOMAD_HOST_PORT_metrics_envoy
+        metrics_port_envoy = "${NOMAD_HOST_PORT_metrics_envoy}"
       }
 
       connect {
@@ -43,9 +48,8 @@ job "overseerr" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.overseerr.rule=Host(`plex-request.domain.name`) && PathPrefix(`/`)",
-        "traefik.http.routers.overseerr.tls.certresolver=letsencrypt",
-        "traefik.http.routers.overseerr.entrypoints=web-secure",
+        "traefik.http.routers.overseerr.rule=Host(`[[ .app.overseerr.traefik.hostname ]].[[ .app.traefik.domain.tld ]]`) && PathPrefix(`[[ .app.overseerr.traefik.path ]]`)",
+        "traefik.http.routers.overseerr.entrypoints=[[ .app.overseerr.traefik.entrypoints  ]]",
       ]
 
       canary_tags = [
@@ -56,10 +60,13 @@ job "overseerr" {
         name     = "overseerr"
         type     = "http"
         port     = "overseerr"
-        path     = "/login"
+        path     = "/api/v1/status"
         interval = "30s"
         timeout  = "2s"
         expose   = true
+        header {
+          Accept = ["application/json"]
+        }
 
         check_restart {
           limit = 2
@@ -90,8 +97,8 @@ job "overseerr" {
       driver = "docker"
 
       env {
-        PGID = "1100"
-        PUID = "1100"
+        PGID = "[[ .common.env.puid ]]"
+        PUID = "[[ .common.env.pgid ]]"
         TZ   = "America/New_York"
       }
 

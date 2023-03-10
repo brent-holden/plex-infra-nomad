@@ -1,6 +1,11 @@
 job "tautulli" {
-  datacenters = ["lab"]
+  datacenters = ["[[ .nomad.datacenter ]]"]
   type        = "service"
+
+  constraint {
+    attribute = "${meta.plex_node}"
+    value     = "true"
+  }
 
   group "tautulli" {
     count = 1
@@ -16,7 +21,7 @@ job "tautulli" {
       port = 8181
 
       meta {
-        metrics_port_envoy = NOMAD_HOST_PORT_metrics_envoy
+        metrics_port_envoy = "${NOMAD_HOST_PORT_metrics_envoy}"
       }
 
       connect {
@@ -31,9 +36,8 @@ job "tautulli" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.tautulli.rule=Host(`plex-request.domain.name`) && PathPrefix(`/tautulli`)",
-        "traefik.http.routers.tautulli.tls.certresolver=letsencrypt",
-        "traefik.http.routers.tautulli.entrypoints=web-secure",
+        "traefik.http.routers.tautulli.rule=Host(`[[ .app.tautulli.traefik.hostname ]].[[ .app.traefik.domain.tld ]]`) && PathPrefix(`[[ .app.tautulli.traefik.path ]]`)",
+        "traefik.http.routers.tautulli.entrypoints=[[ .app.tautulli.traefik.entrypoints  ]]",
       ]
 
       canary_tags = [
@@ -44,7 +48,7 @@ job "tautulli" {
         name     = "tautulli"
         type     = "http"
         port     = "tautulli"
-        path     = "/tautulli/auth/login"
+        path     = "/tautulli/status"
         interval = "60s"
         timeout  = "2s"
         expose   = true
@@ -81,8 +85,8 @@ job "tautulli" {
       }
 
       env {
-        PGID = "1100"
-        PUID = "1100"
+        PUID = "[[ .common.env.puid ]]"
+        PGID = "[[ .common.env.pgid ]]"
         TZ   = "America/New_York"
       }
 

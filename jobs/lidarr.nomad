@@ -1,6 +1,11 @@
 job "lidarr" {
-  datacenters = ["lab"]
+  datacenters = ["[[ .nomad.datacenter ]]"]
   type        = "service"
+
+  constraint {
+    attribute = "${meta.download_node}"
+    value     = "true"
+  }
 
   group "lidarr" {
     count = 1
@@ -16,7 +21,7 @@ job "lidarr" {
       port = 8686
 
       meta {
-        metrics_port_envoy = NOMAD_HOST_PORT_metrics_envoy
+        metrics_port_envoy = "${NOMAD_HOST_PORT_metrics_envoy}"
       }
 
       connect {
@@ -39,9 +44,8 @@ job "lidarr" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.lidarr.rule=Host(`plex-request.domain.name`) && PathPrefix(`/lidarr`)",
-        "traefik.http.routers.lidarr.tls.certresolver=letsencrypt",
-        "traefik.http.routers.lidarr.entrypoints=web-secure",
+        "traefik.http.routers.lidarr.rule=Host(`[[ .app.lidarr.traefik.hostname ]].[[ .app.traefik.domain.tld ]]`) && PathPrefix(`[[ .app.lidarr.traefik.path ]]`)",
+        "traefik.http.routers.lidarr.entrypoints=[[ .app.lidarr.traefik.entrypoints  ]]",
       ]
 
       canary_tags = [
@@ -52,7 +56,7 @@ job "lidarr" {
         name     = "lidarr"
         type     = "http"
         port     = "lidarr"
-        path     = "/lidarr/login"
+        path     = "/lidarr/ping"
         interval = "30s"
         timeout  = "2s"
         expose   = true
@@ -94,8 +98,8 @@ job "lidarr" {
       driver = "docker"
 
       env {
-        PGID = "1100"
-        PUID = "1100"
+        PUID = "[[ .common.env.puid ]]"
+        PGID = "[[ .common.env.pgid ]]"
       }
 
       volume_mount {

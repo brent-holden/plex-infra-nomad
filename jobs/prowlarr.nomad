@@ -1,7 +1,12 @@
 job "prowlarr" {
-  datacenters = ["lab"]
+  datacenters = ["[[ .nomad.datacenter ]]"]
   type        = "service"
   priority    = 5
+
+  constraint {
+    attribute = "${meta.download_node}"
+    value     = "true"
+  }
 
   group "prowlarr" {
     count = 1
@@ -17,7 +22,7 @@ job "prowlarr" {
       port = 9696
 
       meta {
-        metrics_port_envoy = NOMAD_HOST_PORT_metrics_envoy
+        metrics_port_envoy = "${NOMAD_HOST_PORT_metrics_envoy}"
       }
 
       connect {
@@ -52,9 +57,8 @@ job "prowlarr" {
 
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.prowlarr.rule=Host(`plex-request.domain.name`) && PathPrefix(`/prowlarr`)",
-        "traefik.http.routers.prowlarr.tls.certresolver=letsencrypt",
-        "traefik.http.routers.prowlarr.entrypoints=web-secure",
+        "traefik.http.routers.prowlarr.rule=Host(`[[ .app.prowlarr.traefik.hostname ]].[[ .app.traefik.domain.tld ]]`) && PathPrefix(`[[ .app.prowlarr.traefik.path ]]`)",
+        "traefik.http.routers.prowlarr.entrypoints=[[ .app.prowlarr.traefik.entrypoints  ]]",
       ]
 
       canary_tags = [
@@ -65,7 +69,7 @@ job "prowlarr" {
         name     = "prowlarr"
         type     = "http"
         port     = "prowlarr"
-        path     = "/prowlarr/login"
+        path     = "/prowlarr/ping"
         interval = "30s"
         timeout  = "2s"
         expose   = true
@@ -102,8 +106,8 @@ job "prowlarr" {
       }
 
       env {
-        PGID = "1100"
-        PUID = "1100"
+        PUID = "[[ .common.env.puid ]]"
+        PGID = "[[ .common.env.pgid ]]"
       }
 
       config {

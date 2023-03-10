@@ -1,7 +1,12 @@
 job "plex" {
-  datacenters = ["lab"]
+  datacenters = ["[[ .nomad.datacenter ]]"]
   type        = "service"
   priority    = 20
+
+  constraint {
+    attribute = "${meta.plex_node}"
+    value     = "true"
+  }
 
   group "plex" {
     count = 1
@@ -23,15 +28,19 @@ job "plex" {
       check {
         type     = "http"
         port     = "plex"
-        path     = "/web/index.html"
+        path     = "/identity"
         interval = "5m"
         timeout  = "5s"
+        header {
+          Accept = ["application/json"]
+        }
 
         check_restart {
           limit = 2
           grace = "60s"
         }
       }
+
     }
 
     volume "config" {
@@ -60,11 +69,11 @@ job "plex" {
       driver = "docker"
 
       env {
-        PLEX_GID   = "1100"
-        PLEX_UID   = "1100"
+        PLEX_UID   = "[[ .common.env.puid ]]"
+        PLEX_GID   = "[[ .common.env.pgid ]]"
         VERSION    = "docker"
         TZ         = "America/New_York"
-        PLEX_CLAIM = PLEX_CLAIM
+        PLEX_CLAIM = "${PLEX_CLAIM}"
       }
 
       volume_mount {
@@ -86,6 +95,14 @@ job "plex" {
       config {
         image        = "${IMAGE}:${RELEASE}"
         network_mode = "host"
+        privileged   = true
+        devices = [
+          {
+            host_path      = "/dev/dri"
+            container_path = "/dev/dri"
+          }
+        ]
+
       }
 
       template {
