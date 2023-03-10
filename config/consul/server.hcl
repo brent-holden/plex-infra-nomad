@@ -5,7 +5,7 @@ bind_addr = "{{GetPrivateIP}}"
 
 ui = true
 server = true
-bootstrap_expect=1
+bootstrap_expect = 1
 
 ports {
   grpc = 8502
@@ -13,5 +13,9 @@ ports {
 
 connect {
   enabled = true
+}
+
+telemetry {
+  prometheus_retention_time = "480h"
 }
 

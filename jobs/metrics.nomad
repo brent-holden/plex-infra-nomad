@@ -124,6 +124,17 @@ job "metrics" {
               params:
                 format: ['prometheus']
 
+            - job_name: consul
+              honor_timestamps: true
+              scrape_interval: 15s
+              scrape_timeout: 10s
+              metrics_path: '/v1/agent/metrics'
+              scheme: http
+              params: 
+                format: ['prometheus']  
+              static_configs:
+              - targets: ['consul.service.consul:8500']
+
             - job_name: 'consul_metrics'
               metrics_path: /metrics
               consul_sd_configs:
