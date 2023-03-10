@@ -1,0 +1,129 @@
+nomad:
+  datacenter: lab
+  region: home
+
+common:
+  env:
+    puid: 1100
+    pgid: 1100
+
+app:
+  caddy:
+    volumes:
+      config: /opt/caddy
+    traefik:
+      hostname: plex-request
+      path: /downloads
+      entrypoints: websecure
+
+  kavita:
+    volumes:
+      config: /opt/kavita
+    traefik:
+      hostname: kavita
+      path: /
+      entrypoints: websecure
+
+  lidarr:
+    volumes:
+      config: /opt/appdata/lidarr
+      downloads: /mnt/media/downloads/complete
+      tv: /mnt/media/tv-shows
+    traefik:
+      hostname: plex-request
+      path: /lidarr
+      entrypoints: websecure
+
+  grafana:
+    volumes:
+      config: /opt/appdata/grafana/config
+      data: /opt/appdata/grafana/data
+    traefik:
+      hostname: plex-request
+      path: /lidarr
+      entrypoints: websecure
+
+  overseerr:
+    traefik:
+      hostname: plex-request
+      path: /
+      entrypoints: websecure
+
+  plex:
+    constraints:
+      operator: =
+      node: nomad-3
+    volumes:
+      root: /mnt/media/
+      config: /opt/appdata/plex
+      transcode: /mnt/transcode
+
+  prowlarr:
+    volumes:
+      config: /opt/appdata/prowlarr
+      downloads: /mnt/rclone/media/downloads/complete
+      tv: /mnt/media/tv-shows
+    traefik:
+      hostname: plex-request
+      path: /prowlarr
+      entrypoints: websecure
+
+  radarr:
+    volumes:
+      config: /opt/appdata/radarr
+      downloads: /mnt/rclone/media/downloads/complete
+      tv: /mnt/rclone/media/tv-shows
+    traefik:
+      hostname: plex-request
+      path: /radarr
+      entrypoints: websecure
+
+  readarr:
+    volumes:
+      config: /opt/appdata/readarr
+      downloads: /mnt/rclone/downloads/complete
+      books: /mnt/rclone/media/Books
+    traefik:
+      hostname: plex-request
+      path: /readarr
+      entrypoints: websecure
+
+  sabnzbd:
+    volumes:
+      config: /opt/appdata/sabnzbd
+      downloads:
+        complete: /mnt/rclone/media/downloads/complete
+        incomplete: /mnt/rclone/media/downloads/incomplete
+    traefik:
+      hostname: plex-request
+      path: /sabnzbd
+      entrypoints: websecure
+
+  sonarr:
+    volumes:
+      config: /opt/appdata/sonarr
+      downloads: /mnt/media/downloads/complete
+      tv: /mnt/media/tv-shows
+    traefik:
+      hostname: plex-request
+      path: /sonarr
+      entrypoints: websecure
+
+  traefik:
+    volumes:
+      dynamic: /opt/traefik/dynamic
+      certificates: /mnt/traefik/certificates
+    consul:
+      address: 192.168.10.2
+      port: 8500
+    domain:
+      tld: eventide.network
+
+  tautulli:
+    volumes:
+      config: /opt/appdata/tautulli
+    traefik:
+      hostname: plex-request
+      path: /tautulli
+      entrypoints: websecure
+
