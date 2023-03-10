@@ -107,7 +107,6 @@ job "sabnzbd" {
           IMAGE={{ key "sabnzbd/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "sabnzbd/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "sabnzbd/config/release" "latest" }}
-          ACME_HOST={{ key "traefik/config/acme_host" }}
           EOH
         destination = "env_info"
         env         = true

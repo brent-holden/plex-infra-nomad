@@ -127,7 +127,6 @@ job "sonarr" {
           IMAGE={{ key "sonarr/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "sonarr/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "sonarr/config/release" "latest" }}
-          ACME_HOST={{ key "traefik/config/acme_host" }}
           EOH
         destination = "env_info"
         env         = true

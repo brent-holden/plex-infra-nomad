@@ -127,7 +127,6 @@ job "lidarr" {
           IMAGE={{ key "lidarr/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "lidarr/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "lidarr/config/release" "latest" }}
-          ACME_HOST={{ key "traefik/config/acme_host" }}
           EOH
         destination = "env_info"
         env         = true

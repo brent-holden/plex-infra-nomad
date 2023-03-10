@@ -101,7 +101,6 @@ job "tautulli" {
           IMAGE={{ key "tautulli/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "tautulli/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "tautulli/config/release" "latest" }}
-          ACME_HOST={{ key "traefik/config/acme_host" }}
           EOH
         destination = "env_info"
         env         = true

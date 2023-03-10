@@ -120,7 +120,6 @@ job "prowlarr" {
           IMAGE={{ key "prowlarr/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "prowlarr/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "prowlarr/config/release" "nightly" }}
-          ACME_HOST={{ key "traefik/config/acme_host" }}
           EOH
         destination = "env_info"
         env         = true
