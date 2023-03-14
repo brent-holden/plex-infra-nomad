@@ -99,7 +99,7 @@ job "traefik" {
           "--providers.consulcatalog.connectaware=true",
           "--providers.consulcatalog.connectbydefault=true",
           "--providers.consulcatalog.exposedbydefault=false",
-          "--providers.consulcatalog.endpoint.address=192.168.10.2:8500",
+          "--providers.consulcatalog.endpoint.address=consul.service.consul:8500",
           "--providers.consulcatalog.endpoint.scheme=http",
           "--entrypoints.traefik.address=:8081",
           "--ping=true",
