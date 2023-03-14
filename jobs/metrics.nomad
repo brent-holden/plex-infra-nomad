@@ -1,5 +1,5 @@
 job "metrics" {
-  datacenters = ["lab"]
+  datacenters = ["[[ .nomad.datacenter ]]"]
   type        = "service"
 
   constraint {
@@ -22,6 +22,25 @@ job "metrics" {
     service {
       name = "grafana"
       port = "3000"
+      tags = ["metrics"]
+
+      check {
+        name     = "grafana"
+        type     = "http"
+        port     = "grafana"
+        path     = "/api/health"
+        interval = "30s"
+        timeout  = "2s"
+        header {
+          Accept = ["application/json"]
+        }
+
+        check_restart {
+          limit = 2
+          grace = "30s"
+        }
+      }
+
     }
 
     volume "config" {
@@ -59,13 +78,14 @@ job "metrics" {
 
     service {
       name = "prometheus"
-      tags = ["urlprefix-/"]
       port = "prometheus_ui"
+      tags = ["metrics"]
 
       check {
-        name     = "prometheus_ui port alive"
+        name     = "prometheus"
         type     = "http"
         path     = "/-/healthy"
+        tls_skip_verify = true
         interval = "10s"
         timeout  = "2s"
       }
@@ -97,54 +117,9 @@ job "metrics" {
       }
 
       template {
-        change_mode = "noop"
+        change_mode = "restart"
+        data = "{{ key \"prometheus/config/prometheus.yml\" }}"
         destination = "local/prometheus.yml"
-
-        data = <<-EOH
-          ---
-          global:
-            scrape_interval:     5s
-            evaluation_interval: 5s
-
-          scrape_configs:
-            - job_name: 'traefik_metrics'
-              static_configs:
-              - targets: ['192.168.10.2:8082']
-
-            - job_name: 'nomad_metrics'
-              consul_sd_configs:
-              - server: 'consul.service.consul:8500'
-                services: ['nomad-client', 'nomad']
-              relabel_configs:
-              - source_labels: ['__meta_consul_tags']
-                regex: '(.*)http(.*)'
-                action: keep
-              scrape_interval: 5s
-              metrics_path: /v1/metrics
-              params:
-                format: ['prometheus']
-
-            - job_name: 'consul_metrics'
-              metrics_path: /metrics
-              consul_sd_configs:
-                - server: '192.168.10.2:8500'
-              relabel_configs:
-              - source_labels: [__meta_consul_service]
-                regex: (.+)-sidecar-proxy
-                action: drop
-              - source_labels: [__meta_consul_service]
-                regex: (.+)
-                target_label: service
-              - source_labels: [__meta_consul_service_metadata_metrics_port_envoy]
-                regex: (.+)
-                action: keep
-              - source_labels: [__address__,__meta_consul_service_metadata_metrics_port_envoy]
-                regex: (.+)(?::\d+);(\d+)
-                action: replace
-                replacement: $1:$2
-                target_label: __address__
-              scrape_interval: 5s
-          EOH
       }
     }
   }
