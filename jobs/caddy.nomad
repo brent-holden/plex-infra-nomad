@@ -13,12 +13,13 @@ job "caddy" {
     network {
       mode = "bridge"
       port "caddy" {}
+      port "caddy_admin" { static = 2019 }
       port "metrics_envoy" { to = 20200 }
     }
 
     service {
       name = "caddy"
-      port = 2020
+      port = 80
 
       meta {
         metrics_port_envoy = "${NOMAD_HOST_PORT_metrics_envoy}"
@@ -40,12 +41,11 @@ job "caddy" {
         "traefik.http.routers.caddy.entrypoints=[[ .app.caddy.traefik.entrypoints  ]]",
       ]
 
-      /*
       check {
         name     = "caddy"
         type     = "http"
         port     = "caddy"
-        path     = "/downloads"
+        path     = "/health"
         interval = "30s"
         timeout  = "2s"
         expose   = true
@@ -55,7 +55,6 @@ job "caddy" {
           grace = "30s"
         }
       }
-*/
     }
 
     volume "downloads" {
@@ -109,24 +108,34 @@ job "caddy" {
       }
 
       template {
+        destination = "/local/Caddyfile"
         data        = <<-EOH
           {
-            admin       off
+            admin       :2019
             auto_https  off
           }
 
-          http://:2020 {
-            handle_path   /downloads* {
+          :80 {
+            respond /health 200
+
+            redir /downloads /downloads/
+            handle_path /downloads/* {
               file_server browse
-              root  * /downloads
+              root * /downloads
+
               basicauth {
                 {{ range tree "caddy/config/basicauth_users/" -}}
-                  {{- .Key }} {{ .Value }}
+                {{- .Key }} {{ .Value }}
                 {{ end -}}
-                }
+              }
+            }
+
+            log {
+              output stdout
+            }
+
           }
           EOH
-        destination = "/local/Caddyfile"
         change_mode = "restart"
       }
 
