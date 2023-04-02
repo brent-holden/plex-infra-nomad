@@ -45,7 +45,8 @@ job "readarr" {
       tags = [
         "traefik.enable=true",
         "traefik.http.routers.readarr.rule=Host(`[[ .app.readarr.traefik.hostname ]].[[ .app.traefik.domain.tld ]]`) && PathPrefix(`[[ .app.readarr.traefik.path ]]`)",
-        "traefik.http.routers.readarr.entrypoints=[[ .app.readarr.traefik.entrypoints  ]]",
+        "traefik.http.routers.readarr.entrypoints=[[ .app.readarr.traefik.entrypoints ]]",
+        "traefik.http.routers.readarr.middlewares=[[ .app.authelia.traefik.middlewares ]]",
       ]
 
       canary_tags = [
@@ -68,9 +69,16 @@ job "readarr" {
       }
     }
 
+    #    volume "config" {
+    #      type            = "csi"
+    #      source          = "readarr-config"
+    #      attachment_mode = "file-system"
+    #      access_mode     = "multi-node-multi-writer"
+    #    }
+
     volume "config" {
       type   = "host"
-      source = "readarr-config"
+      source = "readarr-config-host"
     }
 
     volume "downloads" {

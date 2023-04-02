@@ -45,7 +45,8 @@ job "sonarr" {
       tags = [
         "traefik.enable=true",
         "traefik.http.routers.sonarr.rule=Host(`[[ .app.sonarr.traefik.hostname ]].[[ .app.traefik.domain.tld ]]`) && PathPrefix(`[[ .app.sonarr.traefik.path ]]`)",
-        "traefik.http.routers.sonarr.entrypoints=[[ .app.sonarr.traefik.entrypoints  ]]",
+        "traefik.http.routers.sonarr.entrypoints=[[ .app.sonarr.traefik.entrypoints ]]",
+        "traefik.http.routers.sonarr.middlewares=[[ .app.authelia.traefik.middlewares ]]",
       ]
 
       canary_tags = [
@@ -68,9 +69,16 @@ job "sonarr" {
       }
     }
 
+    #    volume "config" {
+    #      type            = "csi"
+    #      source          = "sonarr-config"
+    #      attachment_mode = "file-system"
+    #      access_mode     = "multi-node-multi-writer"
+    #    }
+
     volume "config" {
       type   = "host"
-      source = "sonarr-config"
+      source = "sonarr-config-host"
     }
 
     volume "downloads" {
@@ -101,6 +109,11 @@ job "sonarr" {
         volume      = "config"
         destination = "/config"
       }
+
+      #      volume_mount {
+      #        volume      = "juice-config"
+      #        destination = "/juice-config"
+      #      }
 
       volume_mount {
         volume      = "downloads"

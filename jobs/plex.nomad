@@ -29,8 +29,8 @@ job "plex" {
         type     = "http"
         port     = "plex"
         path     = "/identity"
-        interval = "5m"
-        timeout  = "5s"
+        interval = "1m"
+        timeout  = "2s"
         header {
           Accept = ["application/json"]
         }

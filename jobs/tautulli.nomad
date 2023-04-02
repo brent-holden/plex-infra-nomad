@@ -37,7 +37,8 @@ job "tautulli" {
       tags = [
         "traefik.enable=true",
         "traefik.http.routers.tautulli.rule=Host(`[[ .app.tautulli.traefik.hostname ]].[[ .app.traefik.domain.tld ]]`) && PathPrefix(`[[ .app.tautulli.traefik.path ]]`)",
-        "traefik.http.routers.tautulli.entrypoints=[[ .app.tautulli.traefik.entrypoints  ]]",
+        "traefik.http.routers.tautulli.entrypoints=[[ .app.tautulli.traefik.entrypoints ]]",
+        "traefik.http.routers.tautulli.middlewares=[[ .app.authelia.traefik.middlewares ]]",
       ]
 
       canary_tags = [
@@ -62,7 +63,7 @@ job "tautulli" {
 
     volume "config" {
       type   = "host"
-      source = "tautulli-config"
+      source = "tautulli-config-host"
     }
 
     update {

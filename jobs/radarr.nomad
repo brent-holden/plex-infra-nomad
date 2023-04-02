@@ -46,6 +46,7 @@ job "radarr" {
         "traefik.enable=true",
         "traefik.http.routers.radarr.rule=Host(`[[ .app.radarr.traefik.hostname ]].[[ .app.traefik.domain.tld ]]`) && PathPrefix(`[[ .app.radarr.traefik.path ]]`)",
         "traefik.http.routers.radarr.entrypoints=[[ .app.radarr.traefik.entrypoints  ]]",
+        "traefik.http.routers.radarr.middlewares=[[ .app.authelia.traefik.middlewares ]]",
       ]
 
       canary_tags = [
@@ -57,12 +58,12 @@ job "radarr" {
         type     = "http"
         port     = "radarr"
         path     = "/radarr/ping"
-        interval = "30s"
-        timeout  = "2s"
+        interval = "120s"
+        timeout  = "10s"
         expose   = true
 
         check_restart {
-          limit = 2
+          limit = 10
           grace = "30s"
         }
       }
@@ -70,7 +71,7 @@ job "radarr" {
 
     volume "config" {
       type   = "host"
-      source = "radarr-config"
+      source = "radarr-config-host"
     }
 
     volume "downloads" {

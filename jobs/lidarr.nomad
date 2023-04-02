@@ -31,6 +31,10 @@ job "lidarr" {
               envoy_prometheus_bind_addr = "0.0.0.0:20200"
             }
             upstreams {
+              destination_name = "authelia"
+              local_bind_port  = 9091
+            }
+            upstreams {
               destination_name = "sabnzbd"
               local_bind_port  = 8080
             }
@@ -45,7 +49,8 @@ job "lidarr" {
       tags = [
         "traefik.enable=true",
         "traefik.http.routers.lidarr.rule=Host(`[[ .app.lidarr.traefik.hostname ]].[[ .app.traefik.domain.tld ]]`) && PathPrefix(`[[ .app.lidarr.traefik.path ]]`)",
-        "traefik.http.routers.lidarr.entrypoints=[[ .app.lidarr.traefik.entrypoints  ]]",
+        "traefik.http.routers.lidarr.entrypoints=[[ .app.lidarr.traefik.entrypoints ]]",
+        "traefik.http.routers.lidarr.middlewares=[[ .app.authelia.traefik.middlewares ]]",
       ]
 
       canary_tags = [
@@ -70,7 +75,7 @@ job "lidarr" {
 
     volume "config" {
       type   = "host"
-      source = "lidarr-config"
+      source = "lidarr-config-host"
     }
 
     volume "downloads" {

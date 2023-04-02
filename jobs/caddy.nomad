@@ -38,7 +38,8 @@ job "caddy" {
       tags = [
         "traefik.enable=true",
         "traefik.http.routers.caddy.rule=Host(`[[ .app.caddy.traefik.hostname ]].[[ .app.traefik.domain.tld ]]`) && PathPrefix(`[[ .app.caddy.traefik.path ]]`)",
-        "traefik.http.routers.caddy.entrypoints=[[ .app.caddy.traefik.entrypoints  ]]",
+        "traefik.http.routers.caddy.entrypoints=[[ .app.caddy.traefik.entrypoints ]]",
+        "traefik.http.routers.caddy.middlewares=[[ .app.authelia.traefik.middlewares ]]",
       ]
 
       check {
@@ -122,12 +123,6 @@ job "caddy" {
             handle_path /downloads/* {
               file_server browse
               root * /downloads
-
-              basicauth {
-                {{ range tree "caddy/config/basicauth_users/" -}}
-                {{- .Key }} {{ .Value }}
-                {{ end -}}
-              }
             }
 
             log {

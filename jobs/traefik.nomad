@@ -19,9 +19,22 @@ job "traefik" {
       port "metrics" { static = 8082 }
     }
 
+    volume "certs" {
+      type      = "host"
+      read_only = false
+      source    = "traefik-certs"
+    }
+
+    update {
+      max_parallel = 0
+      health_check = "checks"
+      auto_revert  = true
+    }
+
     service {
       name = "traefik"
       port = "websecure"
+      task = "traefik"
 
       connect {
         native = true
@@ -43,19 +56,6 @@ job "traefik" {
           grace = "30s"
         }
       }
-
-    }
-
-    volume "certs" {
-      type      = "host"
-      read_only = false
-      source    = "traefik-certs"
-    }
-
-    update {
-      max_parallel = 0
-      health_check = "checks"
-      auto_revert  = true
     }
 
     task "traefik" {
@@ -90,7 +90,7 @@ job "traefik" {
           "--entrypoints.websecure.http.tls.domains[0].sans=*.[[ .app.traefik.domain.tld ]]",
           "--certificatesresolvers.letsencrypt.acme.email=${ACME_EMAIL}",
           "--certificatesresolvers.letsencrypt.acme.storage=/certs/acme.json",
-#          "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory",
+          #          "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory",
           "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-v02.api.letsencrypt.org/directory",
           "--certificatesresolvers.letsencrypt.acme.dnschallenge=true",
           "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare",

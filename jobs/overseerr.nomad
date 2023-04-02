@@ -61,25 +61,24 @@ job "overseerr" {
         type     = "http"
         port     = "overseerr"
         path     = "/api/v1/status"
-        interval = "30s"
-        timeout  = "2s"
+        interval = "60s"
+        timeout  = "5s"
         expose   = true
         header {
           Accept = ["application/json"]
         }
 
         check_restart {
-          limit = 2
-          grace = "30s"
+          limit = 10 
+          grace = "60s"
         }
       }
-
 
     }
 
     volume "config" {
       type   = "host"
-      source = "overseerr-config"
+      source = "overseerr-config-host"
     }
 
     update {

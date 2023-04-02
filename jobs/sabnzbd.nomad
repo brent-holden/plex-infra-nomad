@@ -38,23 +38,18 @@ job "sabnzbd" {
       tags = [
         "traefik.enable=true",
         "traefik.http.routers.sabnzbd.rule=Host(`[[ .app.sabnzbd.traefik.hostname ]].[[ .app.traefik.domain.tld ]]`) && PathPrefix(`[[ .app.sabnzbd.traefik.path ]]`)",
-        "traefik.http.routers.sabnzbd.entrypoints=[[ .app.sabnzbd.traefik.entrypoints  ]]",
+        "traefik.http.routers.sabnzbd.entrypoints=[[ .app.sabnzbd.traefik.entrypoints ]]",
+        "traefik.http.routers.sabnzbd.middlewares=[[ .app.authelia.traefik.middlewares ]]",
       ]
 
       check {
-        name = "sabnzbd"
-        type = "http"
-        port = "sabnzbd"
-        #        path     = "/sabnzbd/api"
-        path     = "/sabnzbd/login/"
+        name     = "sabnzbd"
+        type     = "http"
+        port     = "sabnzbd"
+        path     = "/sabnzbd/"
         interval = "30s"
         timeout  = "2s"
         expose   = true
-
-        header {
-          mode = ["version"]
-        }
-
 
         check_restart {
           limit = 2
@@ -65,7 +60,7 @@ job "sabnzbd" {
 
     volume "config" {
       type   = "host"
-      source = "sabnzbd-config"
+      source = "sabnzbd-config-host"
     }
 
     volume "downloads" {

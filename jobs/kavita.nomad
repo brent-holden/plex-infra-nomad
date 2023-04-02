@@ -37,7 +37,8 @@ job "kavita" {
       tags = [
         "traefik.enable=true",
         "traefik.http.routers.kavita.rule=Host(`[[ .app.kavita.traefik.hostname ]].[[ .app.traefik.domain.tld ]]`) && PathPrefix(`[[ .app.kavita.traefik.path ]]`)",
-        "traefik.http.routers.kavita.entrypoints=[[ .app.kavita.traefik.entrypoints  ]]",
+        "traefik.http.routers.kavita.entrypoints=[[ .app.kavita.traefik.entrypoints ]]",
+        "traefik.http.routers.kavita.middlewares=[[ .app.authelia.traefik.middlewares ]]",
       ]
 
       canary_tags = [
@@ -61,8 +62,9 @@ job "kavita" {
     }
 
     volume "config" {
-      type   = "host"
-      source = "kavita-config"
+      type      = "host"
+      source    = "kavita-config-host"
+      read_only = false
     }
 
     volume "books" {

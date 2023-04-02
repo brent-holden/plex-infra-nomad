@@ -82,12 +82,12 @@ job "metrics" {
       tags = ["metrics"]
 
       check {
-        name     = "prometheus"
-        type     = "http"
-        path     = "/-/healthy"
+        name            = "prometheus"
+        type            = "http"
+        path            = "/-/healthy"
         tls_skip_verify = true
-        interval = "10s"
-        timeout  = "2s"
+        interval        = "10s"
+        timeout         = "2s"
       }
     }
 
@@ -102,9 +102,9 @@ job "metrics" {
       driver = "docker"
 
       env {
-        GF_PATHS_DATA = "/var/lib/grafana"
+        GF_PATHS_DATA         = "/var/lib/grafana"
         GF_AUTH_BASIC_ENABLED = "false"
-        GF_INSTALL_PLUGINS = "grafana-piechart-panel"
+        GF_INSTALL_PLUGINS    = "grafana-piechart-panel"
       }
 
       config {
@@ -118,7 +118,7 @@ job "metrics" {
 
       template {
         change_mode = "restart"
-        data = "{{ key \"prometheus/config/prometheus.yml\" }}"
+        data        = "{{ key \"prometheus/config/prometheus.yml\" }}"
         destination = "local/prometheus.yml"
       }
     }

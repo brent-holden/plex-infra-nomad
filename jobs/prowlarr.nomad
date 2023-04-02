@@ -58,7 +58,8 @@ job "prowlarr" {
       tags = [
         "traefik.enable=true",
         "traefik.http.routers.prowlarr.rule=Host(`[[ .app.prowlarr.traefik.hostname ]].[[ .app.traefik.domain.tld ]]`) && PathPrefix(`[[ .app.prowlarr.traefik.path ]]`)",
-        "traefik.http.routers.prowlarr.entrypoints=[[ .app.prowlarr.traefik.entrypoints  ]]",
+        "traefik.http.routers.prowlarr.entrypoints=[[ .app.prowlarr.traefik.entrypoints ]]",
+        "traefik.http.routers.prowlarr.middlewares=[[ .app.authelia.traefik.middlewares ]]",
       ]
 
       canary_tags = [
@@ -83,7 +84,7 @@ job "prowlarr" {
 
     volume "config" {
       type   = "host"
-      source = "prowlarr-config"
+      source = "prowlarr-config-host"
     }
 
     update {
