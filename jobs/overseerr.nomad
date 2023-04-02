@@ -82,14 +82,9 @@ job "overseerr" {
     }
 
     update {
-      max_parallel      = 1
-      canary            = 1
-      health_check      = "checks"
-      auto_revert       = true
-      auto_promote      = true
-      min_healthy_time  = "10s"
-      healthy_deadline  = "5m"
-      progress_deadline = "10m"
+      max_parallel = 0
+      health_check = "checks"
+      auto_revert  = true
     }
 
     task "overseerr" {

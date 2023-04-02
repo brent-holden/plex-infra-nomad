@@ -68,6 +68,12 @@ job "authelia" {
       read_only = false
     }
 
+    update {
+      max_parallel = 0
+      health_check = "checks"
+      auto_revert  = true
+    }
+
     task "authelia" {
       driver = "docker"
 
