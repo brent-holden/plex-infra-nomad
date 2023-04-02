@@ -12,9 +12,10 @@ job "authelia" {
 
     network {
       mode = "bridge"
-      port "authelia" { static = 9092
-                        to = 9091
-                      }
+      port "authelia" {
+        static = 9092
+        to     = 9091
+      }
       port "metrics_envoy" { to = 20200 }
     }
 
