@@ -69,13 +69,6 @@ job "readarr" {
       }
     }
 
-    #    volume "config" {
-    #      type            = "csi"
-    #      source          = "readarr-config"
-    #      attachment_mode = "file-system"
-    #      access_mode     = "multi-node-multi-writer"
-    #    }
-
     volume "config" {
       type   = "host"
       source = "readarr-config-host"
