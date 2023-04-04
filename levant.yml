@@ -28,6 +28,11 @@ common:
     
 app:
   authelia:
+    container:
+      image: docker.io/authelia/authelia
+      release: latest
+      check_digest_url: https://registry.hub.docker.com/v2/repositories/authelia/authelia/tags/latest
+      auto_update: true
     volumes:
       config:
         name: authelia-config
@@ -46,6 +51,11 @@ app:
         authresponseheaders: Remote-User,Remote-Groups,Remote-Name,Remote-Email
 
   caddy:
+    container:
+      image: docker.io/caddy/caddy
+      release: latest
+      check_digest_url: https://registry.hub.docker.com/v2/repositories/caddy/caddy/tags/latest
+      auto_update: true
     volumes:
       config:
         name: caddy-config
@@ -56,6 +66,11 @@ app:
       entrypoints: websecure
 
   kavita:
+    container:
+      image: docker.io/kizaing/kavita
+      release: latest
+      check_digest_url: https://registry.hub.docker.com/v2/repositories/kizaing/kavita/tags/latest
+      auto_update: true
     volumes:
       config:
         name: kavita-config
@@ -66,6 +81,11 @@ app:
       entrypoints: websecure
 
   lidarr:
+    container:
+      image: docker.io/linuxserver/lidarr
+      release: develop
+      check_digest_url: https://registry.hub.docker.com/v2/repositories/linuxserver/lidarr/tags/develop
+      auto_update: true
     volumes:
       config:
         name: lidarr-config
@@ -76,6 +96,11 @@ app:
       entrypoints: websecure
 
   grafana:
+    container:
+      image: docker.io/grafana/grafana
+      release: latest
+      check_digest_url: https://registry.hub.docker.com/v2/repositories/grafana/grafana/tags/latest
+      auto_update: true
     volumes:
       config:
         name: grafana-config
@@ -89,12 +114,22 @@ app:
       entrypoints: websecure
 
   netbootxyz:
+    container:
+      image: docker.io/linuxserver/netbootxyz
+      release: latest
+      check_digest_url: https://registry.hub.docker.com/v2/repositories/linuxserver/netbootxyz/tags/latest
+      auto_update: true
     volumes:
       config:
         name: netbootxyz-config
         dir: /opt/services/netbootxyz
 
   overseerr:
+    container:
+      image: docker.io/linuxserver/overseerr
+      release: latest
+      check_digest_url: https://registry.hub.docker.com/v2/repositories/linuxserver/overseerr/tags/latest
+      auto_update: true
     volumes:
       config:
         name: overseerr-config
@@ -105,9 +140,11 @@ app:
       entrypoints: websecure
 
   plex:
-    constraints:
-      operator: =
-      node: nomad-3
+    container:
+      image: docker.io/plexinc/pms-docker
+      release: plexpass
+      check_digest_url: https://plex.tv/api/downloads/5.json?channel=plexpass
+      auto_update: true
     volumes:
       config:
         name: plex-config
@@ -117,6 +154,11 @@ app:
         dir: /mnt/transcode
 
   prowlarr:
+    container:
+      image: docker.io/linuxserver/prowlarr
+      release: latest
+      check_digest_url: https://registry.hub.docker.com/v2/repositories/linuxserver/prowlarr/tags/latest
+      auto_update: true
     volumes:
       config:
         name: prowlarr-config
@@ -127,6 +169,11 @@ app:
       entrypoints: websecure
 
   radarr:
+    container:
+      image: docker.io/linuxserver/radarr
+      release: latest
+      check_digest_url: https://registry.hub.docker.com/v2/repositories/linuxserver/radarr/tags/latest
+      auto_update: true
     volumes:
       config:
         name: radarr-config
@@ -137,6 +184,11 @@ app:
       entrypoints: websecure
 
   readarr:
+    container:
+      image: docker.io/linuxserver/readarr
+      release: nightly
+      check_digest_url: https://registry.hub.docker.com/v2/repositories/linuxserver/readarr/tags/nightly
+      auto_update: true
     volumes:
       config:
         name: readarr-config
@@ -147,11 +199,11 @@ app:
       entrypoints: websecure
 
   rclone_restic:
-    service_url: http://rclone-restic.service.consul
     container:
       image: docker.io/rclone/rclone
       release: latest
       check_digest_url: https://registry.hub.docker.com/v2/repositories/rclone/rclone/tags/latest
+      auto_update: true
     volumes:
       cache:
         name: rclone-cache-backup
@@ -159,8 +211,14 @@ app:
     ports:
       rclone: 7070
       web: 7071
+    service_url: http://rclone-restic.service.consul
 
   sabnzbd:
+    container:
+      image: docker.io/linuxserver/sabnzbd
+      release: latest
+      check_digest_url: https://registry.hub.docker.com/v2/repositories/linuxserver/sabnzbd/tags/latest
+      auto_update: true
     volumes:
       config:
         name: sabnzbd-config
@@ -171,6 +229,11 @@ app:
       entrypoints: websecure
 
   sonarr:
+    container:
+      image: docker.io/linuxserver/sonarr
+      release: latest
+      check_digest_url: https://registry.hub.docker.com/v2/repositories/linuxserver/sonarr/tags/latest
+      auto_update: true
     volumes:
       config:
         name: sonarr-config
@@ -181,6 +244,11 @@ app:
       entrypoints: websecure
 
   traefik:
+    container:
+      image: docker.io/library/traefik
+      release: latest
+      check_digest_url: https://registry.hub.docker.com/v2/repositories/library/traefik/tags/latest
+      auto_update: true
     volumes:
       certs:
         name: traefik-certs
@@ -192,6 +260,11 @@ app:
       tld: eventide.network
 
   tautulli:
+    container:
+      image: docker.io/linuxserver/tautulli
+      release: latest
+      check_digest_url: https://registry.hub.docker.com/v2/repositories/linuxserver/tautulli/tags/latest
+      auto_update: true
     volumes:
       config:
         name: tautulli-config
