@@ -20,14 +20,19 @@ services = [
             "tautulli",
             "traefik",
             ]
+
 try:
     with open('levant.yml', 'r') as file:
         levant = yaml.safe_load(file)
 except FileNotFoundError:
-    print("Couldn't find levant.yml. Exiting.")
+    print("Couldn't find levant.yml. Exiting.", file=sys.stderr)
     sys.exit(1)
 
-consul_handler = consul.Consul()
+try:
+    consul_handler = consul.Consul()
+except:
+    print("Couldn't open connection to Consul. Exiting", file=sys.stderr)
+    sys.exit(1)
 
 for service in services:
     index, values = consul_handler.kv.get("%s/config/auto_update" % service)
