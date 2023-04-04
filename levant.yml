@@ -6,6 +6,7 @@ common:
   env:
     puid: 1100
     pgid: 1100
+    consul_http_addr: consul.service.consul:8500
   volumes:
     base:
       name: media-base
