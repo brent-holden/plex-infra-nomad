@@ -6,11 +6,32 @@ common:
   env:
     puid: 1100
     pgid: 1100
-
+  volumes:
+    base:
+      name: media-base
+      dir: /mnt/rclone/drive/media
+    books:
+      name: media-books
+      dir: /mnt/rclone/drive/media/Books
+    movies:
+      name: media-movies
+      dir: /mnt/rclone/drive/media/Movies
+    music:
+      name: media-tv
+      dir: /mnt/rclone/drive/media/Music
+    tv:
+      name: media-tv
+      dir: /mnt/rclone/drive/media/TV
+    downloads:
+      name: downloads
+      dir: /mnt/downloads/complete
+    
 app:
   authelia:
     volumes:
-      config: /opt/services/authelia
+      config:
+        name: authelia-config
+        dir: /opt/services/authelia
     traefik:
       hostname: auth
       path: /
@@ -26,7 +47,9 @@ app:
 
   caddy:
     volumes:
-      config: /opt/caddy
+      config:
+        name: caddy-config
+        dir: /opt/services/caddy
     traefik:
       hostname: plex-request
       path: /downloads
@@ -34,7 +57,9 @@ app:
 
   kavita:
     volumes:
-      config: /opt/kavita
+      config:
+        name: kavita-config
+        dir: /opt/services/kavita
     traefik:
       hostname: kavita
       path: /
@@ -42,9 +67,9 @@ app:
 
   lidarr:
     volumes:
-      config: /opt/services/lidarr
-      downloads: /mnt/media/downloads/complete
-      tv: /mnt/media/tv-shows
+      config:
+        name: lidarr-config
+        dir: /opt/services/lidarr
     traefik:
       hostname: plex-request
       path: /lidarr
@@ -52,14 +77,28 @@ app:
 
   grafana:
     volumes:
-      config: /opt/services/grafana/config
-      data: /opt/services/grafana/data
+      config:
+        name: grafana-config
+        dir: /opt/services/grafana/config
+      data:
+        name: grafana-data
+        dir: /opt/services/grafana/data
     traefik:
       hostname: plex-request
       path: /lidarr
       entrypoints: websecure
 
+  netbootxyz:
+    volumes:
+      config:
+        name: netbootxyz-config
+        dir: /opt/services/netbootxyz
+
   overseerr:
+    volumes:
+      config:
+        name: overseerr-config
+        dir: /opt/services/overseerr
     traefik:
       hostname: plex-request
       path: /
@@ -70,15 +109,18 @@ app:
       operator: =
       node: nomad-3
     volumes:
-      root: /mnt/media/
-      config: /opt/services/plex
-      transcode: /mnt/transcode
+      config:
+        name: plex-config
+        dir: /opt/services/plex
+      transcode:
+        name: plex-transcode
+        dir: /mnt/transcode
 
   prowlarr:
     volumes:
-      config: /opt/services/prowlarr
-      downloads: /mnt/rclone/media/downloads/complete
-      tv: /mnt/media/tv-shows
+      config:
+        name: prowlarr-config
+        dir: /opt/services/prowlarr
     traefik:
       hostname: plex-request
       path: /prowlarr
@@ -86,9 +128,9 @@ app:
 
   radarr:
     volumes:
-      config: /opt/services/radarr
-      downloads: /mnt/rclone/media/downloads/complete
-      tv: /mnt/rclone/media/tv-shows
+      config:
+        name: radarr-config
+        dir: /opt/services/radarr
     traefik:
       hostname: plex-request
       path: /radarr
@@ -96,20 +138,33 @@ app:
 
   readarr:
     volumes:
-      config: /opt/services/readarr
-      downloads: /mnt/rclone/downloads/complete
-      books: /mnt/rclone/media/Books
+      config:
+        name: readarr-config
+        dir: /opt/services/readarr
     traefik:
       hostname: plex-request
       path: /readarr
       entrypoints: websecure
 
+  rclone_restic:
+    service_url: http://rclone-restic.service.consul
+    container:
+      image: docker.io/rclone/rclone
+      release: latest
+      check_digest_url: https://registry.hub.docker.com/v2/repositories/rclone/rclone/tags/latest
+    volumes:
+      cache:
+        name: rclone-cache-backup
+        dir: /mnt/rclone/cache/backup
+    ports:
+      rclone: 7070
+      web: 7071
+
   sabnzbd:
     volumes:
-      config: /opt/services/sabnzbd
-      downloads:
-        complete: /mnt/rclone/media/downloads/complete
-        incomplete: /mnt/rclone/media/downloads/incomplete
+      config:
+        name: sabnzbd-config
+        dir: /opt/services/sabnzbd
     traefik:
       hostname: plex-request
       path: /sabnzbd
@@ -117,9 +172,9 @@ app:
 
   sonarr:
     volumes:
-      config: /opt/services/sonarr
-      downloads: /mnt/media/downloads/complete
-      tv: /mnt/media/tv-shows
+      config:
+        name: sonarr-config
+        dir: /opt/services/sonarr
     traefik:
       hostname: plex-request
       path: /sonarr
@@ -127,8 +182,9 @@ app:
 
   traefik:
     volumes:
-      dynamic: /opt/traefik/dynamic
-      certificates: /mnt/traefik/certificates
+      certs:
+        name: traefik-certs
+        dir: /opt/services/traefik
     consul:
       address: 192.168.10.2
       port: 8500
@@ -137,7 +193,9 @@ app:
 
   tautulli:
     volumes:
-      config: /opt/services/tautulli
+      config:
+        name: tautulli-config
+        dir: /opt/services/tautulli
     traefik:
       hostname: plex-request
       path: /tautulli
