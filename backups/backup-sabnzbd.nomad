@@ -3,8 +3,8 @@ job "backup-sabnzbd" {
   type        = "batch"
 
   periodic {
-    cron             = "5-40 3 * * *"
-    time_zone = "America/New_York"
+    cron             = "@daily"
+    time_zone        = "America/New_York"
     prohibit_overlap = true
   }
 

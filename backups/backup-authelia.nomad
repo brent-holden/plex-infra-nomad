@@ -1,4 +1,4 @@
-job "backup-tautulli" {
+job "backup-authelia" {
   datacenters = ["[[ .nomad.datacenter ]]"]
   type        = "batch"
 
@@ -8,12 +8,12 @@ job "backup-tautulli" {
     prohibit_overlap = true
   }
 
-  group "backup-tautulli" {
+  group "backup-authelia" {
     count = 1
 
     volume "config" {
       type      = "host"
-      source    = "[[ .app.tautulli.volumes.config.name ]]"
+      source    = "[[ .app.authelia.volumes.config.name ]]"
       read_only = true
     }
 
@@ -46,7 +46,7 @@ job "backup-tautulli" {
         image = "${IMAGE}:${RELEASE}"
 
         args = [
-          "--repo", "rest:[[ .app.rclone_restic.service_url ]]:[[ .app.rclone_restic.ports.rclone ]]/tautulli",
+          "--repo", "rest:[[ .app.rclone_restic.service_url ]]:[[ .app.rclone_restic.ports.rclone ]]/authelia",
           "unlock",
         ]
       }
@@ -86,7 +86,7 @@ job "backup-tautulli" {
         image = "${IMAGE}:${RELEASE}"
 
         args = [
-          "--repo", "rest:[[ .app.rclone_restic.service_url ]]:[[ .app.rclone_restic.ports.rclone ]]/tautulli",
+          "--repo", "rest:[[ .app.rclone_restic.service_url ]]:[[ .app.rclone_restic.ports.rclone ]]/authelia",
           "backup",
           "/config",
         ]
@@ -127,7 +127,7 @@ job "backup-tautulli" {
         image = "${IMAGE}:${RELEASE}"
 
         args = [
-          "--repo", "rest:[[ .app.rclone_restic.service_url ]]:[[ .app.rclone_restic.ports.rclone ]]/tautulli",
+          "--repo", "rest:[[ .app.rclone_restic.service_url ]]:[[ .app.rclone_restic.ports.rclone ]]/authelia",
           "forget",
           "--keep-last", "30",
           "--keep-monthly", "12",
