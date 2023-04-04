@@ -60,7 +60,7 @@ job "sabnzbd" {
 
     volume "config" {
       type   = "host"
-      source = "sabnzbd-config-host"
+      source = "sabnzbd-config"
     }
 
     volume "downloads" {

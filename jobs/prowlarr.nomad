@@ -84,7 +84,7 @@ job "prowlarr" {
 
     volume "config" {
       type   = "host"
-      source = "prowlarr-config-host"
+      source = "prowlarr-config"
     }
 
     update {

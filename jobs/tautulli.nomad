@@ -63,7 +63,7 @@ job "tautulli" {
 
     volume "config" {
       type   = "host"
-      source = "tautulli-config-host"
+      source = "tautulli-config"
     }
 
     update {

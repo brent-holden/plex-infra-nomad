@@ -53,10 +53,6 @@ job "lidarr" {
         "traefik.http.routers.lidarr.middlewares=[[ .app.authelia.traefik.middlewares ]]",
       ]
 
-      canary_tags = [
-        "traefik.enable=false",
-      ]
-
       check {
         name     = "lidarr"
         type     = "http"
@@ -75,7 +71,7 @@ job "lidarr" {
 
     volume "config" {
       type   = "host"
-      source = "lidarr-config-host"
+      source = "lidarr-config"
     }
 
     volume "downloads" {

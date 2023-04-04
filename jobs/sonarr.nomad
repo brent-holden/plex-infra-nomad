@@ -71,7 +71,7 @@ job "sonarr" {
 
     volume "config" {
       type   = "host"
-      source = "sonarr-config-host"
+      source = "sonarr-config"
     }
 
     volume "downloads" {

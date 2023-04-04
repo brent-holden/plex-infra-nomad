@@ -78,7 +78,7 @@ job "overseerr" {
 
     volume "config" {
       type   = "host"
-      source = "overseerr-config-host"
+      source = "overseerr-config"
     }
 
     update {

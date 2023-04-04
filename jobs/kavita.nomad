@@ -63,7 +63,7 @@ job "kavita" {
 
     volume "config" {
       type      = "host"
-      source    = "kavita-config-host"
+      source    = "kavita-config"
       read_only = false
     }
 

@@ -71,7 +71,7 @@ job "readarr" {
 
     volume "config" {
       type   = "host"
-      source = "readarr-config-host"
+      source = "readarr-config"
     }
 
     volume "downloads" {

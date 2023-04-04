@@ -71,7 +71,7 @@ job "radarr" {
 
     volume "config" {
       type   = "host"
-      source = "radarr-config-host"
+      source = "radarr-config"
     }
 
     volume "downloads" {
