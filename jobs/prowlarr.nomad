@@ -115,7 +115,7 @@ job "prowlarr" {
         data        = <<-EOH
           IMAGE={{ key "prowlarr/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "prowlarr/config/image_digest" "1" }}
-          RELEASE={{ keyOrDefault "prowlarr/config/release" "nightly" }}
+          RELEASE={{ keyOrDefault "prowlarr/config/release" "latest" }}
           EOH
         destination = "env_info"
         env         = true
