@@ -1,4 +1,4 @@
-job "rclone-restic" {
+job "rclone_restic" {
   datacenters = ["[[ .nomad.datacenter ]]"]
   type        = "service"
 
@@ -13,7 +13,7 @@ job "rclone-restic" {
     auto_revert  = true
   }
 
-  group "rclone-restic" {
+  group "rclone_restic" {
     count = 1
 
     network {
@@ -61,7 +61,7 @@ job "rclone-restic" {
       }
 
       config {
-        image = "docker.io/rclone/rclone:latest"
+        image = "${IMAGE}:${RELEASE}"
         ports = ["rclone", "rclone_web"]
 
         privileged = true
@@ -103,6 +103,7 @@ job "rclone-restic" {
       template {
         change_mode = "restart"
         data        = <<-EOH
+          IMAGE={{ key "rclone/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "rclone/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "rclone/config/release" "latest" }}
           EOH
