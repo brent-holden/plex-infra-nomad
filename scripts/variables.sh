@@ -26,12 +26,11 @@ PLEX_USER=plex
 PLEX_GROUP=plex
 PLEX_UID=1100
 PACKAGES="fuse rsync vim git podman"
-OPT_DIR=/opt
+OPT_DIR=/opt/services
 
 declare -A SERVICES=( [caddy]=docker.io/library/caddy:alpine,auto_update
                       [kavita]=docker.io/kizaing/kavita:latest:latest,auto_update
                       [lidarr]=lscr.io/linuxserver/lidarr:latest,auto_update
-                      [ombi]=lscr.io/linuxserver/ombi:latest,auto_update
                       [overseerr]=lscr.io/linuxserver/overseerr:latest,auto_update
                       [plex]=docker.io/plexinc/pms-docker:plexpass,auto_update
                       [prowlarr]=lscr.io/linuxserver/prowlarr:nightly,auto_update
@@ -44,7 +43,6 @@ declare -A SERVICES=( [caddy]=docker.io/library/caddy:alpine,auto_update
                       [netbootxyz]=docker.io/linuxserver/netbootxyz:latest,auto_update
                       [prometheus]=docker.io/prom/prometheus:latest,auto_update
                       [librespeed]=lscr.io/linuxserver/librespeed:latest,auto_update
-                      [tfc-agent]=docker.io/hashicorp/tfc-agent:latest,auto_update
                     )
 
 declare -A BACKUPS=(  [caddy]=${OPT_DIR}/caddy/
