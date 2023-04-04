@@ -3,6 +3,7 @@
 import consul
 import yaml
 import requests
+import sys
 
 services = [
             "authelia",
@@ -19,9 +20,12 @@ services = [
             "tautulli",
             "traefik",
             ]
-
-with open('levant.yml', 'r') as file:
-    levant = yaml.safe_load(file)
+try:
+    with open('levant.yml', 'r') as file:
+        levant = yaml.safe_load(file)
+except FileNotFoundError:
+    print("Couldn't find levant.yml. Exiting.")
+    sys.exit(1)
 
 consul_handler = consul.Consul()
 
