@@ -64,7 +64,7 @@ job "authelia" {
 
     volume "config" {
       type      = "host"
-      source    = "authelia-config-host"
+      source    = "authelia-config"
       read_only = false
     }
 
@@ -85,6 +85,15 @@ job "authelia" {
 
       env {
         TZ = "America/New_York"
+      }
+
+      config {
+        image = "${IMAGE}:${RELEASE}"
+        ports = ["authelia"]
+
+        volumes = [
+          "local/configuration.yml:/configuration.yml"
+        ]
       }
 
       template {
@@ -117,15 +126,6 @@ job "authelia" {
           EOH
         destination = "local/env_info"
         env         = true
-      }
-
-      config {
-        image = "authelia/authelia:latest"
-        ports = ["authelia"]
-
-        volumes = [
-          "local/configuration.yml:/configuration.yml"
-        ]
       }
     }
   }
