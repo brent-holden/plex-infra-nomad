@@ -1,2 +1,0 @@
-35 4 * * * root %%SCRIPT_REPO%%/prune_downloads.sh >/dev/null 2>&1
-
