@@ -1,0 +1,50 @@
+###############################################################
+#                   Authelia configuration                    #
+###############################################################
+
+default_redirection_url: https://auth.eventide.network
+
+server:
+  host: 0.0.0.0
+  port: 9091
+
+log:
+  level: debug
+# This secret can also be set using the env variables AUTHELIA_JWT_SECRET_FILE
+
+totp:
+  issuer: authelia.com
+
+authentication_backend:
+  file:
+    path: /config/users_database.yml
+    password:
+      algorithm: argon2id
+
+access_control:
+  default_policy: allow
+  rules:
+    # Rules applied to everyone
+    - domain: "*.eventide.network"
+      policy: one_factor
+      subject:
+       - "group:admins"
+
+session:
+  name: authelia_session
+  expiration: 36000  # 10 hours
+  inactivity: 3600  # 1 hour
+  domain: eventide.network  # Should match whatever your root protected domain is
+
+regulation:
+  max_retries: 3
+  find_time: 120
+  ban_time: 300
+
+storage:
+  local:
+    path: /config/db.sqlite3
+
+notifier:
+  filesystem:
+    filename: /config/notification.txt
