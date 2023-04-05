@@ -4,7 +4,9 @@ nomad:
 
 common:
   env:
+    user: lnxsvr-user
     puid: 1100
+    group: appdata
     pgid: 1100
     consul_http_addr: consul.service.consul:8500
   volumes:
