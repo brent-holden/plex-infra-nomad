@@ -25,6 +25,9 @@ common:
       dir: /mnt/rclone/drive/media/TV
     downloads:
       name: downloads
+      dir: /mnt/downloads
+    downloads-complete:
+      name: downloads
       dir: /mnt/downloads/complete
     
 app:
