@@ -26,6 +26,12 @@ ExecStart=/usr/bin/rclone mount \
   --vfs-cache-mode full \
   --vfs-cache-max-age 12h \
   --vfs-cache-max-size 256G \
+  --rc \
+  --rc-no-auth \
+  --rc-web-gui \
+  --rc-enable-metrics \
+  --rc-addr :5572 \
+  --rc-web-gui-no-open-browser \
   google-drive:/Media /mnt/rclone/media
 ExecStop=/bin/fusermount -uz /mnt/rclone/media
 Restart=on-abort
