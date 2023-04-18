@@ -121,8 +121,8 @@ job "sonarr" {
       template {
         data        = <<-EOH
           IMAGE={{ key "sonarr/config/image" }}
-          IMAGE_DIGEST={{ keyOrDefault "sonarr/config/image_digest" "1" }}
-          RELEASE={{ keyOrDefault "sonarr/config/release" "latest" }}
+          RELEASE={{ key "sonarr/config/release" }}
+          IMAGE_DIGEST={{ key "sonarr/config/image_digest" }}
           EOH
         destination = "env_info"
         env         = true
