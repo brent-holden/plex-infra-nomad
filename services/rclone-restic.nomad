@@ -29,7 +29,8 @@ job "rclone_restic" {
       check {
         type     = "http"
         port     = "rclone_web"
-        path     = "/"
+        path     = "/core/version"
+        method   = "POST"
         interval = "30s"
         timeout  = "2s"
 
