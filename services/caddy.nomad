@@ -13,7 +13,6 @@ job "caddy" {
     network {
       mode = "bridge"
       port "caddy" {}
-      port "caddy_admin" { static = 2019 }
       port "metrics_envoy" { to = 20200 }
     }
 
@@ -101,37 +100,18 @@ job "caddy" {
       template {
         data        = <<-EOH
           IMAGE={{ key "caddy/config/image" }}
+          RELEASE={{ key "caddy/config/release" }}
           IMAGE_DIGEST={{ keyOrDefault "caddy/config/image_digest" "1" }}
-          RELEASE={{ keyOrDefault "caddy/config/release" "latest" }}
           EOH
-        destination = "env_info"
+        destination = "local/env_info"
+        change_mode = "restart"
         env         = true
       }
 
       template {
-        destination = "/local/Caddyfile"
-        data        = <<-EOH
-          {
-            admin       :2019
-            auto_https  off
-          }
-
-          :80 {
-            respond /health 200
-
-            redir /downloads /downloads/
-            handle_path /downloads/* {
-              file_server browse
-              root * /downloads
-            }
-
-            log {
-              output stdout
-            }
-
-          }
-          EOH
         change_mode = "restart"
+        data        = "{{ key \"caddy/config/caddyfile\" }}"
+        destination = "/local/Caddyfile"
       }
 
       resources {
