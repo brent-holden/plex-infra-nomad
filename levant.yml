@@ -80,6 +80,7 @@ app:
 
   flame:
     container:
+      architecture: amd64
       image: docker.io/pawelmalak/flame
       release: latest
       check_digest_url: https://registry.hub.docker.com/v2/repositories/pawelmalak/flame/tags/latest
