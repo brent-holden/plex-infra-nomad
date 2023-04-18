@@ -10,6 +10,9 @@ common:
     pgid: 1100
     consul_http_addr: consul.service.consul:8500
   volumes:
+    cache:
+      name: media-cache
+      dir: /mnt/rclone/cache/media
     base:
       name: media-base
       dir: /mnt/rclone/drive/media
