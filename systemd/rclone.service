@@ -1,17 +1,16 @@
 [Unit]
 Description=rClone (Media Folder)
-AssertPathIsDirectory=/mnt/rclone/media
+AssertPathIsDirectory=/mnt/rclone/drive/media
 AssertPathIsDirectory=/mnt/rclone/cache/media
 Wants=network-online.target
-Requires=consul-template.service
-After=network-online.target consul-template.service
+After=network-online.target
 
 [Service]
 Type=notify
 User=root
 Group=root
-ExecStart=/usr/bin/rclone mount \
-  --config /opt/rclone/rclone.conf \
+ExecStart=/usr/local/bin/rclone mount \
+  --config /etc/rclone/rclone.conf \
   --buffer-size=128M \
   --allow-other \
   --allow-non-empty \
@@ -32,8 +31,8 @@ ExecStart=/usr/bin/rclone mount \
   --rc-enable-metrics \
   --rc-addr :5572 \
   --rc-web-gui-no-open-browser \
-  google-drive:/Media /mnt/rclone/media
-ExecStop=/bin/fusermount -uz /mnt/rclone/media
+  google-drive:/Media /mnt/rclone/drive/media
+ExecStop=/bin/fusermount -uz /mnt/rclone/drive/media
 Restart=on-abort
 
 [Install]
