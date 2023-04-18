@@ -1,0 +1,19 @@
+{
+  admin       :2019
+  auto_https  off
+}
+
+:80 {
+  respond /health 200
+
+  redir /downloads /downloads/
+  handle_path /downloads/* {
+    file_server browse
+    root * /downloads
+  }
+
+  log {
+    output stdout
+  }
+
+}
