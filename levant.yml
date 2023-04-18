@@ -74,7 +74,7 @@ app:
       hostname: plex-request
       path: /downloads
       entrypoints: websecure
-    tags: media
+    tags: download
 
   flame:
     container:
@@ -106,7 +106,7 @@ app:
       hostname: kavita
       path: /
       entrypoints: websecure
-    tags: media
+    tags: download
 
   lidarr:
     container:
@@ -122,7 +122,7 @@ app:
       hostname: plex-request
       path: /lidarr
       entrypoints: websecure
-    tags: media
+    tags: download
 
   grafana:
     container:
@@ -141,7 +141,7 @@ app:
       hostname: plex-request
       path: /lidarr
       entrypoints: websecure
-    tags: media
+    tags: network
 
   netbootxyz:
     container:
@@ -153,7 +153,7 @@ app:
       config:
         name: netbootxyz-config
         dir: /opt/services/netbootxyz
-    tags: media
+    tags: network
 
   overseerr:
     container:
@@ -169,7 +169,7 @@ app:
       hostname: plex-request
       path: /
       entrypoints: websecure
-    tags: media
+    tags: download
 
   plex:
     container:
@@ -201,7 +201,7 @@ app:
       hostname: plex-request
       path: /prowlarr
       entrypoints: websecure
-    tags: media
+    tags: download
 
   radarr:
     container:
@@ -217,7 +217,7 @@ app:
       hostname: plex-request
       path: /radarr
       entrypoints: websecure
-    tags: media
+    tags: download
 
   readarr:
     container:
@@ -233,7 +233,7 @@ app:
       hostname: plex-request
       path: /readarr
       entrypoints: websecure
-    tags: media
+    tags: download
 
   rclone_restic:
     container:
@@ -265,7 +265,7 @@ app:
       hostname: plex-request
       path: /sabnzbd
       entrypoints: websecure
-    tags: media
+    tags: download
 
   sonarr:
     container:
@@ -281,7 +281,7 @@ app:
       hostname: plex-request
       path: /sonarr
       entrypoints: websecure
-    tags: media
+    tags: download
 
   traefik:
     container:
@@ -299,7 +299,7 @@ app:
       port: 8500
     domain:
       tld: eventide.network
-    tags: media
+    tags: network
 
   tautulli:
     container:
