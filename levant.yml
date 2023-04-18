@@ -4,10 +4,15 @@ nomad:
 
 common:
   env:
+    user: lnxsvr-user
     puid: 1100
+    group: appdata
     pgid: 1100
     consul_http_addr: consul.service.consul:8500
   volumes:
+    cache:
+      name: media-cache
+      dir: /mnt/rclone/cache/media
     base:
       name: media-base
       dir: /mnt/rclone/drive/media
@@ -24,6 +29,9 @@ common:
       name: media-tv
       dir: /mnt/rclone/drive/media/TV
     downloads:
+      name: downloads
+      dir: /mnt/downloads
+    downloads-complete:
       name: downloads
       dir: /mnt/downloads/complete
     
@@ -51,6 +59,7 @@ app:
         address: http://authelia.service.consul:9092/api/verify?rd=https://auth.eventide.network/
         trustforwardheader: true
         authresponseheaders: Remote-User,Remote-Groups,Remote-Name,Remote-Email
+    tags: network
 
   caddy:
     container:
@@ -67,6 +76,23 @@ app:
       hostname: plex-request
       path: /downloads
       entrypoints: websecure
+    tags: download
+
+  flame:
+    container:
+      image: docker.io/pawelmalak/flame
+      release: latest
+      check_digest_url: https://registry.hub.docker.com/v2/repositories/pawelmalak/flame/tags/latest
+      auto_update: true
+    volumes:
+      config:
+        name: flame-config
+        dir: /opt/services/flame
+    traefik:
+      hostname: plex-request
+      path: /flame
+      entrypoints: websecure
+    tags: network
 
   kavita:
     container:
@@ -83,6 +109,7 @@ app:
       hostname: kavita
       path: /
       entrypoints: websecure
+    tags: download
 
   lidarr:
     container:
@@ -99,6 +126,7 @@ app:
       hostname: plex-request
       path: /lidarr
       entrypoints: websecure
+    tags: download
 
   grafana:
     container:
@@ -118,6 +146,7 @@ app:
       hostname: plex-request
       path: /lidarr
       entrypoints: websecure
+    tags: network
 
   netbootxyz:
     container:
@@ -130,6 +159,7 @@ app:
       config:
         name: netbootxyz-config
         dir: /opt/services/netbootxyz
+    tags: network
 
   overseerr:
     container:
@@ -146,6 +176,7 @@ app:
       hostname: plex-request
       path: /
       entrypoints: websecure
+    tags: download
 
   plex:
     container:
@@ -154,6 +185,7 @@ app:
       release: plexpass
       check_digest_url: https://plex.tv/api/downloads/5.json?channel=plexpass
       auto_update: true
+      claim_token: XXXXXXXX
     volumes:
       config:
         name: plex-config
@@ -161,6 +193,7 @@ app:
       transcode:
         name: plex-transcode
         dir: /mnt/transcode
+    tags: plex
 
   prowlarr:
     container:
@@ -177,6 +210,7 @@ app:
       hostname: plex-request
       path: /prowlarr
       entrypoints: websecure
+    tags: download
 
   radarr:
     container:
@@ -193,6 +227,7 @@ app:
       hostname: plex-request
       path: /radarr
       entrypoints: websecure
+    tags: download
 
   readarr:
     container:
@@ -209,6 +244,7 @@ app:
       hostname: plex-request
       path: /readarr
       entrypoints: websecure
+    tags: download
 
   rclone_restic:
     container:
@@ -225,6 +261,7 @@ app:
       rclone: 7070
       web: 7071
     service_url: http://rclone-restic.service.consul
+    tags: network
 
   sabnzbd:
     container:
@@ -241,6 +278,7 @@ app:
       hostname: plex-request
       path: /sabnzbd
       entrypoints: websecure
+    tags: download
 
   sonarr:
     container:
@@ -257,6 +295,7 @@ app:
       hostname: plex-request
       path: /sonarr
       entrypoints: websecure
+    tags: download
 
   traefik:
     container:
@@ -265,6 +304,7 @@ app:
       release: latest
       check_digest_url: https://registry.hub.docker.com/v2/repositories/library/traefik/tags/latest
       auto_update: true
+      acme_email: brent.holden@gmail.com
     volumes:
       certs:
         name: traefik-certs
@@ -274,6 +314,7 @@ app:
       port: 8500
     domain:
       tld: eventide.network
+    tags: network
 
   tautulli:
     container:
@@ -290,4 +331,5 @@ app:
       hostname: plex-request
       path: /tautulli
       entrypoints: websecure
+    tags: plex
 

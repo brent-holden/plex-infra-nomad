@@ -1,1 +1,1 @@
-@reboot root %%SCRIPT_REPO%%/clean_docker.sh >/dev/null 2>&1
+35 6 * * * root /usr/bin/docker image prune -f >/dev/null 2>&1

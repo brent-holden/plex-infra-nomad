@@ -1,0 +1,8 @@
+users:
+  brent:
+    disabled: false
+    displayname: "Brent Holden"
+    password: "$argon2id$v=generated_password_here"
+    email: me@email.com
+    groups:
+      - admins
