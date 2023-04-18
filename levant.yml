@@ -30,6 +30,7 @@ common:
 app:
   authelia:
     container:
+      architecture: amd64
       image: docker.io/authelia/authelia
       release: latest
       check_digest_url: https://registry.hub.docker.com/v2/repositories/authelia/authelia/tags/latest
@@ -53,6 +54,7 @@ app:
 
   caddy:
     container:
+      architecture: amd64
       image: docker.io/caddy/caddy
       release: latest
       check_digest_url: https://registry.hub.docker.com/v2/repositories/caddy/caddy/tags/latest
@@ -68,6 +70,7 @@ app:
 
   kavita:
     container:
+      architecture: amd64
       image: docker.io/kizaing/kavita
       release: latest
       check_digest_url: https://registry.hub.docker.com/v2/repositories/kizaing/kavita/tags/latest
@@ -83,6 +86,7 @@ app:
 
   lidarr:
     container:
+      architecture: amd64
       image: docker.io/linuxserver/lidarr
       release: develop
       check_digest_url: https://registry.hub.docker.com/v2/repositories/linuxserver/lidarr/tags/develop
@@ -98,6 +102,7 @@ app:
 
   grafana:
     container:
+      architecture: amd64
       image: docker.io/grafana/grafana
       release: latest
       check_digest_url: https://registry.hub.docker.com/v2/repositories/grafana/grafana/tags/latest
@@ -116,6 +121,7 @@ app:
 
   netbootxyz:
     container:
+      architecture: amd64
       image: docker.io/linuxserver/netbootxyz
       release: latest
       check_digest_url: https://registry.hub.docker.com/v2/repositories/linuxserver/netbootxyz/tags/latest
@@ -127,6 +133,7 @@ app:
 
   overseerr:
     container:
+      architecture: amd64
       image: docker.io/linuxserver/overseerr
       release: latest
       check_digest_url: https://registry.hub.docker.com/v2/repositories/linuxserver/overseerr/tags/latest
@@ -142,6 +149,7 @@ app:
 
   plex:
     container:
+      architecture: amd64
       image: docker.io/plexinc/pms-docker
       release: plexpass
       check_digest_url: https://plex.tv/api/downloads/5.json?channel=plexpass
@@ -156,6 +164,7 @@ app:
 
   prowlarr:
     container:
+      architecture: amd64
       image: docker.io/linuxserver/prowlarr
       release: latest
       check_digest_url: https://registry.hub.docker.com/v2/repositories/linuxserver/prowlarr/tags/latest
@@ -171,6 +180,7 @@ app:
 
   radarr:
     container:
+      architecture: amd64
       image: docker.io/linuxserver/radarr
       release: latest
       check_digest_url: https://registry.hub.docker.com/v2/repositories/linuxserver/radarr/tags/latest
@@ -186,6 +196,7 @@ app:
 
   readarr:
     container:
+      architecture: amd64
       image: docker.io/linuxserver/readarr
       release: nightly
       check_digest_url: https://registry.hub.docker.com/v2/repositories/linuxserver/readarr/tags/nightly
@@ -201,6 +212,7 @@ app:
 
   rclone_restic:
     container:
+      architecture: amd64
       image: docker.io/rclone/rclone
       release: latest
       check_digest_url: https://registry.hub.docker.com/v2/repositories/rclone/rclone/tags/latest
@@ -216,6 +228,7 @@ app:
 
   sabnzbd:
     container:
+      architecture: amd64
       image: docker.io/linuxserver/sabnzbd
       release: latest
       check_digest_url: https://registry.hub.docker.com/v2/repositories/linuxserver/sabnzbd/tags/latest
@@ -231,6 +244,7 @@ app:
 
   sonarr:
     container:
+      architecture: amd64
       image: docker.io/linuxserver/sonarr
       release: latest
       check_digest_url: https://registry.hub.docker.com/v2/repositories/linuxserver/sonarr/tags/latest
@@ -246,6 +260,7 @@ app:
 
   traefik:
     container:
+      architecture: amd64
       image: docker.io/library/traefik
       release: latest
       check_digest_url: https://registry.hub.docker.com/v2/repositories/library/traefik/tags/latest
@@ -262,6 +277,7 @@ app:
 
   tautulli:
     container:
+      architecture: amd64
       image: docker.io/linuxserver/tautulli
       release: latest
       check_digest_url: https://registry.hub.docker.com/v2/repositories/linuxserver/tautulli/tags/latest
