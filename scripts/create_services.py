@@ -30,21 +30,4 @@ for service in levant['app']:
         print("Writing to Consul KV %s/config/%s: %s" % (service,item,levant['app'][service]['container'][item]))
         consul_handler.kv.put("%s/config/%s" % (service, item), str(levant['app'][service]['container'][item]))
 
-
-#    index, values = consul_handler.kv.get("%s/config/auto_update" % service)
-#
-#    try:
-#        digest_url = levant['app'][service]['container']['check_digest_url']
-#        output = requests.get(digest_url).json()
-#
-#        if values['Value'].decode('utf8') == 'true':
-#            print("Putting digest " + output['digest'] + " on key " + "%s/config/image_digest" % service)
-#            consul_handler.kv.put("%s/config/image_digest" % service, output['digest'])
-#        else:
-#            print("Skipped %s because auto_update was set to false" % service)
-#
-#    except TypeError:
-#            print("No value for auto_update for %s" % service)
-#
-#    except:
-#        print("Something broke trying to get the JSON data from the URL. BUSTED!")
+print("All done.")
