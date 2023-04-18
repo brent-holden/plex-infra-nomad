@@ -64,9 +64,9 @@ app:
   caddy:
     container:
       architecture: amd64
-      image: docker.io/caddy/caddy
+      image: docker.io/library/caddy
       release: latest
-      check_digest_url: https://registry.hub.docker.com/v2/repositories/caddy/caddy/tags/latest
+      check_digest_url: https://registry.hub.docker.com/v2/repositories/library/caddy/tags/latest
       auto_update: true
     volumes:
       config:
@@ -90,8 +90,8 @@ app:
         name: flame-config
         dir: /opt/services/flame
     traefik:
-      hostname: plex-request
-      path: /flame
+      hostname: flame
+      path: /
       entrypoints: websecure
     tags: network
 
@@ -285,7 +285,7 @@ app:
     container:
       architecture: amd64
       image: docker.io/linuxserver/sonarr
-      release: latest
+      release: develop
       check_digest_url: https://registry.hub.docker.com/v2/repositories/linuxserver/sonarr/tags/latest
       auto_update: true
     volumes:
