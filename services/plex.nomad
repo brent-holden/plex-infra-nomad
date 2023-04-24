@@ -111,9 +111,16 @@ job "plex" {
           IMAGE_DIGEST={{ keyOrDefault "plex/config/image_digest" "1" }}
           VERSION={{ keyOrDefault "plex/config/version" "1.0" }}
           RELEASE={{ keyOrDefault "plex/config/release" "plexpass" }}
+          EOH
+        destination = "local/env_info"
+        env         = true
+      }
+
+      template {
+        data        = <<-EOH
           PLEX_CLAIM={{ keyOrDefault "plex/config/claim_token" "claim-XXXXX" }}
           EOH
-        destination = "env_info"
+        destination = "secrets/plex_claim"
         env         = true
       }
 
