@@ -117,7 +117,7 @@ job "prowlarr" {
           IMAGE_DIGEST={{ keyOrDefault "prowlarr/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "prowlarr/config/release" "latest" }}
           EOH
-        destination = "env_info"
+        destination = "local/env_info"
         env         = true
       }
 

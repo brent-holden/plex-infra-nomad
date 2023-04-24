@@ -124,7 +124,7 @@ job "readarr" {
           IMAGE_DIGEST={{ keyOrDefault "readarr/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "readarr/config/release" "nightly" }}
           EOH
-        destination = "env_info"
+        destination = "local/env_info"
         env         = true
       }
 

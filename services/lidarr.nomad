@@ -124,7 +124,7 @@ job "lidarr" {
           IMAGE_DIGEST={{ keyOrDefault "lidarr/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "lidarr/config/release" "latest" }}
           EOH
-        destination = "env_info"
+        destination = "local/env_info"
         env         = true
       }
 

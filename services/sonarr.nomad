@@ -124,7 +124,7 @@ job "sonarr" {
           RELEASE={{ key "sonarr/config/release" }}
           IMAGE_DIGEST={{ key "sonarr/config/image_digest" }}
           EOH
-        destination = "env_info"
+        destination = "local/env_info"
         env         = true
       }
 

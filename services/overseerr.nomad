@@ -112,7 +112,7 @@ job "overseerr" {
           IMAGE_DIGEST={{ keyOrDefault "overseerr/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "overseerr/config/release" "latest" }}
           EOH
-        destination = "env_info"
+        destination = "local/env_info"
         env         = true
       }
 

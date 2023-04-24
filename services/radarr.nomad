@@ -125,7 +125,7 @@ job "radarr" {
           IMAGE_DIGEST={{ keyOrDefault "radarr/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "radarr/config/release" "latest" }}
           EOH
-        destination = "env_info"
+        destination = "local/env_info"
         env         = true
       }
 

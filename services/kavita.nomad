@@ -109,7 +109,7 @@ job "kavita" {
           IMAGE_DIGEST={{ keyOrDefault "kavita/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "kavita/config/release" "latest" }}
           EOH
-        destination = "env_info"
+        destination = "local/env_info"
         env         = true
       }
 

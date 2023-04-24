@@ -100,7 +100,7 @@ job "netbootxyz" {
           IMAGE_DIGEST={{ keyOrDefault "netbootxyz/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "netbootxyz/config/release" "latest" }}
           EOH
-        destination = "env_info"
+        destination = "local/env_info"
         env         = true
       }
 

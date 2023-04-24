@@ -98,7 +98,7 @@ job "tautulli" {
           IMAGE_DIGEST={{ keyOrDefault "tautulli/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "tautulli/config/release" "latest" }}
           EOH
-        destination = "env_info"
+        destination = "local/env_info"
         env         = true
       }
 
