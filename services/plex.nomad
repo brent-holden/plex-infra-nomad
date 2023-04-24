@@ -3,11 +3,6 @@ job "plex" {
   type        = "service"
   priority    = 20
 
-  constraint {
-    attribute = "${meta.plex_node}"
-    value     = "true"
-  }
-
   group "plex" {
     count = 1
 

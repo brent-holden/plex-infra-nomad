@@ -2,11 +2,6 @@ job "tautulli" {
   datacenters = ["[[ .nomad.datacenter ]]"]
   type        = "service"
 
-  constraint {
-    attribute = "${meta.plex_node}"
-    value     = "true"
-  }
-
   group "tautulli" {
     count = 1
 
