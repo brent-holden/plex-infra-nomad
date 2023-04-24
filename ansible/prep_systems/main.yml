@@ -1,0 +1,18 @@
+- name: Disable SELinux and reboot if necessary
+  hosts: all
+  become: yes
+  tasks:
+    - name: Disable SELinux
+      ansible.posix.selinux:
+        policy: targeted
+        state: disabled
+      register: selinux_status
+
+    - name: Check if a reboot is required
+      set_fact:
+        reboot_required: "{{ selinux_status.reboot_required }}"
+
+    - name: Reboot the system if necessary
+      reboot:
+      when: reboot_required
+
