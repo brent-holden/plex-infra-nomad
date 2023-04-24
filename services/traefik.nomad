@@ -119,11 +119,18 @@ job "traefik" {
           IMAGE={{ key "traefik/config/image" }}
           IMAGE_DIGEST={{ keyOrDefault "traefik/config/image_digest" "1" }}
           RELEASE={{ keyOrDefault "traefik/config/release" "latest" }}
+          EOH
+        destination = "local/env_info"
+        env         = true
+      }
+
+      template {
+        data        = <<-EOH
           ACME_EMAIL={{ key "traefik/config/acme_email" }}
           CLOUDFLARE_EMAIL={{ key "traefik/config/acme_email" }}
           CLOUDFLARE_DNS_API_TOKEN={{ key "traefik/config/dns_api_token" }}
           EOH
-        destination = "env_info"
+        destination = "secrets/cloudflare"
         env         = true
       }
 
