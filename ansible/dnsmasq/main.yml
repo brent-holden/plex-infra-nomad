@@ -1,0 +1,36 @@
+- name: Install dnsmasq
+  hosts: network_hosts
+  become: yes
+
+  vars:
+    - dnsmasq_port: 53
+    - dnsmasq_enable_tftp: no
+    - dnsmasq_conf_dir: /etc/dnsmasq.d
+    - dnsmasq_domain_needed: yes
+    - dnsmasq_bogus_priv: yes
+    - dnsmasq_dnssec: yes
+    - dnsmasq_no_resolv: yes
+    - dnsmasq_dnssec: yes
+    - dnsmasq_servers:
+      - nameserver: 8.8.8.8
+      - nameserver: 8.8.4.4
+
+  roles:
+    - robertdebock.dnsmasq
+
+  tasks:
+  - name: Copy dnsmasq configuration
+    copy:
+      src: "{{ item }}"
+      dest: /etc/dnsmasq.d/
+      owner: root
+      group: root
+      mode: '0644'
+    with_fileglob:
+      - ../../config/dnsmasq/dnsmasq.d/*
+
+  - name: Start dnsmasq.service
+    systemd:
+      name: dnsmasq.service
+      state: started
+      enabled: yes
