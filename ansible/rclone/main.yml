@@ -1,0 +1,61 @@
+- name: install rclone
+  hosts: rclone_hosts
+  become: yes
+
+  vars:
+    pip_install_packages:
+      - name: python-consul
+
+  pre_tasks:
+    - name: Global vars from levant
+      include_vars: "../../levant.yml"
+
+  roles:
+  - name: stefangweichinger.ansible_rclone
+    rclone_arch: "arm64"
+    rclone_config_location: "/etc/rclone/rclone.conf"
+    rclone_configs:
+      - name: google-drive
+        properties:
+          type: "{{ lookup('consul_kv', 'rclone/config/type') }}"
+          client_id: "{{ lookup('consul_kv', 'rclone/config/client_id') }}"
+          client_secret: "{{ lookup('consul_kv', 'rclone/config/client_secret') }}"
+          token: "{{ lookup('consul_kv', 'rclone/config/token') }}"
+          root_folder_id: "{{ lookup('consul_kv', 'rclone/config/root_folder_id') }}"
+
+  tasks:
+  - name: rclone.conf fixup
+    replace:
+      path: "/etc/rclone/rclone.conf"
+      regexp: "{{ \"'\" }}"
+      replace: "{{ '\"' }}"
+
+  - name: Create media cache directory
+    file:
+      path: "{{ common.volumes.cache.dir }}"
+      state: directory
+      mode: '0755'
+      
+  - name: Create media mount directory
+    file:
+      path: "{{ common.volumes.base.dir  }}"
+      state: directory
+      mode: '0755'
+
+  - name: Copy systemd rclone service file
+    copy:
+      src: ../../systemd/rclone.service
+      dest: /usr/lib/systemd/system/rclone.service
+      owner: root
+      group: root
+      mode: '0644'
+
+  - name: Reload systemd
+    systemd:
+      daemon_reload: yes
+      
+  - name: Start rclone.service
+    systemd:
+      name: rclone.service
+      state: started
+      enabled: yes
