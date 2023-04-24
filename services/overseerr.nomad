@@ -69,7 +69,7 @@ job "overseerr" {
         }
 
         check_restart {
-          limit = 10 
+          limit = 10
           grace = "60s"
         }
       }

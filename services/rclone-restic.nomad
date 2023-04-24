@@ -82,7 +82,7 @@ job "rclone_restic" {
           "--addr", ":7070",
           "--cache-dir", "/cache",
           "--rc",
-          "--rc-no-auth", 
+          "--rc-no-auth",
           "--rc-web-gui",
           "--rc-enable-metrics",
           "--rc-addr", ":7071",
