@@ -16,3 +16,8 @@
       reboot:
       when: reboot_required
 
+    - name: Create sudo rules for user 'brent'
+      copy:
+        dest: "/etc/sudoers.d/nopasswd"
+        content: |
+          brent  ALL=(ALL) NOPASSWD:ALL
