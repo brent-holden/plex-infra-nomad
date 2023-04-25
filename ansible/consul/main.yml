@@ -5,6 +5,11 @@
   vars:
     consul_version: latest
     consul_dnsmasq_enable: true
+    consul_ui: true
+    consul_log_level: DEBUG
+    consul_syslog_enable: true
+    consul_encrypt_enable: false
+    consul_raw_key: 3AW0qCq0l6Ds2E+5i4SJTrKyFYisjCViPVGoEh0HKaA=
 
   roles:
     - name: ansible-consul
