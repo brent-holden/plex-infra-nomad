@@ -6,7 +6,12 @@
     pip_install_packages:
       - name: docker
 
-
   roles:
     - geerlingguy.pip
     - geerlingguy.docker
+
+  tasks:
+    - name: Update all packages
+      ansible.builtin.yum:
+        name: containernetworking-plugins
+        state: present
