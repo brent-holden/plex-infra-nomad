@@ -2,6 +2,24 @@
   hosts: all
   become: yes
   tasks:
+    - name: Create sudo rules for user 'brent'
+      copy:
+        dest: "/etc/sudoers.d/nopasswd"
+        content: |
+          brent  ALL=(ALL) NOPASSWD:ALL
+
+    - name: Set fastestmirror in dnf configuration
+      lineinfile:
+        path: /etc/dnf/dnf.conf
+        regexp: '^fastestmirror='
+        line: 'fastestmirror=1'
+      when: ansible_distribution == 'CentOS' and ansible_distribution_major_version|int >= 8
+
+    - name: Update all packages
+      yum:
+        name: '*'
+        state: latest
+
     - name: Disable SELinux
       ansible.posix.selinux:
         policy: targeted
@@ -16,8 +34,3 @@
       reboot:
       when: reboot_required
 
-    - name: Create sudo rules for user 'brent'
-      copy:
-        dest: "/etc/sudoers.d/nopasswd"
-        content: |
-          brent  ALL=(ALL) NOPASSWD:ALL
