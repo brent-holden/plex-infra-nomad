@@ -21,9 +21,9 @@
         state: latest
 
     - name: Disable firewalld
-      service:
+      ansible.builtin.systemd:
         name: firewalld
-        status: stopped
+        state: stopped
         enabled: false
 
     - name: Disable SELinux
