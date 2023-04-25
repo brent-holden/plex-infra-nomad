@@ -1,4 +1,4 @@
-- name: Disable SELinux and reboot if necessary
+- name: Prep all systems for install
   hosts: all
   become: yes
   tasks:
@@ -19,6 +19,12 @@
       yum:
         name: '*'
         state: latest
+
+    - name: Disable firewalld
+      service:
+        name: firewalld
+        status: stopped
+        enabled: false
 
     - name: Disable SELinux
       ansible.posix.selinux:
