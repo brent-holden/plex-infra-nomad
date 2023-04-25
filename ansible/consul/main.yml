@@ -1,0 +1,11 @@
+- name: Install Consul
+  hosts: consul_instances
+  become: yes
+
+  vars:
+    consul_version: latest
+    consul_dnsmasq_enable: true
+
+  roles:
+    - name: ansible-consul
+
