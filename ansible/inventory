@@ -1,23 +1,22 @@
 [network_hosts]
-192.168.0.83
+192.168.106.4
 
 [media_hosts]
-192.168.0.219
+192.168.106.5
 
 [download_hosts]
-192.168.0.95
+192.168.106.5
 
 [rclone_hosts]
-192.168.0.95
-192.168.0.219
+192.168.106.5
+192.168.106.6
 
 [consul_instances]
-192.168.0.83 consul_node_role=bootstrap
-192.168.0.95 consul_node_role=server
-192.168.0.219 consul_node_role=server
+192.168.106.4 consul_node_role=bootstrap
+192.168.106.5 consul_node_role=server
+192.168.106.6 consul_node_role=server
 
 [nomad_instances]
-192.168.0.83
-192.168.0.95
-192.168.0.219
-
+192.168.106.4
+192.168.106.5
+192.168.106.6
