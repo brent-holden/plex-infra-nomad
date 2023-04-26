@@ -23,34 +23,17 @@ job "netbootxyz" {
       mode     = "delay"
     }
 
-    network {
-      port "netbootxyz" {
-        static = 3000
-      }
-      port "tftp" {
-        static = 69
-      }
-      port "webconsole" {
-        static = 8000
-      }
-    }
-
     service {
       name = "netbootxyz"
       tags = ["infra", "http", "provisioning"]
-      port = "netbootxyz"
+      port = "3000"
 
       check {
         type     = "http"
-        port     = "netbootxyz"
+        port     = "3000"
         path     = "/"
         interval = "30s"
         timeout  = "2s"
-
-        check_restart {
-          limit = 10000
-          grace = "60s"
-        }
       }
     }
 
@@ -88,11 +71,7 @@ job "netbootxyz" {
 
       config {
         image = "docker.io/linuxserver/netbootxyz:latest"
-        ports = [
-          "netbootxyz",
-          "tftp",
-          "webconsole",
-        ]
+        network_mode = "host"
       }
 
       template {
@@ -102,11 +81,6 @@ job "netbootxyz" {
           EOH
         destination = "local/env_info"
         env         = true
-      }
-
-      resources {
-        cpu    = 300
-        memory = 1048
       }
 
       kill_timeout = "20s"
