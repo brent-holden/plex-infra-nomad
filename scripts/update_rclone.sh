@@ -2,6 +2,10 @@
 
 source ${BASH_SOURCE%/*}/variables.sh
 
+TMP_DIR=/tmp
+RCLONE_RPM=rclone-current-linux-amd64.rpm
+RCLONE_URL=https://downloads.rclone.org
+
 function upgrade_available () {
   echo "Running wget -O ${TMP_DIR}/${RCLONE_RPM} ${RCLONE_URL}/${RCLONE_RPM}"
   wget -O ${TMP_DIR}/${RCLONE_RPM} ${RCLONE_URL}/${RCLONE_RPM}
@@ -23,7 +27,6 @@ function update_rclone () {
   systemctl restart rclone-media-drive
   systemctl restart rclone-backup-drive
 }
-
 
 function cleanup () {
 
