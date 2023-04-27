@@ -11,7 +11,18 @@
     - geerlingguy.docker
 
   tasks:
-    - name: Update all packages
+    - name: Install containernetworking-plugins
       ansible.builtin.yum:
         name: containernetworking-plugins
         state: present
+
+    - name: Create /opt/cni
+      ansible.builtin.file:
+        path: /opt/cni
+        state: directory
+
+    - name: Link container networking plugins to /opt
+      ansible.builtin.file:
+        src: "/usr/libexec/cni"
+        dest: "/opt/cni/bin"
+        state: link
