@@ -1,0 +1,39 @@
+[Unit]
+Description=rClone (Media Folder)
+AssertPathIsDirectory=/mnt/rclone/drive/media
+AssertPathIsDirectory=/mnt/rclone/cache/media
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=notify
+User=root
+Group=root
+ExecStart=/usr/local/bin/rclone mount \
+  --config /etc/rclone/rclone.conf \
+  --buffer-size=128M \
+  --allow-other \
+  --allow-non-empty \
+  --use-mmap \
+  --umask 002 \
+  --gid 1100 \
+  --uid 1100 \
+  --log-level INFO \
+  --dir-cache-time 48h \
+  --write-back-cache \
+  --cache-dir /mnt/rclone/cache/media \
+  --vfs-cache-mode full \
+  --vfs-cache-max-age 12h \
+  --vfs-cache-max-size 256G \
+  --rc \
+  --rc-no-auth \
+  --rc-web-gui \
+  --rc-enable-metrics \
+  --rc-addr :5572 \
+  --rc-web-gui-no-open-browser \
+  google-drive:/Media /mnt/rclone/drive/media
+ExecStop=/bin/fusermount -uz /mnt/rclone/drive/media
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target
