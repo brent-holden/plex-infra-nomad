@@ -1,0 +1,25 @@
+---
+- src: https://github.com/ansible-community/ansible-consul.git
+  name: consul
+  scm: git
+  version: master
+
+- src: https://github.com/ansible-community/ansible-nomad.git
+  name: nomad
+  scm: git
+  version: master
+
+- src: https://github.com/jtyr/ansible-resolv_conf.git
+  name: resolv_conf
+  scm: git
+  version: master
+
+- src: https://github.com/robertdebock/ansible-role-dnsmasq.git
+  name: dnsmasq
+  scm: git
+  version: master
+
+- src: https://github.com/geerlingguy/ansible-role-docker.git
+  name: docker
+  scm: git
+  version: master
