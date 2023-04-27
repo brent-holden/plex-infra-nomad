@@ -11,6 +11,7 @@
       include_vars: "../../levant.yml"
 
   roles:
+  - name: geerlingguy.pip
   - name: stefangweichinger.ansible_rclone
     rclone_arch: "arm64"
     rclone_config_location: "/etc/rclone/rclone.conf"

@@ -23,3 +23,8 @@
   name: docker
   scm: git
   version: master
+
+- src: https://github.com/geerlingguy/ansible-role-pip.git
+  name: docker
+  scm: git
+  version: master
