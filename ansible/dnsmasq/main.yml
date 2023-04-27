@@ -6,14 +6,11 @@
     - dnsmasq_port: 53
     - dnsmasq_enable_tftp: no
     - dnsmasq_conf_dir: /etc/dnsmasq.d
-    - dnsmasq_domain_needed: yes
-    - dnsmasq_bogus_priv: yes
-    - dnsmasq_dnssec: yes
+    - dnsmasq_bogus_priv: no
+    - dnsmasq_dnssec: no
     - dnsmasq_no_resolv: yes
-    - dnsmasq_dnssec: yes
     - dnsmasq_servers:
-      - nameserver: 8.8.8.8
-      - nameserver: 8.8.4.4
+      - nameserver: 192.168.10.1
 
   roles:
     - robertdebock.dnsmasq
@@ -27,7 +24,7 @@
       group: root
       mode: '0644'
     with_fileglob:
-      - ../../config/dnsmasq/dnsmasq.d/*
+      - ../../config/dnsmasq/*
 
   - name: Start dnsmasq.service
     systemd:
