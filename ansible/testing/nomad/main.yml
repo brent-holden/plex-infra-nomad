@@ -1,0 +1,23 @@
+- name: Install Nomad
+  hosts: nomad_instances
+  become: yes
+
+  vars:
+    nomad_version: 1.5.3
+    nomad_datacenter: lab
+    nomad_bind_address: "0.0.0.0"
+    nomad_retry_join: yes
+    nomad_docker_enable: true
+    nomad_plugins:
+      docker:
+        allow_privileged: true
+        allow_caps: ["all"]
+        volumes:
+          enabled: true
+    nomad_use_consul: true
+    nomad_raft_protocol: 3
+    nomad_autopilot: true
+
+  roles:
+    - name: ansible-nomad
+
