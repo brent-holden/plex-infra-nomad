@@ -117,8 +117,8 @@ job "overseerr" {
       }
 
       resources {
-        cpu    = 300
-        memory = 512
+        cpu    = 1000
+        memory = 1024
       }
 
       restart {

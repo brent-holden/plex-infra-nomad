@@ -98,8 +98,8 @@ job "tautulli" {
       }
 
       resources {
-        cpu    = 150
-        memory = 512
+        cpu    = 500
+        memory = 1024
       }
 
       restart {
