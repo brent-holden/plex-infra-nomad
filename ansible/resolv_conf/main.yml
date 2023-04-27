@@ -1,0 +1,26 @@
+- name: Reconfigure resolv.conf
+  hosts: consul_instances
+  become: yes
+
+  vars:
+    resolv_conf_nameserver:
+      - 127.0.0.1
+    resolv_conf_search:
+      - lab.eventide.network
+      - eventide.network
+
+  roles:
+    - name: jtyr.resolv_conf
+
+  tasks:
+    - name: Turn off DNS management with NM
+      ansible.builtin.lineinfile:
+        path: /etc/NetworkManager/NetworkManager.conf
+        regexp: '^dns'
+        insertafter: '\[main\]'
+        line: dns=none
+
+    - name: Restart NetworkManager
+      ansible.builtin.systemd:
+        name: NetworkManager
+        state: restarted
