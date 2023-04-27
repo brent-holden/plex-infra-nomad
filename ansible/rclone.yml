@@ -8,12 +8,11 @@
 
   pre_tasks:
     - name: Global vars from levant
-      include_vars: "../../levant.yml"
+      include_vars: "../levant.yml"
 
   roles:
-  - name: geerlingguy.pip
-  - name: stefangweichinger.ansible_rclone
-    rclone_arch: "arm64"
+  - name: pip
+  - name: rclone
     rclone_config_location: "/etc/rclone/rclone.conf"
     rclone_configs:
       - name: google-drive
@@ -45,7 +44,7 @@
 
   - name: Copy systemd rclone service file
     copy:
-      src: ../../systemd/rclone.service
+      src: ../systemd/rclone.service
       dest: /usr/lib/systemd/system/rclone.service
       owner: root
       group: root
