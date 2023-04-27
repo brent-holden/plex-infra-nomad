@@ -1,4 +1,0 @@
-client {
-  enabled = true
-}
-

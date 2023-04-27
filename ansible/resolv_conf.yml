@@ -10,7 +10,7 @@
       - eventide.network
 
   roles:
-    - name: jtyr.resolv_conf
+    - name: resolv_conf
 
   tasks:
     - name: Turn off DNS management with NM

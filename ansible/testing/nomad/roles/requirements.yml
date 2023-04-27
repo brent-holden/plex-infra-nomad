@@ -1,5 +1,0 @@
----
-- src: https://github.com/ansible-community/ansible-nomad.git
-  name: ansible-nomad
-  scm: git
-  version: master

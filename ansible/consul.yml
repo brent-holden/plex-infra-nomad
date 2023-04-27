@@ -19,5 +19,5 @@
       - 192.168.10.1
 
   roles:
-    - name: ansible-consul
+    - name: consul
 

@@ -19,5 +19,5 @@
     nomad_autopilot: true
 
   roles:
-    - name: ansible-nomad
+    - name: nomad
 
