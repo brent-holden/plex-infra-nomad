@@ -1,7 +1,8 @@
 ---
 # file: site.yml
-- import_playbook: prep_systems.yml
-- import_playbook: consul.yml
-- import_playbook: resolv_conf.yml
-- import_playbook: docker.yml
-- import_playbook: nomad.yml
+#- import_playbook: prep_systems.yml
+#- import_playbook: consul.yml
+#- import_playbook: resolv_conf.yml
+#- import_playbook: docker.yml
+#- import_playbook: nomad.yml
+- import_playbook: cni.yml
