@@ -25,6 +25,11 @@
   version: master
 
 - src: https://github.com/geerlingguy/ansible-role-pip.git
-  name: docker
+  name: pip
   scm: git
   version: master
+
+- src: https://github.com/stefangweichinger/ansible-rclone.git
+  name: rclone
+  scm: git
+  version: main
