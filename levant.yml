@@ -159,7 +159,10 @@ app:
     volumes:
       config:
         name: netbootxyz-config
-        dir: /opt/services/netbootxyz
+        dir: /opt/services/netbootxyz/config
+      assets:
+        name: netbootxyz-assets
+        dir: /opt/services/netbootxyz/assets
     tags: network
 
   overseerr:
