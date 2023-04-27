@@ -6,7 +6,8 @@
     consul_version: latest
     consul_dnsmasq_enable: true
     consul_ui: true
-    consul_log_level: DEBUG
+    consul_install_from_repo: true
+    consul_log_level: INFO
     consul_syslog_enable: true
     consul_encrypt_enable: true
     consul_autopilot_enable: true
