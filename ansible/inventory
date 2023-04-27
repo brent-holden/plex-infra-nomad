@@ -1,22 +1,22 @@
 [network_hosts]
-192.168.106.4
+centos-s9-1.lab.eventide.network
 
 [media_hosts]
-192.168.106.5
+centos-s9-3.lab.eventide.network
 
 [download_hosts]
-192.168.106.5
+centos-s9-2.lab.eventide.network
 
 [rclone_hosts]
-192.168.106.5
-192.168.106.6
+centos-s9-2.lab.eventide.network
+centos-s9-3.lab.eventide.network
 
 [consul_instances]
-192.168.106.4 consul_node_role=bootstrap
-192.168.106.5 consul_node_role=server
-192.168.106.6 consul_node_role=server
+centos-s9-1.lab.eventide.network consul_node_role=bootstrap
+centos-s9-2.lab.eventide.network consul_node_role=server
+centos-s9-3.lab.eventide.network consul_node_role=server
 
 [nomad_instances]
-192.168.106.4
-192.168.106.5
-192.168.106.6
+centos-s9-1.lab.eventide.network
+centos-s9-2.lab.eventide.network
+centos-s9-3.lab.eventide.network
