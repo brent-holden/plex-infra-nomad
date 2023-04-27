@@ -12,7 +12,6 @@
     consul_encrypt_enable: true
     consul_autopilot_enable: true
     consul_raw_key: 3AW0qCq0l6Ds2E+5i4SJTrKyFYisjCViPVGoEh0HKaA=
-    consul_data_path: "/var/consul"
     consul_datacenter: "lab"
     consul_client_address: "0.0.0.0"
     consul_dnsmasq_servers:
