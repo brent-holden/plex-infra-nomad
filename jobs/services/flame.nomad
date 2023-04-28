@@ -89,8 +89,8 @@ job "flame" {
       template {
         data        = <<-EOH
           IMAGE={{ key "flame/config/image" }}
+          RELEASE={{ key "flame/config/release" }}
           IMAGE_DIGEST={{ keyOrDefault "flame/config/image_digest" "1" }}
-          RELEASE={{ keyOrDefault "flame/config/release" "latest" }}
           EOH
         destination = "local/env_info"
         env         = true

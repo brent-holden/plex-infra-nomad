@@ -117,8 +117,8 @@ job "traefik" {
       template {
         data        = <<-EOH
           IMAGE={{ key "traefik/config/image" }}
+          RELEASE={{ key "traefik/config/release" }}
           IMAGE_DIGEST={{ keyOrDefault "traefik/config/image_digest" "1" }}
-          RELEASE={{ keyOrDefault "traefik/config/release" "latest" }}
           EOH
         destination = "local/env_info"
         env         = true

@@ -121,8 +121,8 @@ job "authelia" {
       template {
         data        = <<-EOH
           IMAGE={{ key "authelia/config/image" }}
+          RELEASE={{ key "authelia/config/release" }}
           IMAGE_DIGEST={{ keyOrDefault "authelia/config/image_digest" "1" }}
-          RELEASE={{ keyOrDefault "authelia/config/release" "latest" }}
           EOH
         destination = "local/env_info"
         env         = true

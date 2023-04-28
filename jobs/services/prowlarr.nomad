@@ -114,8 +114,8 @@ job "prowlarr" {
       template {
         data        = <<-EOH
           IMAGE={{ key "prowlarr/config/image" }}
+          RELEASE={{ key "prowlarr/config/release" }}
           IMAGE_DIGEST={{ keyOrDefault "prowlarr/config/image_digest" "1" }}
-          RELEASE={{ keyOrDefault "prowlarr/config/release" "latest" }}
           EOH
         destination = "local/env_info"
         env         = true

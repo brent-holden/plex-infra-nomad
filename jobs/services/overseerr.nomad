@@ -109,8 +109,8 @@ job "overseerr" {
       template {
         data        = <<-EOH
           IMAGE={{ key "overseerr/config/image" }}
+          RELEASE={{ key "overseerr/config/release" }}
           IMAGE_DIGEST={{ keyOrDefault "overseerr/config/image_digest" "1" }}
-          RELEASE={{ keyOrDefault "overseerr/config/release" "latest" }}
           EOH
         destination = "local/env_info"
         env         = true

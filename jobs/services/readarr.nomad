@@ -121,8 +121,8 @@ job "readarr" {
       template {
         data        = <<-EOH
           IMAGE={{ key "readarr/config/image" }}
+          RELEASE={{ key "readarr/config/release" }}
           IMAGE_DIGEST={{ keyOrDefault "readarr/config/image_digest" "1" }}
-          RELEASE={{ keyOrDefault "readarr/config/release" "nightly" }}
           EOH
         destination = "local/env_info"
         env         = true

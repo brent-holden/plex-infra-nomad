@@ -106,8 +106,8 @@ job "kavita" {
       template {
         data        = <<-EOH
           IMAGE={{ key "kavita/config/image" }}
+          RELEASE={{ key "kavita/config/release" }}
           IMAGE_DIGEST={{ keyOrDefault "kavita/config/image_digest" "1" }}
-          RELEASE={{ keyOrDefault "kavita/config/release" "latest" }}
           EOH
         destination = "local/env_info"
         env         = true

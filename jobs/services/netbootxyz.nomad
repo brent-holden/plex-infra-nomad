@@ -70,14 +70,15 @@ job "netbootxyz" {
       }
 
       config {
-        image = "docker.io/linuxserver/netbootxyz:latest"
+        image = "${IMAGE}:${RELEASE}"
         network_mode = "host"
       }
 
       template {
         data        = <<-EOH
+          IMAGE={{ key "netbootxyz/config/image" }}
+          RELEASE={{ key "netbootxyz/config/release" }}
           IMAGE_DIGEST={{ keyOrDefault "netbootxyz/config/image_digest" "1" }}
-          RELEASE={{ keyOrDefault "netbootxyz/config/release" "latest" }}
           EOH
         destination = "local/env_info"
         env         = true

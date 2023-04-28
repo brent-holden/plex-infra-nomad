@@ -105,8 +105,8 @@ job "rclone_restic" {
         change_mode = "restart"
         data        = <<-EOH
           IMAGE={{ key "rclone/config/image" }}
+          RELEASE={{ key "rclone/config/release" }}
           IMAGE_DIGEST={{ keyOrDefault "rclone/config/image_digest" "1" }}
-          RELEASE={{ keyOrDefault "rclone/config/release" "latest" }}
           EOH
         destination = "local/env_info"
         env         = true

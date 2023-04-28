@@ -90,8 +90,8 @@ job "tautulli" {
       template {
         data        = <<-EOH
           IMAGE={{ key "tautulli/config/image" }}
+          RELEASE={{ key "tautulli/config/release" }}
           IMAGE_DIGEST={{ keyOrDefault "tautulli/config/image_digest" "1" }}
-          RELEASE={{ keyOrDefault "tautulli/config/release" "latest" }}
           EOH
         destination = "local/env_info"
         env         = true

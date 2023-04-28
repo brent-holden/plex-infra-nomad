@@ -100,8 +100,8 @@ job "sabnzbd" {
       template {
         data        = <<-EOH
           IMAGE={{ key "sabnzbd/config/image" }}
+          RELEASE={{ key "sabnzbd/config/release" }}
           IMAGE_DIGEST={{ keyOrDefault "sabnzbd/config/image_digest" "1" }}
-          RELEASE={{ keyOrDefault "sabnzbd/config/release" "latest" }}
           EOH
         destination = "local/env_info"
         env         = true

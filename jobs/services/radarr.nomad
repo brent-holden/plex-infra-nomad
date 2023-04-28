@@ -122,8 +122,8 @@ job "radarr" {
       template {
         data        = <<-EOH
           IMAGE={{ key "radarr/config/image" }}
+          RELEASE={{ key "radarr/config/release" }}
           IMAGE_DIGEST={{ keyOrDefault "radarr/config/image_digest" "1" }}
-          RELEASE={{ keyOrDefault "radarr/config/release" "latest" }}
           EOH
         destination = "local/env_info"
         env         = true

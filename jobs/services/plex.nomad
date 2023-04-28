@@ -103,9 +103,8 @@ job "plex" {
       template {
         data        = <<-EOH
           IMAGE={{ key "plex/config/image" }}
-          IMAGE_DIGEST={{ keyOrDefault "plex/config/image_digest" "1" }}
+          RELEASE={{ key "plex/config/release" }}
           VERSION={{ keyOrDefault "plex/config/version" "1.0" }}
-          RELEASE={{ keyOrDefault "plex/config/release" "plexpass" }}
           EOH
         destination = "local/env_info"
         env         = true
