@@ -1,4 +1,4 @@
-job "rclone_restic" {
+job "restic" {
   datacenters = ["[[ .nomad.datacenter ]]"]
   type        = "service"
 
@@ -22,7 +22,7 @@ job "rclone_restic" {
     }
 
     service {
-      name = "rclone-restic"
+      name = "restic"
       tags = ["infra", "rest", "backup"]
       port = "rclone"
 
@@ -104,9 +104,9 @@ job "rclone_restic" {
       template {
         change_mode = "restart"
         data        = <<-EOH
-          IMAGE={{ key "rclone/config/image" }}
-          RELEASE={{ key "rclone/config/release" }}
-          IMAGE_DIGEST={{ keyOrDefault "rclone/config/image_digest" "1" }}
+          IMAGE={{ key "restic/config/image" }}
+          RELEASE={{ key "restic/config/release" }}
+          IMAGE_DIGEST={{ keyOrDefault "restic/config/image_digest" "1" }}
           EOH
         destination = "local/env_info"
         env         = true
