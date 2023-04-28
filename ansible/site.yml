@@ -6,4 +6,5 @@
 - import_playbook: consul.yml
 - import_playbook: resolv_conf.yml
 - import_playbook: nomad.yml
+- import_playbook: nomad_vols.yml
 - import_playbook: init_services.yml

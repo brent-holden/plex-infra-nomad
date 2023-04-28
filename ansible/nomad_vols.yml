@@ -1,0 +1,39 @@
+---
+- name: Download services host volumes setup
+  hosts: download_nodes
+  become: yes
+
+  vars:
+    hostvols_filename: create_host_vols.py
+    levant_filename: levant.yml
+    tag: download
+
+  tasks:
+    - name: include create_nomad_vols.yml
+      include_tasks: create_nomad_vols.yml
+
+- name: Network services host volumes setup
+  hosts: network_nodes
+  become: yes
+
+  vars:
+    hostvols_filename: create_host_vols.py
+    levant_filename: levant.yml
+    tag: network
+
+  tasks:
+    - name: include create_nomad_vols.yml
+      include_tasks: create_nomad_vols.yml
+
+- name: Plex services host volumes setup
+  hosts: plex_nodes
+  become: yes
+
+  vars:
+    hostvols_filename: create_host_vols.py
+    levant_filename: levant.yml
+    tag: plex
+
+  tasks:
+    - name: include create_nomad_vols.yml
+      include_tasks: create_nomad_vols.yml

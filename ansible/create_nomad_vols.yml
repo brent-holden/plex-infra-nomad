@@ -1,0 +1,47 @@
+- name: Copy network node host volume configuration
+  copy:
+    src: files/nomad/host-vols-{{ tag }}.hcl
+    dest: /etc/nomad.d/host-vols-{{ tag }}.hcl
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Copy network node metadata configuration
+  copy:
+    src: files/nomad/meta-{{ tag }}.hcl
+    dest: /etc/nomad.d/meta-{{ tag }}.hcl
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Copy {{ hostvols_filename }} to remote server
+  copy:
+    src: ../scripts/{{ hostvols_filename }}
+    dest: /tmp/{{ hostvols_filename }}
+    mode: '0777'
+
+- name: Copy levant.yml to remote server
+  copy:
+    src: ../{{ levant_filename }}
+    dest: /tmp/{{ levant_filename }}
+    mode: '0777'
+
+- name: Execute create_host_vols.py on remote server
+  command: /usr/bin/env python3 {{ hostvols_filename }} {{ levant_filename }} {{ tag }}
+  args:
+    chdir: /tmp
+
+- name: Remove create_host_vols.py
+  file:
+    path: /tmp/{{ hostvols_filename }}
+    state: absent
+
+- name: Remove {{ levant_filename }}
+  file:
+    path: /tmp/{{ levant_filename }}
+    state: absent
+
+- name: Restart Nomad
+  systemd:
+    name: nomad.service
+    state: restarted
