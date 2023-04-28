@@ -1,0 +1,3 @@
+- name: What the fuuuuuck
+  debug:
+    msg: "HELLO {{ tag }}"

@@ -1,0 +1,37 @@
+---
+- name: Initialize service configuration in Consul
+  hosts: consul_instances[0]
+  gather_facts: false
+  become: yes
+
+  vars:
+    levant_filename: "levant.yml"
+    init_services_filename: "init_services.py"
+
+  tasks:
+    - name: Copy init_services.py to remote server
+      copy:
+        src: ../scripts/{{ init_services_filename }}
+        dest: /tmp/{{ init_services_filename }}
+        mode: '0777'
+
+    - name: Copy levant.yml to remote server
+      copy:
+        src: ../{{ levant_filename }}
+        dest: /tmp/{{ levant_filename }}
+        mode: '0777'
+
+    - name: Execute init_services.py on remote server
+      command: /usr/bin/env python3 {{ init_services_filename }} {{ levant_filename }}
+      args:
+        chdir: /tmp
+
+    - name: Remove init_services.py
+      file:
+        path: /tmp/{{ init_services_filename }}
+        state: absent
+
+    - name: Remove levant.yml
+      file:
+        path: /tmp/{{ levant_filename }}
+        state: absent
