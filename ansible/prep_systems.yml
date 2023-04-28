@@ -1,6 +1,15 @@
 - name: Prep all systems for install
   hosts: all
   become: yes
+
+  vars:
+    pip_install_packages:
+      - name: python-consul
+      - name: pyyaml
+
+  roles:
+  - name: pip
+
   tasks:
 
     - name: Create sudo rules for user 'brent'
@@ -8,6 +17,19 @@
         dest: "/etc/sudoers.d/nopasswd"
         content: |
           brent  ALL=(ALL) NOPASSWD:ALL
+
+    - name: Ensure group "plex" exists with correct gid
+      ansible.builtin.group:
+        name: plex
+        state: present
+        gid: 1100
+
+    - name: Add the user 'plex' with a specific uid and a primary group of 'plex'
+      ansible.builtin.user:
+        name: plex
+        comment: Plex User
+        uid: 1100
+        group: plex
 
     - name: Set fastestmirror in dnf configuration
       lineinfile:
