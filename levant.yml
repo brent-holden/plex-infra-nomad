@@ -264,7 +264,7 @@ app:
     ports:
       rclone: 7070
       web: 7071
-    service_url: http://rclone-restic.service.consul
+    service_url: http://restic.service.consul
     tags: network
 
   sabnzbd:
