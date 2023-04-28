@@ -7,8 +7,14 @@ import sys
 import os
 
 
+if len(sys.argv) < 2:
+    print("Usage: python3 program.py <config_file>")
+    sys.exit(1)
+
+config_file = sys.argv[1]
+
 try:
-    with open("../levant.yml", "r") as file:
+    with open(config_file, "r") as file:
         levant = yaml.safe_load(file)
 except FileNotFoundError:
     print("Couldn't find levant.yml. Exiting.", file=sys.stderr)
