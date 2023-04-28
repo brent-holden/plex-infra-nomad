@@ -57,5 +57,5 @@
   - name: Start rclone.service
     systemd:
       name: rclone.service
-      state: started
+      state: restarted
       enabled: yes
