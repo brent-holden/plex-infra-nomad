@@ -43,6 +43,17 @@
         name: '*'
         state: latest
 
+    - name: Install EPEL
+      ansible.builtin.yum:
+        name: 'epel-release'
+        state: present
+
+    - name: Install misc. packages
+      ansible.builtin.yum:
+        name:
+          - restic
+        state: present
+
     - name: Disable firewalld
       ansible.builtin.systemd:
         name: firewalld
