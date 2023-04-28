@@ -250,7 +250,7 @@ app:
       entrypoints: websecure
     tags: download
 
-  rclone_restic:
+  restic:
     container:
       architecture: amd64
       image: docker.io/rclone/rclone
