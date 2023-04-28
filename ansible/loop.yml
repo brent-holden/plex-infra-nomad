@@ -1,8 +1,0 @@
----
-- hosts: localhost
-  tasks:
-  - debug:
-      msg: "Hello"
-
-  - name: include foo.yml
-    include_tasks: foo.yml
