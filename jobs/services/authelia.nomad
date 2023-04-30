@@ -11,7 +11,10 @@ job "authelia" {
     count = 1
 
     network {
-      port "authelia" { static = 9091 }
+      mode = "bridge"
+      port "authelia" {
+        static = 9091
+      }
     }
 
     service {
@@ -20,6 +23,8 @@ job "authelia" {
 
       tags = [
         "traefik.enable=true",
+        "traefik.consulcatalog.connect=false",
+        "traefik.http.services.authelia.loadbalancer.server.port=${NOMAD_HOST_PORT_authelia}",
         "traefik.http.routers.authelia.rule=Host(`[[ .app.authelia.traefik.hostname ]].[[ .app.traefik.domain.tld ]]`) && PathPrefix(`[[ .app.authelia.traefik.path ]]`)",
         "traefik.http.routers.authelia.entrypoints=[[ .app.authelia.traefik.entrypoints ]]",
         "traefik.http.middlewares.authelia.forwardauth.address=[[ .app.authelia.traefik.forwardauth.address ]]",
@@ -65,8 +70,6 @@ job "authelia" {
       config {
         image = "${IMAGE}:${RELEASE}"
         ports = ["authelia"]
-        network_mode = "host"
-        privileged   = true
 
         volumes = [
           "local/configuration.yml:/config/configuration.yml"
