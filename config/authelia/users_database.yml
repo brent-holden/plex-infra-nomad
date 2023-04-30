@@ -2,7 +2,7 @@ users:
   brent:
     disabled: false
     displayname: "Brent Holden"
-    password: "$argon2id$v=generated_password_here"
-    email: me@email.com
+    password: "$argon2id$v=19$m=65536,t=3,p=4$GKmBBaDDPlgG4IvU50gWAQ$oXFLZ0voN7luauqHmrSiVqHd4cjNgzkt8t8wUq3YX54"
+    email: your@email.here.com
     groups:
       - admins
