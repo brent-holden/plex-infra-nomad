@@ -1,0 +1,17 @@
+- name: Add local host definitions
+  hosts: consul_instances
+  become: yes
+
+  tasks:
+    - name: Copy local host definitions to consul instance
+      ansible.builtin.template:
+        src: files/dnsmasq/0-local-defs.j2
+        dest: /etc/dnsmasq.d/0-local-defs
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Restart dnsmasq.service
+      systemd:
+        name: dnsmasq.service
+        state: restarted
