@@ -121,8 +121,8 @@ job "lidarr" {
       template {
         data        = <<-EOH
           IMAGE={{ key "lidarr/config/image" }}
+          RELEASE={{ key "lidarr/config/release" }}
           IMAGE_DIGEST={{ keyOrDefault "lidarr/config/image_digest" "1" }}
-          RELEASE={{ keyOrDefault "lidarr/config/release" "latest" }}
           EOH
         destination = "local/env_info"
         env         = true
