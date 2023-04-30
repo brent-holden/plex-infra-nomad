@@ -6,8 +6,7 @@
 :80 {
   respond /health 200
 
-  redir /downloads /downloads/
-  handle_path /downloads/* {
+  handle_path /* {
     file_server browse
     root * /downloads
   }
