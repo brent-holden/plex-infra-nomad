@@ -1,0 +1,33 @@
+---
+- name: Initialize stored configs
+  hosts: localhost
+  connection: local
+
+  vars:
+    consul_address: "{{ groups['consul_instances'][0] }}"
+    authelia_config: "{{ lookup('file', authelia_config_filename) }}"
+    authelia_users: "{{ lookup('file', authelia_users_filename) }}"
+    caddy_config: "{{ lookup('file', caddy_config_filename) }}"
+
+  tasks:
+    - name: include configs file
+      include_vars: 'vars/configs.yml'
+
+    - name: Write out authelia configuration
+      consul_kv:
+        key: authelia/config/configuration.yml
+        value: "{{ authelia_config }}"
+        host: "{{ consul_address }}"
+
+    - name: Write out authelia users database
+      consul_kv:
+        key: authelia/config/users_database.yml
+        value: "{{ authelia_users }}"
+        host: "{{ consul_address }}"
+
+    - name: Write out Caddy configuration
+      consul_kv:
+        key: caddy/config/caddyfile
+        value: "{{ caddy_config }}"
+        host: "{{ consul_address }}"
+
