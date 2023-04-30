@@ -24,16 +24,20 @@ gid = levant['common']['env']['pgid']
 
 for service in levant['app']:
     if levant['app'][service]['tags'] == node_tag:
-        for volume in levant['app'][service]['volumes']:
-            directory_to_create = levant['app'][service]['volumes'][volume]['dir']
+        try:
+          for volume in levant['app'][service]['volumes']:
+              directory_to_create = levant['app'][service]['volumes'][volume]['dir']
 
-            if not os.path.exists(directory_to_create):
-                print("Created %s" % directory_to_create)
-                os.makedirs(directory_to_create, exist_ok=True)
-            else:
-                print("Directory %s already exists" % directory_to_create)
+              if not os.path.exists(directory_to_create):
+                  print("Created %s" % directory_to_create)
+                  os.makedirs(directory_to_create, exist_ok=True)
+              else:
+                  print("Directory %s already exists" % directory_to_create)
 
-            os.chown(directory_to_create, uid, gid)
+              os.chown(directory_to_create, uid, gid)
+
+        except KeyError:
+            print("Got a KeyError. Volume unconfigured for service: %s" % service)
 
 if node_tag == 'download':
     directories = [levant['common']['volumes']['downloads']['dir'], levant['common']['volumes']['downloads-complete']['dir']]
@@ -45,3 +49,4 @@ if node_tag == 'download':
         else:
             print("Directory %s already exists" % directory_to_create)
 
+sys.exit(0)
