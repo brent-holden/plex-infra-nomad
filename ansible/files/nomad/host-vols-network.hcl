@@ -1,4 +1,8 @@
 client {
+  host_volume "flame-config" {
+    path = "/opt/services/flame"
+    read_only = false
+  }
 
   host_volume "rclone-cache-backup" {
     path = "/mnt/rclone/cache/backup"
