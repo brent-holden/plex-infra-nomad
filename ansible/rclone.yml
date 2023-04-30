@@ -19,38 +19,43 @@
           root_folder_id: "{{ lookup('consul_kv', 'rclone/config/root_folder_id') }}"
 
   tasks:
-  - name: rclone.conf fixup
-    replace:
-      path: "/etc/rclone/rclone.conf"
-      regexp: "{{ \"'\" }}"
-      replace: "{{ '\"' }}"
+    - name: Install FUSE3
+      ansible.builtin.yum:
+        name: 'fuse3'
+        state: present
 
-  - name: Create media cache directory
-    file:
-      path: "{{ common.volumes.cache.dir }}"
-      state: directory
-      mode: '0755'
-      
-  - name: Create media mount directory
-    file:
-      path: "{{ common.volumes.base.dir  }}"
-      state: directory
-      mode: '0755'
+    - name: rclone.conf fixup
+      replace:
+        path: "/etc/rclone/rclone.conf"
+        regexp: "{{ \"'\" }}"
+        replace: "{{ '\"' }}"
 
-  - name: Copy systemd rclone service file
-    copy:
-      src: ../systemd/rclone.service
-      dest: /usr/lib/systemd/system/rclone.service
-      owner: root
-      group: root
-      mode: '0644'
+    - name: Create media cache directory
+      file:
+        path: "{{ common.volumes.cache.dir }}"
+        state: directory
+        mode: '0755'
+        
+    - name: Create media mount directory
+      file:
+        path: "{{ common.volumes.base.dir  }}"
+        state: directory
+        mode: '0755'
 
-  - name: Reload systemd
-    systemd:
-      daemon_reload: yes
-      
-  - name: Start rclone.service
-    systemd:
-      name: rclone.service
-      state: restarted
-      enabled: yes
+    - name: Copy systemd rclone service file
+      copy:
+        src: ../systemd/rclone.service
+        dest: /usr/lib/systemd/system/rclone.service
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Reload systemd
+      systemd:
+        daemon_reload: yes
+        
+    - name: Start rclone.service
+      systemd:
+        name: rclone.service
+        state: restarted
+        enabled: yes

@@ -32,7 +32,7 @@ ExecStart=/usr/local/bin/rclone mount \
   --rc-addr :5572 \
   --rc-web-gui-no-open-browser \
   google-drive:/Media /mnt/rclone/drive/media
-ExecStop=/bin/fusermount -uz /mnt/rclone/drive/media
+ExecStop=/usr/bin/fusermount3 -uz /mnt/rclone/drive/media
 Restart=on-abort
 
 [Install]
