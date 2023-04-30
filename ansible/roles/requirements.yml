@@ -1,4 +1,6 @@
 ---
+- src: community.general
+
 - src: https://github.com/ansible-community/ansible-consul.git
   name: consul
   scm: git
