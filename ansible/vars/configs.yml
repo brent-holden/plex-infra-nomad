@@ -1,0 +1,6 @@
+---
+# config file locations to be provisioned to Consul
+
+authelia_config_filename: ../config/authelia/configuration.yml
+authelia_users_filename: ../config/authelia/users_database.yml
+caddy_config_filename: ../config/caddy/caddyfile
