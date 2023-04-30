@@ -17,12 +17,12 @@ totp:
 
 authentication_backend:
   file:
-    path: /config/users_database.yml
+    path: /secrets/users_database.yml
     password:
       algorithm: argon2id
 
 access_control:
-  default_policy: allow
+  default_policy: one_factor
   rules:
     # Rules applied to everyone
     - domain: "*.eventide.network"
