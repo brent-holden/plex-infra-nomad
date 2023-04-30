@@ -5,6 +5,7 @@
   vars:
     nomad_version: 1.5.3
     nomad_datacenter: lab
+    nomad_region: home
     nomad_bind_address: "0.0.0.0"
     nomad_retry_join: yes
     nomad_docker_enable: true
