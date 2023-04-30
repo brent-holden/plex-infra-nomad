@@ -56,7 +56,7 @@ app:
         use: true
         certresolver: letsencrypt
       forwardauth:
-        address: http://authelia.service.consul:9092/api/verify?rd=https://auth.eventide.network/
+        address: http://authelia.service.consul:9091/api/verify?rd=https://auth.eventide.network/
         trustforwardheader: true
         authresponseheaders: Remote-User,Remote-Groups,Remote-Name,Remote-Email
     tags: network
@@ -73,8 +73,8 @@ app:
         name: caddy-config
         dir: /opt/services/caddy
     traefik:
-      hostname: plex-request
-      path: /downloads
+      hostname: downloads
+      path: /
       entrypoints: websecure
     tags: download
 
@@ -124,8 +124,8 @@ app:
         name: lidarr-config
         dir: /opt/services/lidarr
     traefik:
-      hostname: plex-request
-      path: /lidarr
+      hostname: lidarr
+      path: /
       entrypoints: websecure
     tags: download
 
@@ -143,10 +143,6 @@ app:
       data:
         name: grafana-data
         dir: /opt/services/grafana/data
-    traefik:
-      hostname: plex-request
-      path: /lidarr
-      entrypoints: websecure
     tags: network
 
   netbootxyz:
@@ -210,8 +206,8 @@ app:
         name: prowlarr-config
         dir: /opt/services/prowlarr
     traefik:
-      hostname: plex-request
-      path: /prowlarr
+      hostname: prowlarr
+      path: /
       entrypoints: websecure
     tags: download
 
@@ -227,8 +223,8 @@ app:
         name: radarr-config
         dir: /opt/services/radarr
     traefik:
-      hostname: plex-request
-      path: /radarr
+      hostname: radarr
+      path: /
       entrypoints: websecure
     tags: download
 
@@ -244,8 +240,8 @@ app:
         name: readarr-config
         dir: /opt/services/readarr
     traefik:
-      hostname: plex-request
-      path: /readarr
+      hostname: readarr
+      path: /
       entrypoints: websecure
     tags: download
 
@@ -278,8 +274,8 @@ app:
         name: sabnzbd-config
         dir: /opt/services/sabnzbd
     traefik:
-      hostname: plex-request
-      path: /sabnzbd
+      hostname: sabnzbd
+      path: /
       entrypoints: websecure
     tags: download
 
@@ -295,8 +291,8 @@ app:
         name: sonarr-config
         dir: /opt/services/sonarr
     traefik:
-      hostname: plex-request
-      path: /sonarr
+      hostname: sonarr
+      path: /
       entrypoints: websecure
     tags: download
 
@@ -331,8 +327,8 @@ app:
         name: tautulli-config
         dir: /opt/services/tautulli
     traefik:
-      hostname: plex-request
-      path: /tautulli
+      hostname: tautulli
+      path: /
       entrypoints: websecure
     tags: plex
 
