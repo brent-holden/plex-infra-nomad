@@ -39,7 +39,7 @@ job "sabnzbd" {
         "traefik.enable=true",
         "traefik.http.routers.sabnzbd.rule=Host(`[[ .app.sabnzbd.traefik.hostname ]].[[ .app.traefik.domain.tld ]]`) && PathPrefix(`[[ .app.sabnzbd.traefik.path ]]`)",
         "traefik.http.routers.sabnzbd.entrypoints=[[ .app.sabnzbd.traefik.entrypoints ]]",
-        "traefik.http.routers.sabnzbd.middlewares=[[ .app.authelia.traefik.middlewares ]]",
+#        "traefik.http.routers.sabnzbd.middlewares=[[ .app.authelia.traefik.middlewares ]]",
       ]
 
 #      check {

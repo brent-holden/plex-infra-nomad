@@ -25,12 +25,6 @@ job "traefik" {
       source    = "traefik-certs"
     }
 
-    update {
-      max_parallel = 0
-      health_check = "checks"
-      auto_revert  = true
-    }
-
     service {
       name = "traefik"
       port = "websecure"
@@ -51,6 +45,12 @@ job "traefik" {
         interval = "30s"
         timeout  = "2s"
       }
+    }
+
+    update {
+      max_parallel = 0
+      health_check = "checks"
+      auto_revert  = true
     }
 
     task "traefik" {
