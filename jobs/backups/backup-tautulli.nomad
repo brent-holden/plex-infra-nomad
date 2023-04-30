@@ -36,7 +36,7 @@ job "backup-tautulli" {
       template {
         data        = <<-EOH
           IMAGE={{ key "restic/config/image" }}
-          RELEASE={{ keyOrDefault "restic/config/release" "latest" }}
+          RELEASE={{ key "restic/config/release" }}
           EOH
         destination = "local/env_info"
         env         = true
@@ -76,7 +76,7 @@ job "backup-tautulli" {
       template {
         data        = <<-EOH
           IMAGE={{ key "restic/config/image" }}
-          RELEASE={{ keyOrDefault "restic/config/release" "latest" }}
+          RELEASE={{ key "restic/config/release" }}
           EOH
         destination = "local/env_info"
         env         = true
@@ -117,7 +117,7 @@ job "backup-tautulli" {
       template {
         data        = <<-EOH
           IMAGE={{ key "restic/config/image" }}
-          RELEASE={{ keyOrDefault "restic/config/release" "latest" }}
+          RELEASE={{ key "restic/config/release" }}
           EOH
         destination = "local/env_info"
         env         = true
