@@ -46,7 +46,7 @@ job "backup-overseerr" {
         image = "${IMAGE}:${RELEASE}"
 
         args = [
-          "--repo", "rest:[[ .app.rclone_restic.service_url ]]:[[ .app.rclone_restic.ports.rclone ]]/overseerr",
+          "--repo", "rest:[[ .app.restic.service_url ]]:[[ .app.restic.ports.rclone ]]/overseerr",
           "unlock",
         ]
       }
@@ -86,7 +86,7 @@ job "backup-overseerr" {
         image = "${IMAGE}:${RELEASE}"
 
         args = [
-          "--repo", "rest:[[ .app.rclone_restic.service_url ]]:[[ .app.rclone_restic.ports.rclone ]]/overseerr",
+          "--repo", "rest:[[ .app.restic.service_url ]]:[[ .app.restic.ports.rclone ]]/overseerr",
           "backup",
           "/config",
         ]
@@ -127,7 +127,7 @@ job "backup-overseerr" {
         image = "${IMAGE}:${RELEASE}"
 
         args = [
-          "--repo", "rest:[[ .app.rclone_restic.service_url ]]:[[ .app.rclone_restic.ports.rclone ]]/overseerr",
+          "--repo", "rest:[[ .app.restic.service_url ]]:[[ .app.restic.ports.rclone ]]/overseerr",
           "forget",
           "--keep-last", "30",
           "--keep-monthly", "12",

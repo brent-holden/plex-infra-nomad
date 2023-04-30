@@ -46,7 +46,7 @@ job "backup-tautulli" {
         image = "${IMAGE}:${RELEASE}"
 
         args = [
-          "--repo", "rest:[[ .app.rclone_restic.service_url ]]:[[ .app.rclone_restic.ports.rclone ]]/tautulli",
+          "--repo", "rest:[[ .app.restic.service_url ]]:[[ .app.restic.ports.rclone ]]/tautulli",
           "unlock",
         ]
       }
@@ -86,7 +86,7 @@ job "backup-tautulli" {
         image = "${IMAGE}:${RELEASE}"
 
         args = [
-          "--repo", "rest:[[ .app.rclone_restic.service_url ]]:[[ .app.rclone_restic.ports.rclone ]]/tautulli",
+          "--repo", "rest:[[ .app.restic.service_url ]]:[[ .app.restic.ports.rclone ]]/tautulli",
           "backup",
           "/config",
         ]
@@ -127,7 +127,7 @@ job "backup-tautulli" {
         image = "${IMAGE}:${RELEASE}"
 
         args = [
-          "--repo", "rest:[[ .app.rclone_restic.service_url ]]:[[ .app.rclone_restic.ports.rclone ]]/tautulli",
+          "--repo", "rest:[[ .app.restic.service_url ]]:[[ .app.restic.ports.rclone ]]/tautulli",
           "forget",
           "--keep-last", "30",
           "--keep-monthly", "12",

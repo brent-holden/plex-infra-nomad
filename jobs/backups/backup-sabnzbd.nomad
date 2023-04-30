@@ -46,7 +46,7 @@ job "backup-sabnzbd" {
         image = "${IMAGE}:${RELEASE}"
 
         args = [
-          "--repo", "rest:[[ .app.rclone_restic.service_url ]]:[[ .app.rclone_restic.ports.rclone ]]/sabnzbd",
+          "--repo", "rest:[[ .app.restic.service_url ]]:[[ .app.restic.ports.rclone ]]/sabnzbd",
           "unlock",
         ]
       }
@@ -86,7 +86,7 @@ job "backup-sabnzbd" {
         image = "${IMAGE}:${RELEASE}"
 
         args = [
-          "--repo", "rest:[[ .app.rclone_restic.service_url ]]:[[ .app.rclone_restic.ports.rclone ]]/sabnzbd",
+          "--repo", "rest:[[ .app.restic.service_url ]]:[[ .app.restic.ports.rclone ]]/sabnzbd",
           "backup",
           "/config",
         ]
@@ -127,7 +127,7 @@ job "backup-sabnzbd" {
         image = "${IMAGE}:${RELEASE}"
 
         args = [
-          "--repo", "rest:[[ .app.rclone_restic.service_url ]]:[[ .app.rclone_restic.ports.rclone ]]/sabnzbd",
+          "--repo", "rest:[[ .app.restic.service_url ]]:[[ .app.restic.ports.rclone ]]/sabnzbd",
           "forget",
           "--keep-last", "30",
           "--keep-monthly", "12",

@@ -46,7 +46,7 @@ job "backup-netbootxyz-config" {
         image = "${IMAGE}:${RELEASE}"
 
         args = [
-          "--repo", "rest:[[ .app.rclone_restic.service_url ]]:[[ .app.rclone_restic.ports.rclone ]]/netbootxyz/config",
+          "--repo", "rest:[[ .app.restic.service_url ]]:[[ .app.restic.ports.rclone ]]/netbootxyz/config",
           "unlock",
         ]
       }
@@ -86,7 +86,7 @@ job "backup-netbootxyz-config" {
         image = "${IMAGE}:${RELEASE}"
 
         args = [
-          "--repo", "rest:[[ .app.rclone_restic.service_url ]]:[[ .app.rclone_restic.ports.rclone ]]/netbootxyz/config",
+          "--repo", "rest:[[ .app.restic.service_url ]]:[[ .app.restic.ports.rclone ]]/netbootxyz/config",
           "backup",
           "/config",
         ]
@@ -127,7 +127,7 @@ job "backup-netbootxyz-config" {
         image = "${IMAGE}:${RELEASE}"
 
         args = [
-          "--repo", "rest:[[ .app.rclone_restic.service_url ]]:[[ .app.rclone_restic.ports.rclone ]]/netbootxyz/config",
+          "--repo", "rest:[[ .app.restic.service_url ]]:[[ .app.restic.ports.rclone ]]/netbootxyz/config",
           "forget",
           "--keep-last", "30",
           "--keep-monthly", "12",

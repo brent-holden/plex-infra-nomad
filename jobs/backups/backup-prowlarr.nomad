@@ -46,7 +46,7 @@ job "backup-prowlarr" {
         image = "${IMAGE}:${RELEASE}"
 
         args = [
-          "--repo", "rest:[[ .app.rclone_restic.service_url ]]:[[ .app.rclone_restic.ports.rclone ]]/prowlarr",
+          "--repo", "rest:[[ .app.restic.service_url ]]:[[ .app.restic.ports.rclone ]]/prowlarr",
           "unlock",
         ]
       }
@@ -86,7 +86,7 @@ job "backup-prowlarr" {
         image = "${IMAGE}:${RELEASE}"
 
         args = [
-          "--repo", "rest:[[ .app.rclone_restic.service_url ]]:[[ .app.rclone_restic.ports.rclone ]]/prowlarr",
+          "--repo", "rest:[[ .app.restic.service_url ]]:[[ .app.restic.ports.rclone ]]/prowlarr",
           "backup",
           "/config",
         ]
@@ -127,7 +127,7 @@ job "backup-prowlarr" {
         image = "${IMAGE}:${RELEASE}"
 
         args = [
-          "--repo", "rest:[[ .app.rclone_restic.service_url ]]:[[ .app.rclone_restic.ports.rclone ]]/prowlarr",
+          "--repo", "rest:[[ .app.restic.service_url ]]:[[ .app.restic.ports.rclone ]]/prowlarr",
           "forget",
           "--keep-last", "30",
           "--keep-monthly", "12",
