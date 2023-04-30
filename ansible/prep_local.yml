@@ -21,6 +21,7 @@
           - levant
           - nomad
           - consul
+          - restic
         state: present
       when: ansible_distribution == 'MacOSX'
 
