@@ -245,7 +245,7 @@ app:
       entrypoints: websecure
     tags: download
 
-  restic:
+  rclone:
     container:
       architecture: amd64
       image: docker.io/rclone/rclone
@@ -259,7 +259,16 @@ app:
     ports:
       rclone: 7070
       web: 7071
-    service_url: http://restic.service.consul
+    tags: network
+
+  restic:
+    container:
+      architecture: amd64
+      image: docker.io/restic/restic
+      release: latest
+      check_digest_url: https://registry.hub.docker.com/v2/repositories/restic/restic/tags/latest
+      auto_update: true
+    service_url: http://restic-endpoint.service.consul
     tags: network
 
   sabnzbd:
