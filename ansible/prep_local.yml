@@ -1,0 +1,10 @@
+- name: Prep local system for install
+  hosts: localhost
+
+  tasks:
+    - name: Install python dependencies
+      command: /usr/bin/env pip3 install "{{ item }}"
+      loop:
+      - python-consul
+      - pyyaml
+
