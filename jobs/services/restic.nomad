@@ -27,11 +27,6 @@ job "restic" {
         method   = "POST"
         interval = "30s"
         timeout  = "2s"
-
-        check_restart {
-          limit = 100
-          grace = "60s"
-        }
       }
     }
 

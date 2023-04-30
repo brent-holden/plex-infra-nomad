@@ -42,20 +42,16 @@ job "sabnzbd" {
         "traefik.http.routers.sabnzbd.middlewares=[[ .app.authelia.traefik.middlewares ]]",
       ]
 
-      check {
-        name     = "sabnzbd"
-        type     = "http"
-        port     = "sabnzbd"
-        path     = "/sabnzbd/"
-        interval = "30s"
-        timeout  = "2s"
-        expose   = true
+#      check {
+#        name     = "sabnzbd"
+#        type     = "http"
+#        port     = "sabnzbd"
+#        path     = "/sabnzbd/api"
+#        interval = "30s"
+#        timeout  = "2s"
+#        expose   = true
+#      }
 
-        check_restart {
-          limit = 2
-          grace = "30s"
-        }
-      }
     }
 
     volume "config" {

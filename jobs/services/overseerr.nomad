@@ -67,11 +67,6 @@ job "overseerr" {
         header {
           Accept = ["application/json"]
         }
-
-        check_restart {
-          limit = 10
-          grace = "60s"
-        }
       }
 
     }

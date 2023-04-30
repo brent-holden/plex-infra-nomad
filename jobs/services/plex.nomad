@@ -29,11 +29,6 @@ job "plex" {
         header {
           Accept = ["application/json"]
         }
-
-        check_restart {
-          limit = 2
-          grace = "60s"
-        }
       }
 
     }

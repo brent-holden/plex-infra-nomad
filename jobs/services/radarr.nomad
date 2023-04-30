@@ -57,15 +57,10 @@ job "radarr" {
         name     = "radarr"
         type     = "http"
         port     = "radarr"
-        path     = "/radarr/ping"
+        path     = "/ping"
         interval = "120s"
         timeout  = "10s"
         expose   = true
-
-        check_restart {
-          limit = 10
-          grace = "30s"
-        }
       }
     }
 

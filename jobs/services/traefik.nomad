@@ -50,11 +50,6 @@ job "traefik" {
         path     = "/ping"
         interval = "30s"
         timeout  = "2s"
-
-        check_restart {
-          limit = 2
-          grace = "30s"
-        }
       }
     }
 

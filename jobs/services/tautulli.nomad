@@ -44,15 +44,10 @@ job "tautulli" {
         name     = "tautulli"
         type     = "http"
         port     = "tautulli"
-        path     = "/tautulli/status"
+        path     = "/status"
         interval = "60s"
         timeout  = "2s"
         expose   = true
-
-        check_restart {
-          limit = 2
-          grace = "30s"
-        }
       }
     }
 

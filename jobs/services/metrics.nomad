@@ -34,11 +34,6 @@ job "metrics" {
         header {
           Accept = ["application/json"]
         }
-
-        check_restart {
-          limit = 2
-          grace = "30s"
-        }
       }
 
     }

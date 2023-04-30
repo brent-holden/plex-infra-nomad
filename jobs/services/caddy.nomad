@@ -49,11 +49,6 @@ job "caddy" {
         interval = "30s"
         timeout  = "2s"
         expose   = true
-
-        check_restart {
-          limit = 2
-          grace = "30s"
-        }
       }
     }
 

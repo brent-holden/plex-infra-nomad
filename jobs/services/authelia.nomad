@@ -11,31 +11,12 @@ job "authelia" {
     count = 1
 
     network {
-      mode = "bridge"
-      port "authelia" {
-        static = 9092
-        to     = 9091
-      }
-      port "metrics_envoy" { to = 20200 }
+      port "authelia" { static = 9091 }
     }
 
     service {
       name = "authelia"
       port = 9091
-
-      meta {
-        metrics_port_envoy = "${NOMAD_HOST_PORT_metrics_envoy}"
-      }
-
-      connect {
-        sidecar_service {
-          proxy {
-            config {
-              envoy_prometheus_bind_addr = "0.0.0.0:20200"
-            }
-          }
-        }
-      }
 
       tags = [
         "traefik.enable=true",
@@ -53,12 +34,6 @@ job "authelia" {
         path     = "/api/health"
         interval = "30s"
         timeout  = "2s"
-        expose   = true
-
-        check_restart {
-          limit = 2
-          grace = "30s"
-        }
       }
     }
 
@@ -90,9 +65,11 @@ job "authelia" {
       config {
         image = "${IMAGE}:${RELEASE}"
         ports = ["authelia"]
+        network_mode = "host"
+        privileged   = true
 
         volumes = [
-          "local/configuration.yml:/configuration.yml"
+          "local/configuration.yml:/config/configuration.yml"
         ]
       }
 
@@ -109,7 +86,7 @@ job "authelia" {
       template {
         change_mode = "restart"
         data        = "{{ key \"authelia/config/users_database.yml\" }}"
-        destination = "local/users_database.yml"
+        destination = "secrets/users_database.yml"
       }
 
       template {

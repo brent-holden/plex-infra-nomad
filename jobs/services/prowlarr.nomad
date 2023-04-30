@@ -70,15 +70,10 @@ job "prowlarr" {
         name     = "prowlarr"
         type     = "http"
         port     = "prowlarr"
-        path     = "/prowlarr/ping"
+        path     = "/ping"
         interval = "30s"
         timeout  = "2s"
         expose   = true
-
-        check_restart {
-          limit = 2
-          grace = "30s"
-        }
       }
     }
 

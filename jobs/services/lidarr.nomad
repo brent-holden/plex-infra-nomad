@@ -31,10 +31,6 @@ job "lidarr" {
               envoy_prometheus_bind_addr = "0.0.0.0:20200"
             }
             upstreams {
-              destination_name = "authelia"
-              local_bind_port  = 9091
-            }
-            upstreams {
               destination_name = "sabnzbd"
               local_bind_port  = 8080
             }
@@ -57,15 +53,10 @@ job "lidarr" {
         name     = "lidarr"
         type     = "http"
         port     = "lidarr"
-        path     = "/lidarr/ping"
+        path     = "/ping"
         interval = "30s"
         timeout  = "2s"
         expose   = true
-
-        check_restart {
-          limit = 2
-          grace = "30s"
-        }
       }
     }
 

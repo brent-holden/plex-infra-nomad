@@ -57,15 +57,10 @@ job "sonarr" {
         name     = "sonarr"
         type     = "http"
         port     = "sonarr"
-        path     = "/sonarr/ping"
+        path     = "/ping"
         interval = "30s"
         timeout  = "2s"
         expose   = true
-
-        check_restart {
-          limit = 2
-          grace = "30s"
-        }
       }
     }
 
