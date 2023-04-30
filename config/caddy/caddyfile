@@ -4,15 +4,16 @@
 }
 
 :80 {
-  respond /health 200
+  handle /health {
+    respond 200
+  }
 
-  handle_path /* {
-    file_server browse
+  handle /* {
     root * /downloads
+    file_server browse
   }
 
   log {
     output stdout
   }
-
 }
