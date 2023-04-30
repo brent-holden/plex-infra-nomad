@@ -7,12 +7,6 @@ job "restic" {
     value     = "true"
   }
 
-  update {
-    max_parallel = 0
-    health_check = "checks"
-    auto_revert  = true
-  }
-
   group "rclone_restic" {
     count = 1
 
@@ -51,6 +45,12 @@ job "restic" {
     volume "cache" {
       type   = "host"
       source = "rclone-cache-backup"
+    }
+
+    update {
+      max_parallel = 0
+      health_check = "checks"
+      auto_revert  = true
     }
 
     task "rclone" {
