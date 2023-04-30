@@ -127,7 +127,7 @@ job "backup-netbootxyz-assets" {
         image = "${IMAGE}:${RELEASE}"
 
         args = [
-          "--repo", "rest:[[ .app.restic.service_url ]]:[[ .app.restic.ports.rclone ]]/netbootxyz/assets",
+          "--repo", "rest:[[ .app.restic.service_url ]]:[[ .app.restic.ports.rclone ]]/netbootxyz-assets",
           "forget",
           "--keep-last", "30",
           "--keep-monthly", "12",

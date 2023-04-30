@@ -46,7 +46,7 @@ job "backup-netbootxyz-config" {
         image = "${IMAGE}:${RELEASE}"
 
         args = [
-          "--repo", "rest:[[ .app.restic.service_url ]]:[[ .app.restic.ports.rclone ]]/netbootxyz/config",
+          "--repo", "rest:[[ .app.restic.service_url ]]:[[ .app.restic.ports.rclone ]]/netbootxyz-config",
           "unlock",
         ]
       }
