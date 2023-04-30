@@ -2,16 +2,11 @@
   hosts: rclone_hosts
   become: yes
 
-  vars:
-    pip_install_packages:
-      - name: python-consul
-
   pre_tasks:
     - name: Global vars from levant
       include_vars: "../levant.yml"
 
   roles:
-  - name: pip
   - name: rclone
     rclone_config_location: "/etc/rclone/rclone.conf"
     rclone_configs:
