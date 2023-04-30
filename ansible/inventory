@@ -1,10 +1,10 @@
-[network_nodes]
+[network_node]
 centos-s9-1.lab.eventide.network
 
-[plex_nodes]
+[plex_node]
 centos-s9-3.lab.eventide.network
 
-[download_nodes]
+[download_node]
 centos-s9-2.lab.eventide.network
 
 [rclone_hosts]

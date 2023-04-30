@@ -1,6 +1,6 @@
 ---
 - name: Download services host volumes setup
-  hosts: download_nodes
+  hosts: download_node
   become: yes
 
   vars:
@@ -13,7 +13,7 @@
       include_tasks: create_nomad_vols.yml
 
 - name: Network services host volumes setup
-  hosts: network_nodes
+  hosts: network_node
   become: yes
 
   vars:
@@ -26,7 +26,7 @@
       include_tasks: create_nomad_vols.yml
 
 - name: Plex services host volumes setup
-  hosts: plex_nodes
+  hosts: plex_node
   become: yes
 
   vars:
