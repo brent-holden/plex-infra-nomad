@@ -122,7 +122,7 @@ job "sonarr" {
         data        = <<-EOH
           IMAGE={{ key "sonarr/config/image" }}
           RELEASE={{ key "sonarr/config/release" }}
-          IMAGE_DIGEST={{ key "sonarr/config/image_digest" }}
+          IMAGE_DIGEST={{ keyOrDefault "sonarr/config/image_digest" "1" }}
           EOH
         destination = "local/env_info"
         env         = true
