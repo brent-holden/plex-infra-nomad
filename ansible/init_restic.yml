@@ -1,0 +1,50 @@
+---
+- name: Initialize restic backup repositories
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  pre_tasks:
+    - name: Global vars from levant
+      include_vars: "../levant.yml"
+
+  environment:
+    RESTIC_PASSWORD: "{{ lookup('consul_kv', 'restic/config/restic_password') }}"
+
+  tasks:
+    - name: Find restic binary in PATH
+      command: which restic
+      changed_when: false
+      failed_when: false
+      register: restic_installed
+
+    - name: Return fail if not found
+      fail:
+        msg: "Couldn't find restic binary in PATH. Please install"
+      when: restic_installed.rc not in [ 0 ]
+
+    - name: Get restic password from Consul
+      debug:
+        msg: 'key contains {{item}}'
+      with_consul_kv:
+        - 'restic/config/restic_password'
+
+    - name: Init repository
+      command: restic --repo rest:{{ app.restic.service_url }}:{{app.restic.ports.rclone}}/{{ item }} init
+      loop:
+      - authelia
+      - kavita
+      - lidarr
+      - netbootxyz-assets
+      - netbootxyz-config
+      - overseerr
+      - plex
+      - prowlarr
+      - radarr
+      - readarr
+      - sabnzbd
+      - sonarr
+      - tautulli
+      register: output
+      ignore_errors: true
+
