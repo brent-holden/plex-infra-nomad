@@ -129,38 +129,6 @@ app:
       entrypoints: websecure
     tags: download
 
-  grafana:
-    container:
-      architecture: amd64
-      image: docker.io/grafana/grafana
-      release: latest
-      check_digest_url: https://registry.hub.docker.com/v2/repositories/grafana/grafana/tags/latest
-      auto_update: true
-    volumes:
-      config:
-        name: grafana-config
-        dir: /opt/services/grafana/config
-      data:
-        name: grafana-data
-        dir: /opt/services/grafana/data
-    tags: network
-
-  netbootxyz:
-    container:
-      architecture: amd64
-      image: docker.io/linuxserver/netbootxyz
-      release: latest
-      check_digest_url: https://registry.hub.docker.com/v2/repositories/linuxserver/netbootxyz/tags/latest
-      auto_update: true
-    volumes:
-      config:
-        name: netbootxyz-config
-        dir: /opt/services/netbootxyz/config
-      assets:
-        name: netbootxyz-assets
-        dir: /opt/services/netbootxyz/assets
-    tags: network
-
   overseerr:
     container:
       architecture: amd64
