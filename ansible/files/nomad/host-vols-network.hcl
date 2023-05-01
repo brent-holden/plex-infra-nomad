@@ -1,4 +1,5 @@
 client {
+
   host_volume "flame-config" {
     path = "/opt/services/flame"
     read_only = false
@@ -9,21 +10,6 @@ client {
     read_only = false
   }
   
-  host_volume "netbootxyz-config" {
-    path = "/opt/services/netbootxyz/config"
-    read_only = false
-  }
-  
-  host_volume "netbootxyz-assets" {
-    path = "/opt/services/netbootxyz/assets"
-    read_only = false
-  }
-  
-  host_volume "grafana-config" {
-    path = "/opt/services/grafana"
-    read_only = false
-  }
-
   host_volume "authelia-config" {
     path = "/opt/services/authelia"
     read_only = false
@@ -35,4 +21,3 @@ client {
   }
 
 }
-
