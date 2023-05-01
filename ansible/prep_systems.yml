@@ -55,6 +55,11 @@
           - pwgen
         state: present
 
+    - name: Enable cockpit
+      ansible.builtin.systemd:
+        name: cockpit.socket 
+        enabled: true 
+
     - name: Disable firewalld
       ansible.builtin.systemd:
         name: firewalld
