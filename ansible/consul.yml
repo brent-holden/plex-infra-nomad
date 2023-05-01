@@ -10,8 +10,10 @@
     consul_encrypt_enable: true
     consul_autopilot_enable: true
     consul_force_install: true
+# the consul key generation does not work correctly in the ansible-consul role
+# generate a key using `consul keygen` and stuff it in this variable
     consul_raw_key: 3AW0qCq0l6Ds2E+5i4SJTrKyFYisjCViPVGoEh0HKaA=
-    consul_datacenter: "lab"
+    consul_datacenter: "home"
     consul_client_address: "0.0.0.0"
     consul_ports_grpc: 8502
     consul_connect_enabled: false
