@@ -16,4 +16,3 @@
 - import_playbook: rclone.yml
 - import_playbook: launch_services.yml
 - import_playbook: launch_periodics.yml
-- import_playbook: launch_backups.yml
