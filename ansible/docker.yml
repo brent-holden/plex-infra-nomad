@@ -2,6 +2,12 @@
   hosts: all
   become: yes
 
+  vars:
+    docker_users:
+      - brent
+      - plex
+    docker_daemon_options: {'dns': ["127.0.0.1"]}
+
   roles:
     - geerlingguy.docker
 
