@@ -17,9 +17,9 @@
     consul_connect_enabled: false
     consul_ui: true
     consul_dnsmasq_enable: true
+    consul_dnsmasq_listen_addresses: ['127.0.0.1', '172.17.0.1']
     consul_dnsmasq_servers:
       - 192.168.10.2
-    consul_dnsmasq_bind_interfaces: true
 
   roles:
     - name: consul
