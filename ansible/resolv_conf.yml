@@ -4,7 +4,7 @@
 
   vars:
     resolv_conf_nameserver:
-      - 127.0.0.1
+      - 172.17.0.1 
     resolv_conf_search:
       - lab.eventide.network
       - eventide.network
