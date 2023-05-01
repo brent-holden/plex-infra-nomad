@@ -1,5 +1,5 @@
 ---
 # file: launch.yml
-- import_playbook: launch_services.yml
-- import_playbook: launch_periodics.yml
-- import_playbook: launch_backups.yml
+- import_playbook: services.yml
+- import_playbook: periodics.yml
+- import_playbook: backups.yml
