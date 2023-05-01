@@ -13,5 +13,3 @@
 - import_playbook: init_configs.yml
 - import_playbook: init_restic.yml
 - import_playbook: rclone.yml
-- import_playbook: launch_services.yml
-- import_playbook: launch_periodics.yml
