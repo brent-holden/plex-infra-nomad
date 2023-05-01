@@ -19,6 +19,7 @@
     consul_dnsmasq_enable: true
     consul_dnsmasq_servers:
       - 192.168.10.2
+    consul_dnsmasq_bind_interfaces: true
 
   roles:
     - name: consul
