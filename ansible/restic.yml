@@ -9,12 +9,6 @@
     restic_path: /usr/local/bin/restic
 
   tasks:
-    - name: Install bzip2 (to install restic)
-      ansible.builtin.yum:
-        name:
-          - bzip2
-          - pigz
-        state: present
 
     - name: Download restic
       ansible.builtin.get_url:
