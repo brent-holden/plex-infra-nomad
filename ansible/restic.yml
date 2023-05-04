@@ -1,0 +1,45 @@
+---
+- name: Install restic
+  hosts: localhost
+  connection: local
+  become: yes
+
+  vars:
+    restic_version: 0.15.0
+    restic_path: /usr/local/bin/restic
+
+    pip_install_packages:
+      - name: resticpy
+
+  roles:
+    - name: pip
+
+  tasks:
+    - name: Install bzip2 (to install restic)
+      ansible.builtin.yum:
+        name:
+          - bzip2
+          - pigz
+        state: present
+
+    - name: Download restic
+      ansible.builtin.get_url:
+        url: "https://github.com/restic/restic/releases/download/v{{ restic_version }}/restic_{{ restic_version }}_linux_amd64.bz2"
+        dest: "/tmp/restic_{{ restic_version }}_linux_amd64.bz2"
+
+    - name: Extract restic
+      command: "bzip2 -d /tmp/restic_{{ restic_version }}_linux_amd64.bz2"
+      args:
+        creates: "/tmp/restic_{{ restic_version }}_linux_amd64"
+
+    - name: Install restic
+      ansible.builtin.copy:
+        remote_src: true
+        src: "/tmp/restic_{{ restic_version }}_linux_amd64"
+        dest: "{{ restic_path }}"
+        mode: 0755
+
+    - name: Remove downloaded file
+      ansible.builtin.file:
+        path: "/tmp/restic_{{ restic_version }}_linux_amd64"
+        state: absent
