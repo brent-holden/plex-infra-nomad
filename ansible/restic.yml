@@ -8,12 +8,6 @@
     restic_version: 0.15.0
     restic_path: /usr/local/bin/restic
 
-    pip_install_packages:
-      - name: resticpy
-
-  roles:
-    - name: pip
-
   tasks:
     - name: Install bzip2 (to install restic)
       ansible.builtin.yum:
