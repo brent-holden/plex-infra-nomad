@@ -12,7 +12,6 @@
     - name: Launch backup jobs
       command: levant deploy -var-file={{ levant_file }} {{ jobs_dir}}/backup-{{ item }}.nomad
       loop:
-      - authelia
       - kavita
       - lidarr
       - overseerr
