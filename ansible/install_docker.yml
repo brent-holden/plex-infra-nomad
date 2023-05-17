@@ -9,7 +9,7 @@
     docker_daemon_options: {'dns': ["172.17.0.1"]}
 
   roles:
-    - geerlingguy.docker
+    - docker
 
   tasks:
     - name: Copy clean_docker script to remote server
