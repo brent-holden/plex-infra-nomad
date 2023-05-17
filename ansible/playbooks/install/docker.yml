@@ -8,8 +8,12 @@
       - plex
     docker_daemon_options: {'dns': ["172.17.0.1"]}
 
+    pip_install_packages:
+      - name: docker
+
   roles:
     - docker
+    - pip
 
   tasks:
     - name: Copy clean_docker script to remote server
