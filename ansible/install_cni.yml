@@ -1,0 +1,29 @@
+- name: Install CNI plugins
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Install containernetworking-plugins
+      ansible.builtin.yum:
+        name: containernetworking-plugins
+        state: present
+
+    - name: Create /opt/cni
+      ansible.builtin.file:
+        path: /opt/cni
+        state: directory
+
+    - name: Link container networking plugins to /opt
+      ansible.builtin.file:
+        src: "/usr/libexec/cni"
+        dest: "/opt/cni/bin"
+        state: link
+
+    - name: Create sysctls for CNI
+      ansible.builtin.copy:
+        dest: "/etc/sysctl.d/10-cni.conf"
+        content: |
+          net.ipv4.ip_unprivileged_port_start=0
+          net.bridge.bridge-nf-call-arptables=1
+          net.bridge.bridge-nf-call-ip6tables=1
+          net.bridge.bridge-nf-call-iptables=1

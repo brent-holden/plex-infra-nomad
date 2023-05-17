@@ -1,0 +1,28 @@
+- name: Install Consul
+  hosts: consul_instances
+  become: yes
+
+  vars:
+    consul_version: 1.15.2
+    consul_data_path: "/var/consul"
+    consul_log_level: INFO
+    consul_syslog_enable: true
+    consul_encrypt_enable: true
+    consul_autopilot_enable: true
+    consul_force_install: true
+# the consul key generation does not work correctly in the ansible-consul role
+# generate a key using `consul keygen` and stuff it in this variable
+    consul_raw_key: 3AW0qCq0l6Ds2E+5i4SJTrKyFYisjCViPVGoEh0HKaA=
+    consul_datacenter: "home"
+    consul_client_address: "0.0.0.0"
+    consul_ports_grpc: 8502
+    consul_connect_enabled: false
+    consul_ui: true
+    consul_dnsmasq_enable: true
+    consul_dnsmasq_listen_addresses: ['127.0.0.1', '172.17.0.1']
+    consul_dnsmasq_servers:
+      - 192.168.10.2
+
+  roles:
+    - name: consul
+

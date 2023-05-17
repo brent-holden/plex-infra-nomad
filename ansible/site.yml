@@ -1,12 +1,12 @@
 ---
 # file: site.yml
-- import_playbook: docker.yml
-- import_playbook: cni.yml
-- import_playbook: consul.yml
-- import_playbook: resolv_conf.yml
-- import_playbook: nomad.yml
-- import_playbook: nomad_vols.yml
+- import_playbook: install_docker.yml
+- import_playbook: install_cni.yml
+- import_playbook: install_consul.yml
+- import_playbook: install_resolv_conf.yml
+- import_playbook: install_nomad.yml
+- import_playbook: install_nomad_vols.yml
 - import_playbook: init_services.yml
 - import_playbook: init_secrets.yml
 - import_playbook: init_configs.yml
-- import_playbook: rclone.yml
+- import_playbook: install_rclone.yml
