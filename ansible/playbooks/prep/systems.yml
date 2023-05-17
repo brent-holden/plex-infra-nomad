@@ -1,0 +1,82 @@
+- name: Prep all systems for install
+  hosts: all
+  become: yes
+
+  vars:
+    pip_install_packages:
+      - name: python-consul
+      - name: pyyaml
+
+  roles:
+  - name: pip
+
+  tasks:
+
+    - name: Create sudo rules for user 'brent'
+      copy:
+        dest: "/etc/sudoers.d/nopasswd"
+        content: |
+          brent  ALL=(ALL) NOPASSWD:ALL
+
+    - name: Ensure group "plex" exists with correct gid
+      ansible.builtin.group:
+        name: plex
+        state: present
+        gid: 1100
+
+    - name: Add the user 'plex' with a specific uid and a primary group of 'plex'
+      ansible.builtin.user:
+        name: plex
+        comment: Plex User
+        uid: 1100
+        group: plex
+
+    - name: Set fastestmirror in dnf configuration
+      lineinfile:
+        path: /etc/dnf/dnf.conf
+        regexp: '^fastestmirror='
+        line: 'fastestmirror=1'
+      when: ansible_distribution == 'CentOS' and ansible_distribution_major_version|int >= 8
+
+    - name: Update all packages
+      ansible.builtin.yum:
+        name: '*'
+        state: latest
+
+    - name: Install EPEL
+      ansible.builtin.yum:
+        name: 'epel-release'
+        state: present
+
+    - name: Install misc. packages
+      ansible.builtin.yum:
+        name:
+          - restic
+          - pwgen
+        state: present
+
+    - name: Enable cockpit
+      ansible.builtin.systemd:
+        name: cockpit.socket 
+        enabled: true 
+
+    - name: Disable firewalld
+      ansible.builtin.systemd:
+        name: firewalld
+        state: stopped
+        enabled: false
+
+    - name: Disable SELinux
+      ansible.posix.selinux:
+        policy: targeted
+        state: disabled
+      register: selinux_status
+
+    - name: Check if a reboot is required
+      set_fact:
+        reboot_required: "{{ selinux_status.reboot_required }}"
+
+    - name: Reboot the system if necessary
+      reboot:
+      when: reboot_required
+
