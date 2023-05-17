@@ -1,22 +1,22 @@
 [network_node]
-centos-s9-1.lab.eventide.network
+centos-s9-4.lab.eventide.network
 
 [download_node]
-centos-s9-2.lab.eventide.network
+centos-s9-5.lab.eventide.network
 
 [plex_node]
-centos-s9-3.lab.eventide.network
+centos-s9-0.lab.eventide.network
 
 [rclone_hosts]
-centos-s9-2.lab.eventide.network
-centos-s9-3.lab.eventide.network
+centos-s9-0.lab.eventide.network
+centos-s9-5.lab.eventide.network
 
 [consul_instances]
-centos-s9-1.lab.eventide.network consul_node_role=bootstrap
-centos-s9-2.lab.eventide.network consul_node_role=server
-centos-s9-3.lab.eventide.network consul_node_role=server
+centos-s9-4.lab.eventide.network consul_node_role=bootstrap
+centos-s9-0.lab.eventide.network consul_node_role=server
+centos-s9-5.lab.eventide.network consul_node_role=server
 
 [nomad_instances]
-centos-s9-1.lab.eventide.network nomad_node_role=both
-centos-s9-2.lab.eventide.network nomad_node_role=both
-centos-s9-3.lab.eventide.network nomad_node_role=both
+centos-s9-0.lab.eventide.network nomad_node_role=both
+centos-s9-4.lab.eventide.network nomad_node_role=both
+centos-s9-5.lab.eventide.network nomad_node_role=both

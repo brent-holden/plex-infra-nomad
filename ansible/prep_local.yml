@@ -1,5 +1,7 @@
 - name: Prep local system for install
   hosts: localhost
+  connection: local
+  become: yes
 
   tasks:
     - name: Install HashiCorp tap
@@ -30,5 +32,3 @@
       loop:
       - python-consul
       - pyyaml
-
-  

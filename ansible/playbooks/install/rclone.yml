@@ -4,7 +4,7 @@
 
   pre_tasks:
     - name: Global vars from levant
-      include_vars: "../levant.yml"
+      include_vars: "../../../levant.yml"
 
   roles:
   - name: rclone
@@ -44,7 +44,7 @@
 
     - name: Copy systemd rclone service file
       copy:
-        src: ../systemd/rclone.service
+        src: ../../../systemd/rclone.service
         dest: /usr/lib/systemd/system/rclone.service
         owner: root
         group: root

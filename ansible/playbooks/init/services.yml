@@ -5,8 +5,8 @@
   gather_facts: false
 
   vars:
-    levant_filename: "../levant.yml"
-    init_services_filename: "../scripts/init_services.py"
+    levant_filename: "../../../levant.yml"
+    init_services_filename: "../../../scripts/init_services.py"
 
   tasks:
     - name: Execute init_services.py on local

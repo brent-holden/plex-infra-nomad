@@ -1,6 +1,6 @@
 - name: Copy network node host volume configuration
   copy:
-    src: files/nomad/host-vols-{{ tag }}.hcl
+    src: ../../files/nomad/host-vols-{{ tag }}.hcl
     dest: /etc/nomad.d/host-vols-{{ tag }}.hcl
     owner: root
     group: root
@@ -8,7 +8,7 @@
 
 - name: Copy network node metadata configuration
   copy:
-    src: files/nomad/meta-{{ tag }}.hcl
+    src: ../../files/nomad/meta-{{ tag }}.hcl
     dest: /etc/nomad.d/meta-{{ tag }}.hcl
     owner: root
     group: root
@@ -16,13 +16,13 @@
 
 - name: Copy {{ hostvols_filename }} to remote server
   copy:
-    src: ../scripts/{{ hostvols_filename }}
+    src: ../../../scripts/{{ hostvols_filename }}
     dest: /tmp/{{ hostvols_filename }}
     mode: '0777'
 
 - name: Copy levant.yml to remote server
   copy:
-    src: ../{{ levant_filename }}
+    src: ../../../{{ levant_filename }}
     dest: /tmp/{{ levant_filename }}
     mode: '0777'
 

@@ -6,7 +6,7 @@
 
   pre_tasks:
     - name: Global vars from levant
-      include_vars: "../levant.yml"
+      include_vars: "../../../levant.yml"
 
   environment:
     RESTIC_PASSWORD: "{{ lookup('consul_kv', 'restic/config/restic_password') }}"

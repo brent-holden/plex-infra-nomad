@@ -14,6 +14,6 @@
   tasks:
     - name: Copy clean_docker script to remote server
       ansible.builtin.copy:
-        src: ../scripts/clean_docker.sh
+        src: ../../../scripts/clean_docker.sh
         dest: /etc/cron.daily/clean_docker
         mode: '0755'
