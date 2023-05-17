@@ -12,8 +12,8 @@
     - geerlingguy.docker
 
   tasks:
-    - name: Add docker cleanup to cron
+    - name: Copy clean_docker script to remote server
       ansible.builtin.copy:
-        dest: "/etc/cron.d/clean-docker"
-        content: |
-          35 6 * * * root /usr/bin/docker image prune -f >/dev/null 2>&1
+        src: ../scripts/clean_docker.sh
+        dest: /etc/cron.daily/clean_docker
+        mode: '0755'
