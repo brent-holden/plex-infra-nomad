@@ -3,7 +3,7 @@
   become: yes
 
   vars:
-    consul_version: latest
+    consul_version: 1.15.2
     consul_data_path: "/var/consul"
     consul_log_level: INFO
     consul_syslog_enable: true
