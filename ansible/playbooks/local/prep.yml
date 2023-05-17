@@ -1,0 +1,15 @@
+- name: Prep local system for install
+  hosts: localhost
+  connection: local
+
+  tasks:
+    - include_tasks: tasks/macos.yml
+      when: ansible_facts['distribution'] == 'MacOSX'
+
+    - include_tasks: tasks/redhat.yml
+      when:
+        - ansible_facts['distribution'] == 'CentOS'
+        - ansible_facts['distribution_major_version'] == '8' or
+          ansible_facts['distribution_major_version'] == '9'
+
+
