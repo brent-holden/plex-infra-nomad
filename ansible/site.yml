@@ -1,7 +1,5 @@
 ---
 # file: site.yml
-- import_playbook: prep_local.yml
-- import_playbook: prep_systems.yml
 - import_playbook: docker.yml
 - import_playbook: cni.yml
 - import_playbook: consul.yml
@@ -11,5 +9,4 @@
 - import_playbook: init_services.yml
 - import_playbook: init_secrets.yml
 - import_playbook: init_configs.yml
-- import_playbook: init_restic.yml
 - import_playbook: rclone.yml
