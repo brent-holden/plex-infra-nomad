@@ -1,6 +1,6 @@
 nomad:
-  datacenter: lab
-  region: home
+  datacenter: home
+  region: lab
 
 common:
   env:
