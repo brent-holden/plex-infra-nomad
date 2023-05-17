@@ -1,5 +1,5 @@
 ---
-# file: site.yml
+# file: install.yml
 - import_playbook: install_docker.yml
 - import_playbook: install_cni.yml
 - import_playbook: install_consul.yml
