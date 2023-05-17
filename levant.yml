@@ -23,7 +23,7 @@ common:
       name: media-movies
       dir: /mnt/rclone/drive/media/Movies
     music:
-      name: media-tv
+      name: media-music
       dir: /mnt/rclone/drive/media/Music
     tv:
       name: media-tv
@@ -32,9 +32,20 @@ common:
       name: downloads
       dir: /mnt/downloads
     downloads-complete:
-      name: downloads
+      name: downloads-complete
       dir: /mnt/downloads/complete
-    
+    downloads-movies:
+      name: downloads-movies
+      dir: /mnt/downloads/complete/movies
+    downloads-music:
+      name: downloads-music
+      dir: /mnt/downloads/complete/music
+    downloads-tv:
+      name: downloads-tv
+      dir: /mnt/downloads/complete/tv
+    downloads-books:
+      name: downloads-books
+      dir: /mnt/downloads/complete/books
 app:
   authelia:
     container:

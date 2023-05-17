@@ -40,7 +40,13 @@ for service in levant['app']:
             print("Got a KeyError. Volume unconfigured for service: %s" % service)
 
 if node_tag == 'download':
-    directories = [levant['common']['volumes']['downloads']['dir'], levant['common']['volumes']['downloads-complete']['dir']]
+    directories = [ levant['common']['volumes']['downloads']['dir'],
+                    levant['common']['volumes']['downloads-complete']['dir'],
+                    levant['common']['volumes']['downloads-movies']['dir'],
+                    levant['common']['volumes']['downloads-tv']['dir'],
+                    levant['common']['volumes']['downloads-music']['dir'],
+                    levant['common']['volumes']['downloads-books']['dir']
+                   ]
 
     for directory_to_create in directories:
         if not os.path.exists(directory_to_create):
