@@ -1,0 +1,26 @@
+---
+- name: Launch backups
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    levant_file: ../levant.yml
+    jobs_dir: ../jobs/backups
+
+  tasks:
+    - name: Launch backup jobs
+      command: levant deploy -var-file={{ levant_file }} {{ jobs_dir}}/backup-{{ item }}.nomad
+      loop:
+      - authelia
+      - kavita
+      - lidarr
+      - overseerr
+      - plex
+      - prowlarr
+      - radarr
+      - readarr
+      - sabnzbd
+      - sonarr
+      - tautulli
+      ignore_errors: true
