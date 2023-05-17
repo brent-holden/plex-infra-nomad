@@ -1,0 +1,40 @@
+---
+- name: Launch services
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    levant_file: ../../../levant.yml
+    jobs_dir: ../../../jobs/services
+
+  tasks:
+    - name: Launch network services
+      command: levant deploy -var-file={{ levant_file }} {{ jobs_dir}}/{{ item }}.nomad
+      loop:
+      - traefik
+      - authelia
+      - flame
+      ignore_errors: true
+
+    - name: Launch download services
+      command: levant deploy -var-file={{ levant_file }} {{ jobs_dir}}/{{ item }}.nomad
+      loop:
+      - prowlarr
+      - sabnzbd
+      - sonarr
+      - radarr
+      - lidarr
+      - readarr
+      - kavita
+      - caddy
+      - overseerr
+      - lidarr
+      ignore_errors: true
+
+    - name: Launch plex services
+      command: levant deploy -var-file={{ levant_file }} {{ jobs_dir}}/{{ item }}.nomad
+      loop:
+      - plex
+      - tautulli
+      ignore_errors: true
