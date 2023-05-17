@@ -1,0 +1,5 @@
+---
+# file: prep.yml
+- import_playbook: prep_local.yml
+- import_playbook: restic.yml
+- import_playbook: prep_systems.yml
