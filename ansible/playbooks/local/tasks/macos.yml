@@ -1,0 +1,25 @@
+- name: Install HashiCorp tap
+  community.general.homebrew_tap:
+    name: hashicorp/tap
+    url: https://github.com/hashicorp/homebrew-tap
+    state: present
+
+- name: Update homebrew
+  community.general.homebrew:
+    update_homebrew: true
+
+# Install formula foo with 'brew' in default path
+- name: Install packages via homebrew
+  community.general.homebrew:
+    name:
+      - levant
+      - nomad
+      - consul
+      - restic
+    state: present
+
+- name: Install python dependencies
+  command: /usr/bin/env pip3 install "{{ item }}"
+  loop:
+  - python-consul
+  - pyyaml
