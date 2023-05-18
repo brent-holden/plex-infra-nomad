@@ -81,6 +81,7 @@ job "authelia" {
           AUTHELIA_JWT_SECRET={{ key "authelia/config/jwt_secret" }}
           AUTHELIA_SESSION_SECRET={{ key "authelia/config/session_secret" }}
           AUTHELIA_STORAGE_ENCRYPTION_KEY={{ key "authelia/config/encryption_key" }}
+          AUTHELIA_NOTIFIER_SMTP_PASSWORD={{ key "authelia/config/smtp_password" }}
           EOH
         destination = "secrets/keys"
         env         = true
