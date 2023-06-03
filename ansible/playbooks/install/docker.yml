@@ -6,7 +6,7 @@
     docker_users:
       - brent
       - plex
-    docker_daemon_options: {'dns': ["172.17.0.1"]}
+    docker_daemon_options: {'dns': ["192.168.10.2"]}
 
     pip_install_packages:
       - name: docker
