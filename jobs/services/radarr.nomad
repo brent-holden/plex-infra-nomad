@@ -58,8 +58,8 @@ job "radarr" {
         type     = "http"
         port     = "radarr"
         path     = "/ping"
-        interval = "120s"
-        timeout  = "10s"
+        interval = "30s"
+        timeout  = "2s"
         expose   = true
       }
     }
