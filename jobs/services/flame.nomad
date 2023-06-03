@@ -40,15 +40,15 @@ job "flame" {
         "traefik.enable=false",
       ]
 
-      check {
-        name     = "flame"
-        type     = "http"
-        port     = "flame"
-        path     = "/"
-        interval = "120s"
-        timeout  = "10s"
-        expose   = true
-      }
+#      check {
+#        name     = "flame"
+#        type     = "http"
+#        port     = "flame"
+#        path     = "/"
+#        interval = "30s"
+#        timeout  = "2s"
+#        expose   = true
+#      }
     }
 
     volume "config" {
