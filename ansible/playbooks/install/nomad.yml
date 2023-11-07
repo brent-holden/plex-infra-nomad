@@ -3,7 +3,7 @@
   become: yes
 
   vars:
-    nomad_version: 1.5.6
+    nomad_version: 1.6.3
     nomad_datacenter: home 
     nomad_region: lab 
     nomad_bind_address: "0.0.0.0"
