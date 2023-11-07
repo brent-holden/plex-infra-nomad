@@ -22,6 +22,8 @@ job "plex" {
 
       check {
         type     = "http"
+        protocol = "https"
+        tls_skip_verify = true
         port     = "plex"
         path     = "/identity"
         interval = "1m"
